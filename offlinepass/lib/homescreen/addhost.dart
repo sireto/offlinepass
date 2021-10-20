@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/themes.dart';
@@ -14,15 +15,28 @@ class Addhost extends StatefulWidget {
 class _AddhostState extends State<Addhost> {
   //String password = "";
   TextEditingController password = TextEditingController();
+  TextEditingController appSiteUrl = TextEditingController();
+  TextEditingController usernameEmailPhone = TextEditingController();
   bool visibletext = true;
+  List<String> url = [
+    "https://www.facebook.com",
+    "https://www.gmail.com",
+    "https://www.yahoo.com",
+    "https://www.reddit.com",
+    "https://www.teams.com",
+    "https://www.twitter.com",
+    "https://www.udemy.com",
+    "https://www.linkedin.com"
+  ];
   final _key = GlobalKey<FormState>();
+  final _urlkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
-          "Add Host",
+          "Add an App or Website",
         ),
       ),
       body: SingleChildScrollView(
@@ -45,23 +59,80 @@ class _AddhostState extends State<Addhost> {
                   key: _key,
                   child: Column(
                     children: [
-                      TextFormField(
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return knullUrl;
-                          }
-                          //  else if (!kurlvalidatior.contains(value)) {
-                          //   return kvalidurl;
-                          // }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            label: const Text("App/Site URL"),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(8),
-                            )),
-                      ),
+                      TypeAheadFormField<String>(
+                          // key: _urlkey,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return knullUrl;
+                            }
+                            return null;
+                          },
+                          suggestionsCallback: (pattern) {
+                            return url
+                                .where((e) => e
+                                    .toLowerCase()
+                                    .contains(pattern.toLowerCase()))
+                                .toList();
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          hideSuggestionsOnKeyboardHide: true,
+                          textFieldConfiguration: TextFieldConfiguration(
+                              controller: appSiteUrl,
+                              scrollPadding: const EdgeInsets.only(bottom: 250),
+                              decoration: InputDecoration(
+                                labelText: "App/Site URL",
+                                labelStyle: const TextStyle(
+                                    fontSize: 16, color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                suffixIcon: const Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                              )),
+                          itemBuilder: (context, suggestion) {
+                            //  print(suggestion!.statename);
+                            return ListTile(
+                              title: Text(suggestion.toString()),
+                            );
+                          },
+                          noItemsFoundBuilder: (context) => Container(
+                                height: 50,
+                                child: const Center(
+                                  child: Text(
+                                    "Not listed",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                          onSuggestionSelected: (suggestion) {
+                            setState(() {
+                              appSiteUrl.text = suggestion;
+                            });
+                          }),
+                      //     heightspace(20),
+                      // TextFormField(
+                      //   validator: (String? value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return knullUrl;
+                      //     }
+                      //     //  else if (!kurlvalidatior.contains(value)) {
+                      //     //   return kvalidurl;
+                      //     // }
+                      //     return null;
+                      //   },
+                      //   decoration: InputDecoration(
+                      //       label: const Text("App/Site URL"),
+                      //       border: OutlineInputBorder(
+                      //         borderSide: const BorderSide(color: Colors.black),
+                      //         borderRadius: BorderRadius.circular(8),
+                      //       )),
+                      // ),
                       heightspace(20),
                       TextFormField(
                         validator: (String? value) {
@@ -71,7 +142,9 @@ class _AddhostState extends State<Addhost> {
                           return null;
                         },
                         decoration: InputDecoration(
-                            label: const Text("Username/email or phone"),
+                            labelText: "Username/email or phone",
+                            labelStyle: const TextStyle(
+                                fontSize: 16, color: Colors.grey),
                             border: OutlineInputBorder(
                               borderSide: const BorderSide(color: Colors.black),
                               borderRadius: BorderRadius.circular(8),

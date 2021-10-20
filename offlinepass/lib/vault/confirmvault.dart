@@ -16,7 +16,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
-          "New Vault",
+          "Confirm Vault",
         ),
       ),
       body: SingleChildScrollView(

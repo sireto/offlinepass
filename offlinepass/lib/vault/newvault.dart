@@ -39,20 +39,26 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "App has generated a Master Security Key (MSK) for you .",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'TitilliumWeb',
-                ),
-              ),
+              RichText(
+                  text: const TextSpan(
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'TitilliumWeb',
+                          color: ktextcolor),
+                      children: [
+                    TextSpan(text: "App has generated a "),
+                    TextSpan(
+                        text: "Master Security Key (MSK)",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: " for you .")
+                  ])),
               heightspace(25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.6,
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.only(top: 12, bottom: 12),
                     child: Center(
                       child: Text(
                         msk,
