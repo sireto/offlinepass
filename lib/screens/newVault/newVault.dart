@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:offline_pass/themes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 
@@ -38,7 +40,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "App has generated a Master Security Key (MSK) for you .",
+                "App has generated a Master Security Key (MSK) for you.",
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'TitilliumWeb',
@@ -94,7 +96,11 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                   height: 45,
                   width: screenWidth,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      EncryptedSharedPreferences encryptedSharedPreferences =
+                          EncryptedSharedPreferences();
+                      encryptedSharedPreferences.setString('msk', msk);
+                    },
                     child: Text(
                       "Confirm Vault",
                       textAlign: TextAlign.center,
