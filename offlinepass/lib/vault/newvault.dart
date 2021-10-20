@@ -1,110 +1,148 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:offlinepass/color.dart';
+import 'package:flutter/services.dart';
+import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/vault/confirmvault.dart';
 
-class NewVault extends StatefulWidget {
-  const NewVault({Key? key}) : super(key: key);
+import '../../constants.dart';
+
+class NewVaultScreen extends StatefulWidget {
+  const NewVaultScreen({Key? key}) : super(key: key);
 
   @override
-  _NewVaultState createState() => _NewVaultState();
+  _NewVaultScreenState createState() => _NewVaultScreenState();
 }
 
-class _NewVaultState extends State<NewVault> {
+class _NewVaultScreenState extends State<NewVaultScreen> {
+  String msk = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    msk = generateMsk();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.grey,
         title: const Text(
           "New Vault",
-          style: TextStyle(color: Colors.black),
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: const Text(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
                 "App has generated a Master Security Key (MSK) for you .",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'TitilliumWeb',
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
+              heightspace(25),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width / 2 + 30,
-                    height: 50,
-                    padding: const EdgeInsets.all(15),
-                    child: const Text(
-                      "1#baHMjhpPMSBNuLvP",
-                      style: TextStyle(fontSize: 16),
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    padding: const EdgeInsets.all(12),
+                    child: Center(
+                      child: Text(
+                        msk,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'TitilliumWeb',
+                        ),
+                      ),
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.black)),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: msk));
+                      const snackBar =
+                          SnackBar(content: Text("Copied to Clipboard"));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: const Text(
                       "Copy",
-                      style: TextStyle(color: textcolor, fontSize: 16),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'TitilliumWeb',
+                      ),
                     ),
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 30),
-                        primary: Colors.grey),
+                            vertical: 10, horizontal: 20),
+                        primary: Colors.grey.shade500),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: const Text(
-                "This is the only time the Master Security Key (MSK) is shown. MSK is used to generate and recover your passwords so keep it safe and secure.",
+              heightspace(25),
+              const Text(
+                "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontFamily: 'TitilliumWeb',
+                  fontSize: 14,
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Container(
-                height: 50,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Confirmvault()));
-                  },
-                  child: Text(
-                    "Confirm Vault",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: textcolor, fontSize: 16),
-                  ),
-                  style: ElevatedButton.styleFrom(primary: Colors.grey),
-                ))
-          ],
+              heightspace(10),
+              const Text(
+                "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
+                style: TextStyle(
+                  fontFamily: 'TitilliumWeb',
+                  fontSize: 14,
+                ),
+              ),
+              heightspace(25),
+              Container(
+                  height: 45,
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Confirmvault()));
+                    },
+                    child: const Text(
+                      "MSK saved, Confirm Vault now",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'TitilliumWeb',
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(primary: kprimarycolor),
+                  ))
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  String generateMsk() {
+    const length = 20;
+    const letterslowercase = "abcdefghijklmnopqrstuvwxyz";
+    const lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const special = "@#=+!£\$%&/)(*><-.^][^~";
+    String chars = "$lettersuppercase$letterslowercase$numbers$special";
+    return List.generate(length, (index) {
+      int intRandom = Random.secure().nextInt(chars.length);
+      return chars[intRandom];
+    }).join('');
   }
 }

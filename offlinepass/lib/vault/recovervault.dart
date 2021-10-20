@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:offlinepass/homescreen/addhost.dart';
-import 'package:offlinepass/themes.dart';
 
-class Confirmvault extends StatefulWidget {
-  const Confirmvault({Key? key}) : super(key: key);
+import '../themes.dart';
 
-  @override
-  _ConfirmvaultState createState() => _ConfirmvaultState();
-}
+class Recovervault extends StatelessWidget {
+  const Recovervault({Key? key}) : super(key: key);
 
-class _ConfirmvaultState extends State<Confirmvault> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
-          "New Vault",
+          "Recover Vault",
         ),
       ),
       body: SingleChildScrollView(
@@ -75,7 +71,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
                               builder: (context) => const Addhost()));
                     },
                     child: const Text(
-                      "Confirm and get started",
+                      "Recover and get started",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
