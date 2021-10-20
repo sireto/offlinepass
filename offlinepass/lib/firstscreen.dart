@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offlinepass/color.dart';
-import 'package:offlinepass/newvault.dart';
+import 'package:offlinepass/vault/newvault.dart';
 
 class Firstscreen extends StatefulWidget {
   const Firstscreen({Key? key}) : super(key: key);

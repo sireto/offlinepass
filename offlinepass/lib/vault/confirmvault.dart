@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:offlinepass/addhost.dart';
+import 'package:offlinepass/homescreen/addhost.dart';
 import 'package:offlinepass/color.dart';
 
 class Confirmvault extends StatefulWidget {

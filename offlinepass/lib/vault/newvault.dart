@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offlinepass/color.dart';
-import 'package:offlinepass/confirmvault.dart';
+import 'package:offlinepass/vault/confirmvault.dart';
 
 class NewVault extends StatefulWidget {
   const NewVault({Key? key}) : super(key: key);
