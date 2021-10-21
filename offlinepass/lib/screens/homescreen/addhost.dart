@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:offlinepass/components/datas.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/themes.dart';
 
@@ -23,18 +28,36 @@ class _AddhostState extends State<Addhost> {
     "https://www.gmail.com",
     "https://www.yahoo.com",
     "https://www.reddit.com",
-    "https://www.teams.com",
+    "https://www.twitch.com",
     "https://www.twitter.com",
-    "https://www.udemy.com",
+    "https://www.telegram.com",
     "https://www.linkedin.com"
   ];
+  List icons = const [
+    FontAwesomeIcons.facebook,
+    FontAwesomeIcons.google,
+    FontAwesomeIcons.yahoo,
+    FontAwesomeIcons.reddit,
+    FontAwesomeIcons.twitch,
+    FontAwesomeIcons.twitter,
+    FontAwesomeIcons.telegram,
+    FontAwesomeIcons.linkedin,
+  ];
   final _key = GlobalKey<FormState>();
-  final _urlkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context, datas);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            )),
         title: const Text(
           "Add an App or Website",
         ),
@@ -135,6 +158,7 @@ class _AddhostState extends State<Addhost> {
                       // ),
                       heightspace(20),
                       TextFormField(
+                        controller: usernameEmailPhone,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return knullEmail;
@@ -153,15 +177,24 @@ class _AddhostState extends State<Addhost> {
                       heightspace(20),
                       Container(
                         // padding: const EdgeInsets.only(left: 30, right: 30),
-                        width: MediaQuery.of(context).size.width,
+                        width: screenWidth,
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
                             if (_key.currentState!.validate()) {
                               setState(() {
-                                password = TextEditingController(
-                                    text: "0\$6abJf8HpfgJfFkw7");
+                                password.text = generatepassword();
                               });
+                              Map data = {
+                                "url": appSiteUrl.text,
+                                "email": usernameEmailPhone.text,
+                                "password": password.text,
+                                "icon": url.contains(appSiteUrl.text)
+                                    ? icons[url.indexOf(appSiteUrl.text)]
+                                    : Icons.lock,
+                              };
+                              datas.add(data);
+                              print("$datas");
                             }
                           },
                           child: const Text(
@@ -193,7 +226,7 @@ class _AddhostState extends State<Addhost> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
+                    width: screenWidth * 0.6,
                     child: TextFormField(
                       obscureText: visibletext,
                       controller: password,
@@ -257,5 +290,25 @@ class _AddhostState extends State<Addhost> {
     setState(() {
       visibletext = !visibletext;
     });
+  }
+
+  String generatepassword() {
+    const length = 15;
+    // final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
+    // final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // final numbers = "0123456789";
+    // final special = "@#=+!£\$%&/)(*><-.^][^~";
+    // String chars = "$lettersuppercase$letterslowercase$numbers$special";
+    var randomIntGen = List.generate(length, (index) {
+      int intRandom = Random.secure().nextInt(9);
+
+      return intRandom;
+    }).join('');
+    var encodedMsk = Base58Encode(utf8.encode(randomIntGen));
+    // print(mskGen);
+    // print(mskGen.length);
+    // print(encodedMsk);
+    // print(encodedMsk.length);
+    return encodedMsk;
   }
 }

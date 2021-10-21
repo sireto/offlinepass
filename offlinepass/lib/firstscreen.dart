@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/themes.dart';
-import 'package:offlinepass/vault/newvault.dart';
-import 'package:offlinepass/vault/recovervault.dart';
+import 'package:offlinepass/screens/vault/newvault.dart';
+import 'package:offlinepass/screens/vault/recovervault.dart';
 
 class Firstscreen extends StatefulWidget {
   const Firstscreen({Key? key}) : super(key: key);
@@ -38,7 +38,7 @@ class _FirstscreenState extends State<Firstscreen> {
                   child: const Image(image: AssetImage("asset/logo.png"))),
               heightspace(30),
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: screenWidth,
                 height: 50,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: ElevatedButton(
@@ -62,7 +62,7 @@ class _FirstscreenState extends State<Firstscreen> {
               ),
               heightspace(20),
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: screenWidth,
                 height: 50,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: ElevatedButton(

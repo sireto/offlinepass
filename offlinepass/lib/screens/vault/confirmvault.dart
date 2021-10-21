@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:offlinepass/homescreen/addhost.dart';
+import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/screens/homescreen/addhost.dart';
+import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:offlinepass/themes.dart';
 
 class Confirmvault extends StatefulWidget {
@@ -35,7 +37,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
               ),
               heightspace(20),
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: screenWidth,
                 // height: 40,
                 // margin: const EdgeInsets.all(10),
                 // padding: const EdgeInsets.all(10),
@@ -66,13 +68,13 @@ class _ConfirmvaultState extends State<Confirmvault> {
               heightspace(25),
               Container(
                   height: 50,
-                  width: MediaQuery.of(context).size.width,
+                  width: screenWidth,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Addhost()));
+                              builder: (context) => const HomeScreen()));
                     },
                     child: const Text(
                       "Confirm and get started",

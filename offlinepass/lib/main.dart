@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:offlinepass/components/notification.dart';
+import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/firstscreen.dart';
+import 'package:offlinepass/themes.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PushNotification().initialize();
   runApp(const MyApp());
 }
 
@@ -10,8 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Firstscreen(),
+    return MaterialApp(
+      theme: theme(),
+      home: LayoutBuilder(builder: (context, constraints) {
+        return OrientationBuilder(builder: (context, orientation) {
+          screenHeight = constraints.maxHeight;
+          screenWidth = constraints.maxWidth;
+          return const Firstscreen();
+        });
+      }),
     );
   }
 }

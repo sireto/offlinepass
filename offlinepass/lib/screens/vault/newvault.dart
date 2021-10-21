@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:offlinepass/components/notification.dart';
 import 'package:offlinepass/themes.dart';
-import 'package:offlinepass/vault/confirmvault.dart';
+import 'package:offlinepass/screens/vault/confirmvault.dart';
 
 import '../../constants.dart';
 
@@ -57,7 +61,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
+                    width: screenWidth * 0.6,
                     padding: const EdgeInsets.only(top: 12, bottom: 12),
                     child: Center(
                       child: Text(
@@ -113,9 +117,13 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
               heightspace(25),
               Container(
                   height: 45,
-                  width: MediaQuery.of(context).size.width,
+                  width: screenWidth,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      EncryptedSharedPreferences encryptedSharedPreferences =
+                          EncryptedSharedPreferences();
+                      encryptedSharedPreferences.setString('msk', msk);
+                      PushNotification().showNotification(1, 10);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -140,15 +148,23 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   }
 
   String generateMsk() {
-    const length = 20;
-    const letterslowercase = "abcdefghijklmnopqrstuvwxyz";
-    const lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const numbers = "0123456789";
-    const special = "@#=+!£\$%&/)(*><-.^][^~";
-    String chars = "$lettersuppercase$letterslowercase$numbers$special";
-    return List.generate(length, (index) {
-      int intRandom = Random.secure().nextInt(chars.length);
-      return chars[intRandom];
+    const length = 15;
+    // final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
+    // final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // final numbers = "0123456789";
+    // final special = "@#=+!£\$%&/)(*><-.^][^~";
+    // String chars = "$lettersuppercase$letterslowercase$numbers$special";
+
+    var randomIntGen = List.generate(length, (index) {
+      int intRandom = Random.secure().nextInt(9);
+
+      return intRandom;
     }).join('');
+    var encodedMsk = Base58Encode(utf8.encode(randomIntGen));
+    // print(mskGen);
+    // print(mskGen.length);
+    // print(encodedMsk);
+    // print(encodedMsk.length);
+    return encodedMsk;
   }
 }
