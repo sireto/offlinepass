@@ -6,7 +6,7 @@ import 'package:offline_pass/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PushNotification.initialize();
+  await PushNotification().initialize();
   runApp(MyApp());
 }
 

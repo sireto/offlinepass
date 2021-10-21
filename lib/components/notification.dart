@@ -3,18 +3,20 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class PushNotification {
-  static Future<void> initialize() async {
-    var androidInitialize = new AndroidInitializationSettings('launch_background');
+  FlutterLocalNotificationsPlugin fltrNotification =
+      FlutterLocalNotificationsPlugin();
+  Future<void> initialize() async {
+    var androidInitialize =
+        new AndroidInitializationSettings('launch_background');
     var initializationSettings =
         new InitializationSettings(android: androidInitialize);
-    FlutterLocalNotificationsPlugin fltrNotification;
-    fltrNotification = FlutterLocalNotificationsPlugin();
+
     tz.initializeTimeZones();
     await fltrNotification.initialize(initializationSettings,
         onSelectNotification: onNotificationSelected);
   }
 
-  static Future onNotificationSelected(String? payload) async {
+  Future onNotificationSelected(String? payload) async {
     // return null;fl
   }
   void showNotification(id, timeSec) async {
@@ -23,8 +25,7 @@ class PushNotification {
         priority: Priority.high, importance: Importance.max);
     var scheduledTime = Duration(seconds: timeSec);
     var notificationDetails = new NotificationDetails(android: androidDetails);
-    FlutterLocalNotificationsPlugin fltrNotification;
-    fltrNotification = FlutterLocalNotificationsPlugin();
+
     await fltrNotification.zonedSchedule(
         id,
         "Passwords expired",
