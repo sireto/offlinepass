@@ -1,7 +1,9 @@
 import 'dart:math';
-
+import 'dart:convert' show utf8;
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';
+import 'package:offline_pass/components/notification.dart';
 import 'package:offline_pass/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,10 +41,11 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              heightspace(8),
               Text(
                 "App has generated a Master Security Key (MSK) for you.",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontFamily: 'TitilliumWeb',
                 ),
               ),
@@ -51,7 +54,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: screenWidth * 0.6,
+                    width: screenWidth * 0.7,
                     padding: const EdgeInsets.all(12),
                     child: Center(
                       child: Text(
@@ -88,7 +91,8 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 "This is the only time the Master Security Key (MSK) is shown. MSK is used to generate and recover your passwords so keep it safe and secure.",
                 style: TextStyle(
                   fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
                 ),
               ),
               heightspace(25),
@@ -100,15 +104,16 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                       EncryptedSharedPreferences encryptedSharedPreferences =
                           EncryptedSharedPreferences();
                       encryptedSharedPreferences.setString('msk', msk);
+                      PushNotification().showNotification(1, 10);
                     },
                     child: Text(
                       "Confirm Vault",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
-                      ),
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'TitilliumWeb',
+                          fontWeight: FontWeight.bold),
                     ),
                     style: ElevatedButton.styleFrom(primary: kprimarycolor),
                   ))
@@ -120,15 +125,23 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   }
 
   String generateMsk() {
-    final length = 20;
-    final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
-    final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    final numbers = "0123456789";
-    final special = "@#=+!£\$%&/)(*><-.^][^~";
-    String chars = "$lettersuppercase$letterslowercase$numbers$special";
-    return List.generate(length, (index) {
-      int intRandom = Random.secure().nextInt(chars.length);
-      return chars[intRandom];
+    final length = 15;
+    // final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
+    // final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // final numbers = "0123456789";
+    // final special = "@#=+!£\$%&/)(*><-.^][^~";
+    // String chars = "$lettersuppercase$letterslowercase$numbers$special";
+
+    var randomIntGen = List.generate(length, (index) {
+      int intRandom = Random.secure().nextInt(9);
+
+      return intRandom;
     }).join('');
+    var encodedMsk = Base58Encode(utf8.encode(randomIntGen));
+    // print(mskGen);
+    // print(mskGen.length);
+    // print(encodedMsk);
+    // print(encodedMsk.length);
+    return encodedMsk;
   }
 }

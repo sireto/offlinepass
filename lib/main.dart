@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:offline_pass/components/notification.dart';
 import 'package:offline_pass/constants.dart';
 import 'package:offline_pass/screens/newVault/newVault.dart';
 import 'package:offline_pass/themes.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PushNotification.initialize();
   runApp(MyApp());
 }
 
