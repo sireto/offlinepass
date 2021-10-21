@@ -103,14 +103,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             return InkWell(
                                 onTap: () {
-                                  Navigator.push(
+                                  Future data = Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => RenewPassword(
-                                              url: datas[index]["url"],
-                                              email: datas[index]["email"],
-                                              password: datas[index]
-                                                  ["password"])));
+                                                data: datas[index],
+                                                // url: datas[index]["url"],
+                                                // email: datas[index]["email"],
+                                                // password: datas[index]
+                                                // ["password"]
+                                              )));
+                                  data.then((value) {
+                                    setState(() {
+                                      datas = datas;
+                                    });
+                                  });
                                 },
                                 child: emailUserView(index));
                           }),
