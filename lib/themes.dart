@@ -11,13 +11,13 @@ AppBarTheme appBarTheme() => AppBarTheme(
     color: Colors.blueAccent,
     centerTitle: true,
     elevation: 0.0,
-    titleTextStyle: TextStyle(
+    titleTextStyle: const TextStyle(
       color: Colors.white,
       fontFamily: 'TitilliumWeb',
       fontSize: 18,
       fontWeight: FontWeight.w700,
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       headline6: TextStyle(
         color: Colors.white,
         fontFamily: 'TitilliumWeb',

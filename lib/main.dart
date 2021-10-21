@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:offline_pass/components/notification.dart';
-import 'package:offline_pass/constants.dart';
-import 'package:offline_pass/screens/newVault/newVault.dart';
-import 'package:offline_pass/themes.dart';
+import 'package:offlinepass/components/notification.dart';
+import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/firstscreen.dart';
+import 'package:offlinepass/themes.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PushNotification().initialize();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: theme(),
       home: LayoutBuilder(builder: (context, constraints) {
         return OrientationBuilder(builder: (context, orientation) {
           screenHeight = constraints.maxHeight;
           screenWidth = constraints.maxWidth;
-          return NewVaultScreen();
+          return const Firstscreen();
         });
       }),
     );

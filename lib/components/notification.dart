@@ -7,9 +7,9 @@ class PushNotification {
       FlutterLocalNotificationsPlugin();
   Future<void> initialize() async {
     var androidInitialize =
-        new AndroidInitializationSettings('launch_background');
+        const AndroidInitializationSettings('launch_background');
     var initializationSettings =
-        new InitializationSettings(android: androidInitialize);
+        InitializationSettings(android: androidInitialize);
 
     tz.initializeTimeZones();
     await fltrNotification.initialize(initializationSettings,
@@ -20,11 +20,11 @@ class PushNotification {
     // return null;fl
   }
   void showNotification(id, timeSec) async {
-    var androidDetails = new AndroidNotificationDetails(
+    var androidDetails = const AndroidNotificationDetails(
         'Channel ID', 'Password',
         priority: Priority.high, importance: Importance.max);
     var scheduledTime = Duration(seconds: timeSec);
-    var notificationDetails = new NotificationDetails(android: androidDetails);
+    var notificationDetails = NotificationDetails(android: androidDetails);
 
     await fltrNotification.zonedSchedule(
         id,
