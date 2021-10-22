@@ -8,6 +8,9 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:offlinepass/components/datas.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/pass_operation.dart';
+import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 
 class Addhost extends StatefulWidget {
@@ -18,6 +21,7 @@ class Addhost extends StatefulWidget {
 }
 
 class _AddhostState extends State<Addhost> {
+  final DbOperation _dbOperation = PassOperation();
   //String password = "";
   TextEditingController password = TextEditingController();
   TextEditingController appSiteUrl = TextEditingController();
@@ -180,20 +184,23 @@ class _AddhostState extends State<Addhost> {
                         width: screenWidth,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_key.currentState!.validate()) {
                               setState(() {
                                 password.text = generatepassword();
                               });
-                              Map data = {
-                                "url": appSiteUrl.text,
-                                "email": usernameEmailPhone.text,
-                                "password": password.text,
-                                "icon": url.contains(appSiteUrl.text)
-                                    ? icons[url.indexOf(appSiteUrl.text)]
-                                    : Icons.lock,
-                              };
-                              datas.add(data);
+
+                              PassModel passModel = PassModel(
+                                  icon: url.contains(appSiteUrl.text)
+                                      ? icons[url.indexOf(appSiteUrl.text)]
+                                      : Icons.lock,
+                                  url: appSiteUrl.text,
+                                  pass: password.text,
+                                  user: usernameEmailPhone.text);
+                              var result = await _dbOperation.add(passModel);
+                              print(result);
+                              datas.add(passModel);
+
                               print("$datas");
                             }
                           },

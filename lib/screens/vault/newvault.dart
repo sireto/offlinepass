@@ -5,7 +5,7 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:offlinepass/components/notification.dart';
+import 'package:offlinepass/services/notification.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/screens/vault/confirmvault.dart';
 

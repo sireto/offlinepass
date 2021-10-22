@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:offlinepass/components/datas.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/pass_operation.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/renewpassword.dart';
-import 'package:offlinepass/screens/vault/recovervault.dart';
+import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,8 +19,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future? getPsws;
+  final DbOperation _dbOperation = PassOperation();
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPsws = getPasswords();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print('bitcoin'.codeUnits.toList().runtimeType);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -47,8 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
         ],
       ),
-      body: datas.isEmpty
-          ? Center(
+      body: FutureBuilder(
+        future: getPsws,
+        builder: (context, snapshots) {
+          if (snapshots.hasData) {
+            return Center(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -79,8 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-            )
-          : Column(
+            );
+          } else {
+            return Column(
               children: [
                 // Container(
                 //   padding: const EdgeInsets.all(8),
@@ -125,7 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )
               ],
-            ),
+            );
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: kprimarycolor,
         onPressed: () {
@@ -161,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(8),
                           color: kprimarycolor),
                       child: Icon(
-                        datas[i]["icon"],
+                        datas[i].icon,
                         color: Colors.white,
                         size: 30,
                       )),
@@ -171,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          datas[i]["url"],
+                          datas[i].url,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 16,
@@ -180,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         heightspace(5),
                         Text(
-                          datas[i]["email"],
+                          datas[i].user,
                           style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'TitilliumWeb',
@@ -197,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 40,
               child: ElevatedButton(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: datas[i]["password"]));
+                  Clipboard.setData(ClipboardData(text: datas[i].pass));
                   const snackBar = SnackBar(
                     content: Text("Copied to Clipboard"),
                     duration: Duration(milliseconds: 20),
@@ -223,5 +243,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ));
+  }
+
+  Future? getPasswords() async {
+    var datas = await _dbOperation.getAll();
+    List<PassModel> passDatas = [];
+    for (int i = 0; i < datas.length; i++) {
+      passDatas[i] = PassModel.fromMap(datas[i]['key'], datas[i]);
+    }
+    datas = passDatas;
+    print(datas);
+    GetIt.I.registerSingleton<List<PassModel>>(passDatas);
   }
 }
