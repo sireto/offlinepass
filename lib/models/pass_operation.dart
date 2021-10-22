@@ -15,7 +15,7 @@ class PassOperation extends DbOperation {
   }
 
   @override
-  Future<List> getAll() async {
+  Future<List<PassModel>> getAll() async {
     final snapshots = await _store.find(_db);
     return snapshots
         .map((snapshot) => PassModel.fromMap(snapshot.key, snapshot.value))
@@ -41,5 +41,12 @@ class PassOperation extends DbOperation {
     } else {
       return false;
     }
+  }
+
+  @override
+  Future remove(PassModel passModel) async {
+    // TODO: implement remove
+    var result = await _store.record(passModel.id).delete(_db);
+    return result;
   }
 }

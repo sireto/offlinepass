@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:offlinepass/components/datas.dart';
+
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/models/pass_model.dart';
 import 'package:offlinepass/models/pass_operation.dart';
@@ -23,6 +23,7 @@ class Addhost extends StatefulWidget {
 class _AddhostState extends State<Addhost> {
   final DbOperation _dbOperation = PassOperation();
   //String password = "";
+  PassModel passModel=PassModel();
   TextEditingController password = TextEditingController();
   TextEditingController appSiteUrl = TextEditingController();
   TextEditingController usernameEmailPhone = TextEditingController();
@@ -57,7 +58,7 @@ class _AddhostState extends State<Addhost> {
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context, datas);
+              Navigator.pop(context, passModel);
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -190,18 +191,10 @@ class _AddhostState extends State<Addhost> {
                                 password.text = generatepassword();
                               });
 
-                              PassModel passModel = PassModel(
-                                  icon: url.contains(appSiteUrl.text)
-                                      ? icons[url.indexOf(appSiteUrl.text)]
-                                      : Icons.lock,
+                              passModel = PassModel(
                                   url: appSiteUrl.text,
-                                  pass: password.text,
                                   user: usernameEmailPhone.text);
-                              var result = await _dbOperation.add(passModel);
-                              print(result);
-                              datas.add(passModel);
-
-                              print("$datas");
+                              _dbOperation.add(passModel);
                             }
                           },
                           child: const Text(

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:offlinepass/components/datas.dart';
+
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/pass_operation.dart';
+import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
+import 'package:offlinepass/components/string_extension.dart';
 
 class RenewPassword extends StatefulWidget {
   // final String url;
   // final String email;
   // final String password;
-  final Map data;
+  final PassModel passModel;
   const RenewPassword({
+    required this.passModel,
     Key? key,
-    required this.data,
-    // required this.url,
-    // required this.email,
-    // required this.password
   }) : super(key: key);
 
   @override
@@ -23,9 +23,10 @@ class RenewPassword extends StatefulWidget {
 }
 
 class _RenewPasswordState extends State<RenewPassword> {
-  late TextEditingController password =
-      TextEditingController(text: widget.data["password"]);
+  final DbOperation _dbOperation = PassOperation();
+  late TextEditingController password = TextEditingController();
   bool visibletext = true;
+  bool isDeleted = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,33 +36,35 @@ class _RenewPasswordState extends State<RenewPassword> {
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context, datas);
+              Navigator.pop(context, isDeleted);
             },
             icon: const Icon(
               Icons.arrow_back,
             )),
         title: Text(
-          widget.data["url"],
+          widget.passModel.url!,
         ),
         actions: [
           PopupMenuButton(
               onSelected: (value) async {
                 if (value == 0) {
-                  datas.remove(widget.data);
-                  Navigator.pop(context, datas);
+                  // getDatas.datas.remove(widget.data);
+                  isDeleted = true;
+                  _dbOperation.remove(widget.passModel);
+                  Navigator.pop(context, isDeleted);
                 }
               },
               padding: const EdgeInsets.all(4.0),
-              icon: const Icon(
+              icon: Icon(
                 Icons.more_vert,
                 color: Colors.black,
               ),
               iconSize: 30,
               itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 0,
                       child: Text(
-                        "Delete Facebook",
+                        "Delete ${widget.passModel.url!.substring(12, widget.passModel.url!.length - 4).capitalize()}",
                         style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'TitilliumWeb',
@@ -100,7 +103,7 @@ class _RenewPasswordState extends State<RenewPassword> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data["email"],
+                widget.passModel.user!,
                 style: const TextStyle(
                     fontSize: 14,
                     fontFamily: 'TitilliumWeb',

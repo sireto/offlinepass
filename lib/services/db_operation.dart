@@ -8,11 +8,14 @@ abstract class DbOperation {
   Future update(PassModel passModel);
 
   // gets all password from local
-  Future<List<dynamic>> getAll();
+  Future<List<PassModel>> getAll();
 
   //get password based on id(key)
   Future get(int id);
 
-  // checks if the subscription is contains( returns bool)
+  // checks if the passModel is contains( returns bool)
   Future contain(PassModel passModel);
+
+  // removes passModel
+  Future remove(PassModel passModel);
 }
