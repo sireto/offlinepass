@@ -5,6 +5,7 @@ import 'package:offlinepass/components/datas.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/renewpassword.dart';
+import 'package:offlinepass/screens/settings/unlocksettings.dart';
 import 'package:offlinepass/screens/vault/recovervault.dart';
 import 'package:offlinepass/themes.dart';
 
@@ -16,12 +17,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<String> url = [
+    "https://www.facebook.com",
+    "https://www.gmail.com",
+    "https://www.yahoo.com",
+    "https://www.reddit.com",
+    "https://www.twitch.com",
+    "https://www.twitter.com",
+    "https://www.telegram.com",
+    "https://www.linkedin.com"
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "Offline Pass",
+          style: TextStyle(
+            fontFamily: 'TitilliumWeb',
+          ),
         ),
         centerTitle: false,
         automaticallyImplyLeading: false,
@@ -39,11 +53,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: 24,
               )),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Unlocksettings()));
+              },
               icon: const Icon(
-                FontAwesomeIcons.slidersH,
+                Icons.lock,
                 color: Colors.white,
-                size: 20,
               ))
         ],
       ),
@@ -159,19 +177,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 50,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: kprimarycolor),
-                      child: Icon(
-                        datas[i]["icon"],
-                        color: Colors.white,
-                        size: 30,
-                      )),
+                          color: datas[i]["colors"]),
+                      child: url.contains(datas[i]["url"])
+                          ? Icon(
+                              datas[i]["icon"],
+                              color: Colors.white,
+                              size: 30,
+                            )
+                          : Center(
+                              child: Text(
+                              "${datas[i]["icon"]}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ))),
                   widthspace(20),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          datas[i]["url"],
+                          datas[i]["url"]
+                              .substring(12, datas[i]["url"]!.length - 4)
+                              .toUpperCase(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 16,

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:offlinepass/components/local_auth_api.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/main.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/screens/vault/newvault.dart';
 import 'package:offlinepass/screens/vault/recovervault.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Firstscreen extends StatefulWidget {
   const Firstscreen({Key? key}) : super(key: key);
@@ -12,6 +16,71 @@ class Firstscreen extends StatefulWidget {
 }
 
 class _FirstscreenState extends State<Firstscreen> {
+  final LocalAuthentication auth = LocalAuthentication();
+  _SupportState _supportState = _SupportState.unknown;
+  bool authenticate = false;
+  @override
+  void initState() {
+    super.initState();
+    auth.isDeviceSupported().then(
+          (isSupported) => setState(() => _supportState = isSupported
+              ? _SupportState.supported
+              : _SupportState.unsupported),
+        );
+    //LocalAuthApi.authenticate();
+    Future.delayed(Duration(seconds: 1)).then((value) {
+      (fingerprints == true && pincodes == null) ? biometric() : null;
+    });
+  }
+
+  Future biometric() async {
+    final isauthenticate = await LocalAuthApi.authenticate();
+    if (isauthenticate) {
+      setState(() {
+        authenticate = true;
+      });
+    }
+  }
+
+  // biometric() {
+  //   if (_supportState == _SupportState.unknown) {
+  //     return CircularProgressIndicator();
+  //   } else if (_supportState == _SupportState.supported) {
+  //     return buildButton(
+  //       text: 'Authenticate',
+  //       icon: Icons.lock_open,
+  //       onClicked: () async {
+  //         final isAuthenticated = await LocalAuthApi.authenticate();
+  //         print("i am out");
+  //         if (isAuthenticated) {
+  //           print("i am in");
+  //           // Navigator.of(context).pushReplacement(
+  //           //   MaterialPageRoute(builder: (context) => const Homepage()),
+  //           // );
+  //         }
+  //       },
+  //     );
+  //   } else {
+  //     return const Center(child: Text("Not supported"));
+  //   }
+  // }
+
+  // Widget buildButton({
+  //   required String text,
+  //   required IconData icon,
+  //   required VoidCallback onClicked,
+  // }) =>
+  //     ElevatedButton.icon(
+  //       style: ElevatedButton.styleFrom(
+  //         minimumSize: const Size.fromHeight(50),
+  //       ),
+  //       icon: Icon(icon, size: 26),
+  //       label: Text(
+  //         text,
+  //         style: const TextStyle(fontSize: 20),
+  //       ),
+  //       onPressed: onClicked,
+  //     );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +112,17 @@ class _FirstscreenState extends State<Firstscreen> {
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: ElevatedButton(
                   onPressed: () {
+                    //   print(_supportState);
+                    //   final isAuthenticated = await LocalAuthApi.authenticate();
+                    //   print("i am out");
+                    //   if (isAuthenticated) {
+                    //     print("i am in");
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //       builder: (context) => const Homepage()),
+                    // );
+                    //  }
+                    //await LocalAuthApi.authenticate();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -91,4 +171,10 @@ class _FirstscreenState extends State<Firstscreen> {
       ),
     );
   }
+}
+
+enum _SupportState {
+  unknown,
+  supported,
+  unsupported,
 }

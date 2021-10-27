@@ -12,7 +12,7 @@ class Recovervault extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Recover Vault",
         ),
@@ -67,10 +67,11 @@ class Recovervault extends StatelessWidget {
                   width: screenWidth,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomeScreen()));
+                              builder: (context) => const HomeScreen()),
+                          (route) => false);
                     },
                     child: const Text(
                       "Recover and get started",

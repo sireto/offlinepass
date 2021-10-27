@@ -32,7 +32,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "New Vault",
         ),

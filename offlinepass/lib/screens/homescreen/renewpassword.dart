@@ -30,7 +30,7 @@ class _RenewPasswordState extends State<RenewPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         centerTitle: false,
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -41,7 +41,9 @@ class _RenewPasswordState extends State<RenewPassword> {
               Icons.arrow_back,
             )),
         title: Text(
-          widget.data["url"],
+          widget.data["url"]
+              .substring(12, widget.data["url"]!.length - 4)
+              .toUpperCase(),
         ),
         actions: [
           PopupMenuButton(

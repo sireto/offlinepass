@@ -16,7 +16,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Confirm Vault",
         ),
@@ -71,10 +71,11 @@ class _ConfirmvaultState extends State<Confirmvault> {
                   width: screenWidth,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomeScreen()));
+                              builder: (context) => const HomeScreen()),
+                          (route) => false);
                     },
                     child: const Text(
                       "Confirm and get started",

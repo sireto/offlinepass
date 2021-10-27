@@ -43,12 +43,24 @@ class _AddhostState extends State<Addhost> {
     FontAwesomeIcons.telegram,
     FontAwesomeIcons.linkedin,
   ];
+  List<Color> colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.grey,
+    Colors.brown,
+    Colors.cyan,
+    Colors.yellow,
+    Colors.purple,
+  ];
+  var checkindex = 0;
+  Color currentcolor = Colors.red;
   final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         centerTitle: false,
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -87,6 +99,8 @@ class _AddhostState extends State<Addhost> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return knullUrl;
+                            } else if (!Uri.parse(appSiteUrl.text).isAbsolute) {
+                              return kvalidurl;
                             }
                             return null;
                           },
@@ -105,6 +119,11 @@ class _AddhostState extends State<Addhost> {
                           textFieldConfiguration: TextFieldConfiguration(
                               controller: appSiteUrl,
                               scrollPadding: const EdgeInsets.only(bottom: 250),
+                              onSubmitted: (value) {
+                                setState(() {
+                                  appSiteUrl.text = value;
+                                });
+                              },
                               decoration: InputDecoration(
                                 labelText: "App/Site URL",
                                 labelStyle: const TextStyle(
@@ -133,6 +152,11 @@ class _AddhostState extends State<Addhost> {
                                   ),
                                 ),
                               ),
+                          onSaved: (value) {
+                            setState(() {
+                              appSiteUrl.text = value!;
+                            });
+                          },
                           onSuggestionSelected: (suggestion) {
                             setState(() {
                               appSiteUrl.text = suggestion;
@@ -175,6 +199,67 @@ class _AddhostState extends State<Addhost> {
                             )),
                       ),
                       heightspace(20),
+                      !url.contains(appSiteUrl.text)
+                          ? Container(
+                              height: 50,
+                              width: screenWidth,
+                              child: ListView.builder(
+                                  //  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: colors.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        print(colors[index]);
+                                        setState(() {
+                                          checkindex = index;
+                                          currentcolor = colors[index];
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: 50,
+                                        margin:
+                                            const EdgeInsets.only(right: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          // shape: BoxShape.circle,
+                                          color: colors[index],
+                                        ),
+                                        child: Center(
+                                            child: appSiteUrl.text != ""
+                                                ? appSiteUrl.text.length > 14
+                                                    ? Text(
+                                                        appSiteUrl.text
+                                                            .substring(12, 14)
+                                                            .toUpperCase(),
+                                                        style: TextStyle(
+                                                            color: checkindex ==
+                                                                    index
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      )
+                                                    : checkindex == index
+                                                        ? const Center(
+                                                            child: Icon(
+                                                                Icons.check))
+                                                        : null
+                                                : checkindex == index
+                                                    ? const Center(
+                                                        child:
+                                                            Icon(Icons.check))
+                                                    : null),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          : const SizedBox(),
+                      !url.contains(appSiteUrl.text)
+                          ? heightspace(20)
+                          : const SizedBox(),
                       Container(
                         // padding: const EdgeInsets.only(left: 30, right: 30),
                         width: screenWidth,
@@ -191,7 +276,12 @@ class _AddhostState extends State<Addhost> {
                                 "password": password.text,
                                 "icon": url.contains(appSiteUrl.text)
                                     ? icons[url.indexOf(appSiteUrl.text)]
-                                    : Icons.lock,
+                                    : appSiteUrl.text
+                                        .substring(12, 14)
+                                        .toUpperCase(),
+                                "colors": url.contains(appSiteUrl.text)
+                                    ? Colors.blue
+                                    : currentcolor,
                               };
                               datas.add(data);
                               print("$datas");
@@ -219,6 +309,7 @@ class _AddhostState extends State<Addhost> {
                 style: TextStyle(
                     color: ktextcolor,
                     fontSize: 18,
+                    fontFamily: 'TitilliumWeb',
                     fontWeight: FontWeight.bold),
               ),
               heightspace(10),
@@ -229,6 +320,7 @@ class _AddhostState extends State<Addhost> {
                     width: screenWidth * 0.6,
                     child: TextFormField(
                       obscureText: visibletext,
+                      readOnly: true,
                       controller: password,
                       decoration: InputDecoration(
                           label: const Text("password"),
