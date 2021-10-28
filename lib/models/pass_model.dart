@@ -2,9 +2,9 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 
 
 class PassModel {
-  late final int? id;
-  late final String? url;
-  late final String? user;
+  int? id;
+  final String? url;
+  final String? user;
 
   //var encodedStr = Base58Encode(utf8.encode('bitcoin'.codeUnits));
   EncryptedSharedPreferences encryptedSharedPreferences =

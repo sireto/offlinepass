@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/models/pass_model.dart';
 import 'package:offlinepass/models/pass_operation.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/renewpassword.dart';
+import 'package:offlinepass/screens/search/search_screen.dart';
+import 'package:offlinepass/screens/settings/unlocksettings.dart';
 import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/components/string_extension.dart';
@@ -19,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<PassModel> datas = [];
+  PasswordManager passwordManager = PasswordManager();
   Future? getPsws;
   final DbOperation _dbOperation = PassOperation();
 
@@ -32,42 +35,56 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // print('bitcoin'.codeUnits.toList().runtimeType);
+    //print(passwordManager.validDays());
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kprimarycolor,
         title: const Text(
           "Offline Pass",
         ),
         centerTitle: false,
         automaticallyImplyLeading: false,
         leading: Container(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
-                color: Colors.white, shape: BoxShape.circle),
-            child: const Icon(Icons.lock_rounded)),
+                color: Colors.black, shape: BoxShape.circle),
+            child: const Icon(Icons.lock_rounded,)),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showSearch(context: context, delegate: Search(datas: datas));
+              },
               icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 24,
+                Icons.search_rounded,
+               // color: Colors.white70,
+                size: 21,
               )),
-          IconButton(
-              onPressed: () {},
+              IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Unlocksettings()));
+              },
               icon: const Icon(
-                FontAwesomeIcons.slidersH,
-                color: Colors.white,
-                size: 20,
-              ))
+                Icons.lock,
+                
+              //  color: Colors.white70,
+              )),
+          // IconButton(
+          //     onPressed: () {},
+          //     icon: const Icon(
+          //       FontAwesomeIcons.slidersH,
+          //       color: Colors.white,
+          //       size: 20,
+          //     ))
         ],
       ),
       body: FutureBuilder(
         future: getPsws,
-        builder: (context, snapshots) {
+        builder: (context, AsyncSnapshot snapshots) {
           if (snapshots.connectionState == ConnectionState.done) {
-            print(snapshots.data);
-
-            if (!snapshots.hasData) {
+            if (!snapshots.hasData || datas.isEmpty) {
               return Center(
                 child: SingleChildScrollView(
                   child: Column(
@@ -101,8 +118,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else {
+              print("snap:" + snapshots.data.toString());
+              print("datas: ${datas.length}");
+              print("snap datas: ${snapshots.data.length}");
               return Column(
                 children: [
+               datas.isEmpty?SizedBox():   Container(
+                    width: screenWidth,
+                    color: Colors.yellow.shade700,
+                    padding: EdgeInsets.only(left: 15.0, top: 12.0, bottom: 12.0),
+                    child: Text("Passwords expires after " +
+                        passwordManager.validDays().toString() +
+                        " days. Renew the passwords to make them recoverable with your Master Security Key (MSK). "),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
@@ -110,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: datas.length,
+                            itemCount: snapshots.data.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                   onTap: () {
@@ -118,7 +146,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => RenewPassword(
-                                                  passModel: datas[index],
+                                                  passModel:
+                                                      snapshots.data[index],
                                                   // url: datas[index]["url"],
                                                   // email: datas[index]["email"],
                                                   // password: datas[index]
@@ -133,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }
                                     });
                                   },
-                                  child: emailUserView(index));
+                                  child: emailUserView(snapshots.data[index]));
                             }),
                       ),
                     ),
@@ -168,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container emailUserView(int i) {
+  Container emailUserView(var data) {
     return Container(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: Row(
@@ -179,15 +208,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Container(
-                      height: 50,
-                      width: 50,
+                      height: 45,
+                      width: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: icons[datas[i].url]!['color']),
+                          color: icons[data.url]!['color']),
                       child: Icon(
-                        icons[datas[i].url]!['icon'],
+                        icons[data.url]!['icon'],
                         color: Colors.white,
-                        size: 30,
+                        size: 26,
                       )),
                   widthspace(20),
                   Flexible(
@@ -196,19 +225,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          datas[i]
-                              .url!
-                              .substring(12, datas[i].url!.length - 4)
+                          data.url!
+                              .substring(12, data.url!.length - 4)
+                              .toString()
                               .capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontFamily: 'TitilliumWeb',
                               fontWeight: FontWeight.bold),
                         ),
                         //  heightspace(5),
                         Text(
-                          datas[i].user!,
+                          data.user!,
                           style: const TextStyle(
                               fontSize: 15,
                               //  fontFamily: 'TitilliumWeb',
@@ -270,8 +299,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future? getPasswords() async {
     datas = await _dbOperation.getAll();
     datas = datas.reversed.toList();
-    if (datas.isNotEmpty) {
-      return "not empty";
-    }
+    print("get passwords");
+    print(datas);
+    // if (datas.isNotEmpty) {
+    //   return "not empty";
+    // }
+    return datas;
   }
 }
