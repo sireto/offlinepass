@@ -1,3 +1,4 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
@@ -5,18 +6,29 @@ import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:offlinepass/themes.dart';
 
 class Confirmvault extends StatefulWidget {
-  const Confirmvault({Key? key}) : super(key: key);
+  final String msk;
+  const Confirmvault({Key? key, required this.msk}) : super(key: key);
 
   @override
   _ConfirmvaultState createState() => _ConfirmvaultState();
 }
 
 class _ConfirmvaultState extends State<Confirmvault> {
+  TextEditingController _mskController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _mskController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.msk);
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        // iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           "Confirm Vault",
         ),
@@ -32,7 +44,8 @@ class _ConfirmvaultState extends State<Confirmvault> {
                 "Master Security Key",
                 style: TextStyle(
                   fontSize: 16,
-                  fontFamily: 'TitilliumWeb',
+                  fontWeight: FontWeight.w400
+                //  fontFamily: 'TitilliumWeb',
                 ),
               ),
               heightspace(20),
@@ -42,19 +55,23 @@ class _ConfirmvaultState extends State<Confirmvault> {
                 // margin: const EdgeInsets.all(10),
                 // padding: const EdgeInsets.all(10),
                 child: TextFormField(
+                  controller: _mskController,
+                  style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),
                   decoration: InputDecoration(
                       hintText: "Paste MSK here",
                       // label: const Text("MSK"),
+                      hintStyle: TextStyle(fontSize: 15,fontWeight: FontWeight.w400),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
                 ),
               ),
               heightspace(25),
-              const Text(
+              Text(
                 "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
                 style: TextStyle(
                   fontFamily: 'TitilliumWeb',
                   fontSize: 14,
+                  color: Colors.grey.shade700
                 ),
               ),
               heightspace(10),
@@ -71,17 +88,43 @@ class _ConfirmvaultState extends State<Confirmvault> {
                   width: screenWidth,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()));
+                      if (_mskController.text != "") {
+                        if (_mskController.text == widget.msk) {
+                          final snackBar = SnackBar(
+                            content: Text("Vault created successfully"),
+                            backgroundColor: Colors.grey.shade600,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          EncryptedSharedPreferences
+                              encryptedSharedPreferences =
+                              EncryptedSharedPreferences();
+                          encryptedSharedPreferences.setString(
+                              'msk', widget.msk);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()));
+                        } else {
+                          final snackBar = SnackBar(
+                            content: Text("MSK doesnot matched!!"),
+                            backgroundColor: Colors.grey.shade600,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      } else {
+                        final snackBar = SnackBar(
+                          content: Text("Please paste your MSK!!"),
+                          backgroundColor: Colors.grey.shade600,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     },
                     child: const Text(
                       "Confirm and get started",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
+                        fontSize: 15,
+                      //  fontFamily: 'TitilliumWeb',
                       ),
                       // style: TextStyle(color: ktextcolor, fontSize: 16),
                     ),
