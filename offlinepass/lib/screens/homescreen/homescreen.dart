@@ -55,7 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                showSearch(context: context, delegate: Search(datas: datas,context: context));
+                showSearch(
+                    context: context,
+                    delegate: Search(datas: datas, context: context));
               },
               icon: const Icon(
                 Icons.search_rounded,
@@ -174,8 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }
                                     });
                                   },
-                                  child: emailUserView(
-                                      snapshots.data[index]));
+                                  child: emailUserView(snapshots.data[index]));
                             }),
                       ),
                     ),
@@ -213,12 +214,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Container emailUserView(var data) {
     return Container(
         padding: const EdgeInsets.only(top: 5, bottom: 10),
+        width: screenWidth,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         
           children: [
-            Container(
-             width: screenWidth * 0.6,
+            Flexible(
               child: Row(
+                
                 children: [
                   Container(
                       height: 45,
@@ -232,9 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 26,
                       )),
                   widthspace(20),
-                  Flexible(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -251,7 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         //  heightspace(5),
                         Text(
+                          
                           data.user!,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 15,
                               color: Colors.grey,
@@ -274,42 +280,21 @@ class _HomeScreenState extends State<HomeScreen> {
             //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
             //     },
             //     icon: Icon(Icons.copy)),
-            Row(
-              children: [
-                Container(
-                  // width: screenWidth * 0.2,
-                  height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(
-                          text: passwordManager.generatePassword(
-                              passModel: data)));
-                      final snackBar = SnackBar(
-                        content: Text("Copied to Clipboard"),
-                        backgroundColor: Colors.grey.shade600,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                    child: const Text(
-                      "Copy Password",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400
-                          // fontFamily: 'TitilliumWeb',
-                          ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        // padding:
-                        //     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        primary: Colors.grey.shade500),
-                  ),
-                ),
-              ],
-            ),
+            IconButton(
+                padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(
+                      text: passwordManager.generatePassword(passModel: data)));
+                  final snackBar = SnackBar(
+                    content: Text("Copied to Clipboard"),
+                    backgroundColor: Colors.grey.shade600,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                },
+                icon: const Icon(
+                  Icons.copy_rounded,
+                  color: Colors.grey,
+                )),
           ],
         ));
   }
