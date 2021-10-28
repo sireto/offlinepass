@@ -5,7 +5,7 @@ import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:offlinepass/components/notification.dart';
+import 'package:offlinepass/services/notification.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/screens/vault/confirmvault.dart';
 
@@ -32,7 +32,8 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        // iconTheme: const IconThemeData(color: Colors.black),
+        centerTitle: false,
         title: const Text(
           "New Vault",
         ),
@@ -44,16 +45,16 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                       style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'TitilliumWeb',
-                          color: ktextcolor),
+                          fontSize: 15,
+                         // fontFamily: 'TitilliumWeb',
+                          color: Colors.grey.shade700),
                       children: [
                     TextSpan(text: "App has generated a "),
                     TextSpan(
                         text: "Master Security Key (MSK)",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontWeight: FontWeight.w500)),
                     TextSpan(text: " for you .")
                   ])),
               heightspace(25),
@@ -67,14 +68,14 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                       child: Text(
                         msk,
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'TitilliumWeb',
-                        ),
+                            fontSize: 16,
+                            //   fontFamily: 'TitilliumWeb',
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.black)),
+                        border: Border.all(color: Colors.grey)),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -86,10 +87,11 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                     child: const Text(
                       "Copy",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
-                      ),
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400
+                          //  fontFamily: 'TitilliumWeb',
+                          ),
                     ),
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
@@ -99,20 +101,20 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 ],
               ),
               heightspace(25),
-              const Text(
+               Text(
                 "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
                 style: TextStyle(
-                  fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
-                ),
+                    fontFamily: 'TitilliumWeb',
+                    fontSize: 14,
+                    color: Colors.grey.shade700),
               ),
               heightspace(10),
               const Text(
                 "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
                 style: TextStyle(
-                  fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
-                ),
+                    fontSize: 14,
+                    fontFamily: 'TitilliumWeb',
+                  ),
               ),
               heightspace(25),
               Container(
@@ -120,22 +122,21 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                   width: screenWidth,
                   child: ElevatedButton(
                     onPressed: () async {
-                      EncryptedSharedPreferences encryptedSharedPreferences =
-                          EncryptedSharedPreferences();
-                      encryptedSharedPreferences.setString('msk', msk);
-                      PushNotification().showNotification(1, 10);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Confirmvault()));
+                              builder: (context) => Confirmvault(
+                                    msk: msk,
+                                  )));
                     },
                     child: const Text(
                       "MSK saved, Confirm Vault now",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
+                        fontSize: 14,
+
+                        // fontFamily: 'TitilliumWeb',
                       ),
                     ),
                     style: ElevatedButton.styleFrom(primary: kprimarycolor),
@@ -148,7 +149,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   }
 
   String generateMsk() {
-    const length = 15;
+    const length = 10;
     // final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
     // final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     // final numbers = "0123456789";
