@@ -18,4 +18,7 @@ abstract class DbOperation {
 
   // removes passModel
   Future remove(PassModel passModel);
+
+  // checks if db is empty or not
+  Future isEmpty();
 }

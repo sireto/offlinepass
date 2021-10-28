@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:offlinepass/constants.dart';
 
 ThemeData theme() => ThemeData(
       brightness: Brightness.light,
       primaryColor: Colors.blueAccent,
       appBarTheme: appBarTheme(),
+      textTheme:
+          TextTheme(headline6: TextStyle(fontSize: 16, color: Colors.black,fontWeight: FontWeight.w400)),
       scaffoldBackgroundColor: Colors.white,
     );
 
-AppBarTheme appBarTheme() => AppBarTheme(
-    color: Colors.blueAccent,
-    centerTitle: true,
+AppBarTheme appBarTheme() => const AppBarTheme(
+    color: kprimarycolor,
+    centerTitle: false,
     elevation: 0.0,
-    titleTextStyle: const TextStyle(
+    titleTextStyle: TextStyle(
       color: Colors.white,
-      fontFamily: 'TitilliumWeb',
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
+      // fontFamily: 'TitilliumWeb',
+      fontSize: 17,
+      fontWeight: FontWeight.w400,
     ),
-    textTheme: const TextTheme(
+    textTheme: TextTheme(
       headline6: TextStyle(
         color: Colors.white,
         fontFamily: 'TitilliumWeb',
@@ -25,7 +28,8 @@ AppBarTheme appBarTheme() => AppBarTheme(
         fontWeight: FontWeight.w700,
       ),
     ),
-    iconTheme: IconThemeData(color: Colors.grey[600]));
+    actionsIconTheme: IconThemeData(color: Colors.white),
+    iconTheme: IconThemeData(color: Colors.white));
 SizedBox heightspace(double height) {
   return SizedBox(
     height: height,

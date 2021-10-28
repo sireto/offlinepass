@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:offlinepass/components/datas.dart';
+
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/pass_operation.dart';
+import 'package:offlinepass/models/password_manager.dart';
+import 'package:offlinepass/screens/old_pass_screen.dart';
+import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
+import 'package:offlinepass/components/string_extension.dart';
 
 class RenewPassword extends StatefulWidget {
   // final String url;
   // final String email;
+
   // final String password;
-  final Map data;
-  const RenewPassword({
+  final PassModel passModel;
+  RenewPassword({
+    required this.passModel,
     Key? key,
-    required this.data,
-    // required this.url,
-    // required this.email,
-    // required this.password
   }) : super(key: key);
 
   @override
@@ -23,51 +26,86 @@ class RenewPassword extends StatefulWidget {
 }
 
 class _RenewPasswordState extends State<RenewPassword> {
-  late TextEditingController password =
-      TextEditingController(text: widget.data["password"]);
+  final DbOperation _dbOperation = PassOperation();
+  late TextEditingController password;
+
+  PasswordManager passwordManager = PasswordManager();
   bool visibletext = true;
+  bool isDeleted = false;
+  late String pswd;
+  @override
+  void initState() {
+    // TODO: implement initState
+    pswd = passwordManager.generatePassword(
+      passModel: widget.passModel,
+    );
+    password = TextEditingController(text: pswd);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(pswd);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kprimarycolor,
         iconTheme: const IconThemeData(color: Colors.white),
         centerTitle: false,
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context, datas);
+              Navigator.pop(context, isDeleted);
             },
             icon: const Icon(
               Icons.arrow_back,
             )),
         title: Text(
-          widget.data["url"]
-              .substring(12, widget.data["url"]!.length - 4)
-              .toUpperCase(),
+          widget.passModel.url!,
         ),
         actions: [
           PopupMenuButton(
               onSelected: (value) async {
                 if (value == 0) {
-                  datas.remove(widget.data);
-                  Navigator.pop(context, datas);
+                  // getDatas.datas.remove(widget.data);
+                  isDeleted = true;
+                  await _dbOperation.remove(widget.passModel);
+                  bool result = await _dbOperation.isEmpty();
+
+                  if (result) {
+                    print("remove date");
+                    passwordManager.removeStartingDate();
+                  }
+                  final snackBar = SnackBar(
+                    content: Text(
+                        "${widget.passModel.url!.substring(12, widget.passModel.url!.length - 4).capitalize()} deleted successfully"),
+                    backgroundColor: Colors.grey.shade500,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Navigator.pop(context, isDeleted);
+                } else if (value == 1) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              OldPassword(passModel: widget.passModel)));
                 }
               },
               padding: const EdgeInsets.all(4.0),
-              icon: const Icon(
+              icon: Icon(
                 Icons.more_vert,
-                color: Colors.black,
+                color: Colors.white,
               ),
-              iconSize: 30,
+              //iconSize: 30,
               itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 0,
                       child: Text(
-                        "Delete Facebook",
+                        "Delete ${widget.passModel.url!.substring(12, widget.passModel.url!.length - 4).capitalize()}",
                         style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'TitilliumWeb',
-                            fontWeight: FontWeight.bold),
+                            fontSize: 15,
+                            //  fontFamily: 'TitilliumWeb',
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                     const PopupMenuItem(
@@ -75,9 +113,9 @@ class _RenewPasswordState extends State<RenewPassword> {
                       child: Text(
                         "Old Passwords",
                         style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'TitilliumWeb',
-                            fontWeight: FontWeight.bold),
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                     const PopupMenuItem(
@@ -85,9 +123,9 @@ class _RenewPasswordState extends State<RenewPassword> {
                       child: Text(
                         "Password Summary",
                         style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'TitilliumWeb',
-                            fontWeight: FontWeight.bold),
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                   ])
@@ -95,111 +133,185 @@ class _RenewPasswordState extends State<RenewPassword> {
           //   IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.data["email"],
-                style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'TitilliumWeb',
-                    fontWeight: FontWeight.bold),
-              ),
-              heightspace(20),
-              const Text(
-                "Password",
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              width: screenWidth,
+              color: passwordManager.validDays() > 1
+                  ? Colors.green.shade400
+                  : Colors.red,
+              padding: EdgeInsets.only(left: 15.0, top: 12.0, bottom: 12.0),
+              child: Text(
+                "Expires in ${passwordManager.validDays()} days",
                 style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'TitilliumWeb',
-                    fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
-              heightspace(10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: screenWidth * 0.6,
-                    child: TextFormField(
-                      obscureText: visibletext,
-                      controller: password,
-                      decoration: InputDecoration(
-                          label: const Text("password"),
-                          suffixIcon: visibletext
-                              ? IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      visibility();
-                                    });
-                                  },
-                                  icon: const Icon(Icons.visibility))
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      visibility();
-                                    });
-                                  },
-                                  icon: const Icon(Icons.visibility_off)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          )),
+                    width: screenWidth,
+                    child: Row(
+                      children: [
+                        Container(
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: icons[widget.passModel.url]!['color']),
+                            child: Icon(
+                              icons[widget.passModel.url]!['icon'],
+                              color: Colors.white,
+                              size: 26,
+                            )),
+                        widthspace(20),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.passModel.url!
+                                    .substring(
+                                        12, widget.passModel.url!.length - 4)
+                                    .toString()
+                                    .capitalize(),
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  // fontFamily: 'TitilliumWeb',
+                                ),
+                              ),
+                              //  heightspace(5),
+                              Text(
+                                widget.passModel.user!,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    //  fontFamily: 'TitilliumWeb',
+                                    //fontStyle: FontStyle.italic,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  widthspace(5),
+                  heightspace(20),
+                  const Text(
+                    "Password",
+                    style: TextStyle(
+                      color: ktextcolor,
+                      fontSize: 16,
+                      //fontFamily: 'TitilliumWeb',
+                      // fontWeight: FontWeight.w300
+                    ),
+                  ),
+                  Container(
+                    width: screenWidth,
+                    child: TextFormField(
+                        obscureText: visibletext,
+                        controller: password,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          // fontFamily: 'TitilliumWeb',
+                        ),
+                        readOnly: true,
+                        decoration: InputDecoration(
+                            focusedBorder: InputBorder.none,
+                            suffixIcon: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                visibletext
+                                    ? IconButton(
+                                        padding: EdgeInsets.only(
+                                            bottom: 8.0, left: 20.0),
+                                        onPressed: () {
+                                          setState(() {
+                                            visibility();
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.visibility,
+                                          color: Colors.grey,
+                                        ))
+                                    : IconButton(
+                                        padding: EdgeInsets.only(
+                                            bottom: 8.0, left: 20.0),
+                                        onPressed: () {
+                                          setState(() {
+                                            visibility();
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.visibility_off,
+                                          color: Colors.grey,
+                                        )),
+                                IconButton(
+                                    padding:
+                                        EdgeInsets.only(bottom: 8.0, left: 0.0),
+                                    onPressed: () {
+                                      Clipboard.setData(
+                                          ClipboardData(text: password.text));
+                                      final snackBar = SnackBar(
+                                        content: Text("Copied to Clipboard"),
+                                        backgroundColor: Colors.grey.shade600,
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    },
+                                    icon: const Icon(
+                                      Icons.copy_rounded,
+                                      color: Colors.grey,
+                                    )),
+                              ],
+                            ),
+                            border: InputBorder.none)),
+                  ),
+                  const Text(
+                    "Help ?",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'TitilliumWeb',
+                        fontWeight: FontWeight.bold),
+                  ),
+                  heightspace(10),
+                  const Text("Password compromised or needs change?"),
+                  heightspace(15),
                   ElevatedButton(
                     onPressed: () {
-                      Clipboard.setData(ClipboardData(text: password.text));
-                      const snackBar =
-                          SnackBar(content: Text("Copied to Clipboard"));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      setState(() {
+                        pswd = passwordManager.generatePassword(
+                            newPass: true, passModel: widget.passModel);
+                        password.text = pswd;
+                      });
                     },
                     child: const Text(
-                      "Copy",
+                      "New Password",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
-                      ),
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400),
                     ),
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        primary: Colors.grey.shade500),
+                            vertical: 10, horizontal: 30),
+                        primary: kbuttonColor),
                   ),
                 ],
               ),
-              heightspace(10),
-              const Text("Expires in 70 days"),
-              heightspace(20),
-              const Text(
-                "Help",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'TitilliumWeb',
-                    fontWeight: FontWeight.bold),
-              ),
-              heightspace(10),
-              const Text("Password compromised or needs change?"),
-              heightspace(10),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text(
-                  "New Password",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'TitilliumWeb',
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 30),
-                    primary: Colors.grey.shade500),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

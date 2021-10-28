@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:offlinepass/components/datas.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/pass_operation.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/renewpassword.dart';
-import 'package:offlinepass/screens/settings/unlocksettings.dart';
-import 'package:offlinepass/screens/vault/recovervault.dart';
+import 'package:offlinepass/screens/search/search_screen.dart';
+import 'package:offlinepass/screens/settings/settings.dart';
+import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
+import 'package:offlinepass/components/string_extension.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,40 +20,49 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> url = [
-    "https://www.facebook.com",
-    "https://www.gmail.com",
-    "https://www.yahoo.com",
-    "https://www.reddit.com",
-    "https://www.twitch.com",
-    "https://www.twitter.com",
-    "https://www.telegram.com",
-    "https://www.linkedin.com"
-  ];
+  List<PassModel> datas = [];
+  PasswordManager passwordManager = PasswordManager();
+  Future? getPsws;
+  final DbOperation _dbOperation = PassOperation();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPsws = getPasswords();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print('bitcoin'.codeUnits.toList().runtimeType);
+    //print(passwordManager.validDays());
     return Scaffold(
       appBar: AppBar(
+        // backgroundColor: kprimarycolor,
         title: const Text(
           "Offline Pass",
-          style: TextStyle(
-            fontFamily: 'TitilliumWeb',
-          ),
         ),
         centerTitle: false,
         automaticallyImplyLeading: false,
         leading: Container(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
                 color: Colors.white, shape: BoxShape.circle),
-            child: const Icon(Icons.lock_rounded)),
+            child: const Icon(
+              Icons.lock_rounded,
+              color: kprimarycolor,
+            )),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: Search(datas: datas, context: context));
+              },
               icon: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 24,
+                Icons.search_rounded,
+                // color: Colors.white70,
+                //size: 21,
               )),
           IconButton(
               onPressed: () {
@@ -60,99 +72,136 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context) => const Unlocksettings()));
               },
               icon: const Icon(
-                Icons.lock,
-                color: Colors.white,
-              ))
+                Icons.settings,
+
+                //  color: Colors.white70,
+              )),
+          // IconButton(
+          //     onPressed: () {},
+          //     icon: const Icon(
+          //       FontAwesomeIcons.slidersH,
+          //       color: Colors.white,
+          //       size: 20,
+          //     ))
         ],
       ),
-      body: datas.isEmpty
-          ? Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      height: screenHeight * 0.4,
-                      child: const Center(
-                        child: Image(
-                          image: AssetImage("asset/logo.png"),
+      body: FutureBuilder(
+        future: getPsws,
+        builder: (context, AsyncSnapshot snapshots) {
+          if (snapshots.connectionState == ConnectionState.done) {
+            if (!snapshots.hasData || datas.isEmpty) {
+              return Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: screenHeight * 0.25,
+                        child: const Center(
+                          child: Image(
+                            image: AssetImage("asset/logo.png"),
+                          ),
                         ),
                       ),
-                    ),
-                    heightspace(20),
-                    const Text(
-                      "No Apps/Websites  added yet",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'TitilliumWeb',
-                          fontWeight: FontWeight.bold),
-                    ),
-                    heightspace(10),
-                    const Text(
-                        "Click on (+) button below to add a new App or website",
-                        textAlign: TextAlign.center,
+                      heightspace(20),
+                      const Text(
+                        "No Apps/Websites  added yet",
                         style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'TitilliumWeb',
-                        )),
-                  ],
-                ),
-              ),
-            )
-          : Column(
-              children: [
-                // Container(
-                //   padding: const EdgeInsets.all(8),
-                //   color: Colors.grey.shade500,
-                //   child: const Text(
-                //       "Passwords expire in 10 days. Renew the passwords to make them recoverable with your Master Security Key (MSK). ",
-                //       style: TextStyle(
-                //         //fontSize: 12,
-                //         fontFamily: 'TitilliumWeb',
-                //       )),
-                // ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: datas.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                                onTap: () {
-                                  Future data = Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => RenewPassword(
-                                                data: datas[index],
-                                                // url: datas[index]["url"],
-                                                // email: datas[index]["email"],
-                                                // password: datas[index]
-                                                // ["password"]
-                                              )));
-                                  data.then((value) {
-                                    setState(() {
-                                      datas = datas;
-                                    });
-                                  });
-                                },
-                                child: emailUserView(index));
-                          }),
-                    ),
+                            fontSize: 16,
+                            // fontFamily: 'TitilliumWeb',
+                            fontWeight: FontWeight.w500),
+                      ),
+                      heightspace(10),
+                      const Text(
+                          "Click on (+) button below to add a new App or website",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            // fontFamily: 'TitilliumWeb',
+                          )),
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              );
+            } else {
+              return Column(
+                children: [
+                  passwordManager.validDays() > 1
+                      ? SizedBox()
+                      : Container(
+                          width: screenWidth,
+                          color: Colors.red,
+                          padding: EdgeInsets.only(
+                              left: 15.0, top: 12.0, bottom: 12.0),
+                          child: Text(
+                            "Passwords expires after " +
+                                passwordManager.validDays().toString() +
+                                " days. Renew the passwords to make them recoverable with your Master Security Key (MSK). ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                              //  fontFamily: 'TitilliumWeb',
+                            ),
+                          ),
+                        ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshots.data.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                  onTap: () {
+                                    Future data = Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => RenewPassword(
+                                                  passModel:
+                                                      snapshots.data[index],
+                                                  // url: datas[index]["url"],
+                                                  // email: datas[index]["email"],
+                                                  // password: datas[index]
+                                                  // ["password"]
+                                                )));
+                                    data.then((value) {
+                                      //print(value);
+                                      if (value) {
+                                        setState(() {
+                                          datas.removeAt(index);
+                                        });
+                                      }
+                                    });
+                                  },
+                                  child: emailUserView(snapshots.data[index]));
+                            }),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }
+          } else {
+            print("loading");
+            return Center(
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue)),
+            );
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: kprimarycolor,
         onPressed: () {
           Future data = Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Addhost()));
           data.then((value) {
-            if (value != null) {
+            if (value.url != null) {
               setState(() {
-                datas = datas;
+                datas.insert(0, value);
               });
             }
           });
@@ -162,9 +211,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container emailUserView(int i) {
+  Container emailUserView(var data) {
     return Container(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 5, bottom: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -173,47 +222,42 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Container(
-                      height: 50,
-                      width: 50,
+                      height: 45,
+                      width: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: datas[i]["colors"]),
-                      child: url.contains(datas[i]["url"])
-                          ? Icon(
-                              datas[i]["icon"],
-                              color: Colors.white,
-                              size: 30,
-                            )
-                          : Center(
-                              child: Text(
-                              "${datas[i]["icon"]}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.white),
-                            ))),
+                          color: icons[data.url]!['color']),
+                      child: Icon(
+                        icons[data.url]!['icon'],
+                        color: Colors.white,
+                        size: 26,
+                      )),
                   widthspace(20),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          datas[i]["url"]
-                              .substring(12, datas[i]["url"]!.length - 4)
-                              .toUpperCase(),
+                          data.url!
+                              .substring(12, data.url!.length - 4)
+                              .toString()
+                              .capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'TitilliumWeb',
-                              fontWeight: FontWeight.bold),
-                        ),
-                        heightspace(5),
-                        Text(
-                          datas[i]["email"],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'TitilliumWeb',
+                            fontSize: 16,
+                            // fontFamily: 'TitilliumWeb',
+                            // fontWeight: FontWeight.bold
                           ),
+                        ),
+                        //  heightspace(5),
+                        Text(
+                          data.user!,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey,
+                              //  fontFamily: 'TitilliumWeb',
+                              fontWeight: FontWeight.w400),
                         )
                       ],
                     ),
@@ -221,36 +265,65 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Container(
-              width: screenWidth * 0.2,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: datas[i]["password"]));
-                  const snackBar = SnackBar(
-                    content: Text("Copied to Clipboard"),
-                    duration: Duration(milliseconds: 20),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                },
-                child: const Text(
-                  "Copy Password",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontFamily: 'TitilliumWeb',
+            // IconButton(
+            //     onPressed: () {
+            //       Clipboard.setData(ClipboardData(text: 'datas[i].pass'));
+            //       const snackBar = SnackBar(
+            //         content: Text("Copied to Clipboard"),
+            //         duration: Duration(milliseconds: 20),
+            //       );
+            //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            //     },
+            //     icon: Icon(Icons.copy)),
+            Row(
+              children: [
+                Container(
+                  // width: screenWidth * 0.2,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(
+                          text: passwordManager.generatePassword(
+                              passModel: data)));
+                      final snackBar = SnackBar(
+                        content: Text("Copied to Clipboard"),
+                        duration: Duration(seconds: 500),
+                        backgroundColor: Colors.grey.shade600,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: const Text(
+                      "Copy Password",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400
+                          // fontFamily: 'TitilliumWeb',
+                          ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        // padding:
+                        //     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        primary: Colors.grey.shade500),
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    // padding:
-                    //     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    primary: Colors.grey.shade500),
-              ),
+              ],
             ),
           ],
         ));
+  }
+
+  Future? getPasswords() async {
+    datas = await _dbOperation.getAll();
+    datas = datas.reversed.toList();
+    print("get passwords");
+    print(datas);
+    // if (datas.isNotEmpty) {
+    //   return "not empty";
+    // }
+    return datas;
   }
 }

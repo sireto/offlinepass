@@ -36,4 +36,8 @@ class PushNotification {
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
   }
+
+  void cancelNotification() async {
+    await fltrNotification.cancelAll();
+  }
 }

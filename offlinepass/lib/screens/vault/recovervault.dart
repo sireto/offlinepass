@@ -82,7 +82,7 @@ class Recovervault extends StatelessWidget {
                       ),
                       // style: TextStyle(color: ktextcolor, fontSize: 16),
                     ),
-                    // style: ElevatedButton.styleFrom(primary: Colors.grey),
+                    style: ElevatedButton.styleFrom(primary: kprimarycolor),
                   ))
             ],
           ),

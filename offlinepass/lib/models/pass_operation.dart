@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/services/db_operation.dart';
 import 'package:sembast/sembast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PassOperation extends DbOperation {
   final Database _db = GetIt.I.get();
@@ -10,7 +12,15 @@ class PassOperation extends DbOperation {
 
   @override
   Future add(PassModel passModel) async {
-    var result = await _store.add(_db, passModel.toMap(passModel: passModel));
+    var data = passModel.toMap(passModel: passModel);
+    var preferences = await SharedPreferences.getInstance();
+    int? index = preferences.getInt('$data');
+    if (index == null || index == '') {
+      preferences.setInt('$data', 0);
+    } else {
+      preferences.setInt('$data', ++index);
+    }
+    var result = await _store.add(_db, data);
     return result;
   }
 
@@ -35,18 +45,34 @@ class PassOperation extends DbOperation {
 
   @override
   Future contain(PassModel passModel) async {
-    if (passModel.id != null) {
-      var result = await _store.record(passModel.id).exists(_db);
-      return result;
-    } else {
-      return false;
-    }
+    var map = passModel.toMap(passModel: passModel);
+    //if (passModel.id != null) {
+    var result = await _store.find(_db,
+        finder: Finder(
+            filter: Filter.and(map.entries
+                .map((e) => Filter.equals(e.key, e.value))
+                .toList())));
+    print(result);
+    return result.isNotEmpty ? true : false;
+    // } else {
+    //   return false;
+    // }
   }
 
   @override
   Future remove(PassModel passModel) async {
     // TODO: implement remove
+    var data = passModel.toMap(passModel: passModel);
+    PasswordManager.preferences.remove('$data');
     var result = await _store.record(passModel.id).delete(_db);
     return result;
+  }
+
+  @override
+  Future isEmpty() async {
+    List<RecordSnapshot<dynamic, dynamic>> snapshots = await _store.find(_db);
+    print(snapshots);
+    print(snapshots.length);
+    return snapshots.isEmpty ? true : false;
   }
 }

@@ -146,10 +146,12 @@ class _LockscreenState extends State<Lockscreen> {
                   Column(
                     children: [
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 150,
+                        width: 150,
                         child: const Image(image: AssetImage("asset/logo.png")),
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white)),
                       ),
                       heightspace(20),
                       (pincodes != null)
@@ -164,7 +166,7 @@ class _LockscreenState extends State<Lockscreen> {
                             )
                           : Text(
                               fPincode == null
-                                  ? "Set Pincode"
+                                  ? "Set a New Pincode"
                                   : "Re-Enter your password",
                               style: const TextStyle(
                                   fontSize: 20, color: Colors.white),
