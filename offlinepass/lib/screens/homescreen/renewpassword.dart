@@ -28,9 +28,11 @@ class RenewPassword extends StatefulWidget {
 class _RenewPasswordState extends State<RenewPassword> {
   final DbOperation _dbOperation = PassOperation();
   late TextEditingController password;
-
+  TextEditingController newPassword = TextEditingController();
+  bool isGenerated = false;
   PasswordManager passwordManager = PasswordManager();
   bool visibletext = true;
+  bool visiblenewPass = true;
   bool isDeleted = false;
   late String pswd;
   @override
@@ -158,7 +160,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: screenWidth ,
+                    width: screenWidth,
                     child: Row(
                       children: [
                         Container(
@@ -291,9 +293,15 @@ class _RenewPasswordState extends State<RenewPassword> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
+                        isGenerated = true;
                         pswd = passwordManager.generatePassword(
                             newPass: true, passModel: widget.passModel);
-                        password.text = pswd;
+                        newPassword.text = pswd;
+                        final snackBar = SnackBar(
+                          content: Text("Password generated successfully"),
+                          backgroundColor: Colors.grey.shade600,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       });
                     },
                     child: const Text(
@@ -308,6 +316,86 @@ class _RenewPasswordState extends State<RenewPassword> {
                             vertical: 10, horizontal: 30),
                         primary: kbuttonColor),
                   ),
+                  heightspace(15),
+                  isGenerated
+                      ? const Text(
+                          "New Password",
+                          style: TextStyle(
+                            color: ktextcolor,
+                            fontSize: 16,
+                            //fontFamily: 'TitilliumWeb',
+                            // fontWeight: FontWeight.w300
+                          ),
+                        )
+                      : SizedBox(),
+                  isGenerated
+                      ? Container(
+                          width: screenWidth,
+                          child: TextFormField(
+                              obscureText: visiblenewPass,
+                              controller: newPassword,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                // fontFamily: 'TitilliumWeb',
+                              ),
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                  focusedBorder: InputBorder.none,
+                                  suffixIcon: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      visiblenewPass
+                                          ? IconButton(
+                                              padding: EdgeInsets.only(
+                                                  bottom: 8.0, left: 20.0),
+                                              onPressed: () {
+                                                setState(() {
+                                                  visiblenewPass =
+                                                      !visiblenewPass;
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                Icons.visibility,
+                                                color: Colors.grey,
+                                              ))
+                                          : IconButton(
+                                              padding: EdgeInsets.only(
+                                                  bottom: 8.0, left: 20.0),
+                                              onPressed: () {
+                                                setState(() {
+                                                  visiblenewPass =
+                                                      !visiblenewPass;
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                Icons.visibility_off,
+                                                color: Colors.grey,
+                                              )),
+                                      IconButton(
+                                          padding: EdgeInsets.only(
+                                              bottom: 8.0, left: 0.0),
+                                          onPressed: () {
+                                            Clipboard.setData(ClipboardData(
+                                                text: password.text));
+                                            final snackBar = SnackBar(
+                                              content:
+                                                  Text("Copied to Clipboard"),
+                                              backgroundColor:
+                                                  Colors.grey.shade600,
+                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+                                          },
+                                          icon: const Icon(
+                                            Icons.copy_rounded,
+                                            color: Colors.grey,
+                                          )),
+                                    ],
+                                  ),
+                                  border: InputBorder.none)),
+                        )
+                      : SizedBox(),
                 ],
               ),
             ),
