@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const Color ktextcolor = Colors.black;
-//const Color kprimarycolor = Color(0xff24405c);
-const Color kprimarycolor = Color(0xff4285F4);
-//const Color kbuttonColor = Color(0xff24405c);
-const Color kbuttonColor = Color(0xff4285F4);
+const Color kprimarycolor = Color(0xff24405c);
+//const Color kprimarycolor = Color(0xff4285F4);
+const Color kbuttonColor = Color(0xff24405c);
+//const Color kbuttonColor = Color(0xff4285F4);
 const Color kbuttoncolor = Color(0xff03875F);
 const String knullUrl = "please enter the url";
 const String kvalidurl = "please enter valid url";
