@@ -41,6 +41,7 @@ class _LockscreenState extends State<Lockscreen> {
   TextEditingController pin6 = TextEditingController();
   final LocalAuthentication auth = LocalAuthentication();
   _SupportState _supportState = _SupportState.unknown;
+  String? fPincode;
 
   @override
   void initState() {
@@ -96,7 +97,6 @@ class _LockscreenState extends State<Lockscreen> {
     pin6FocusNode.dispose();
     _focusNode2.dispose();
     _focusNode3.dispose();
-    _focusNode3.dispose();
     _focusNode4.dispose();
     _focusNode5.dispose();
     _focusNode6.dispose();
@@ -140,8 +140,8 @@ class _LockscreenState extends State<Lockscreen> {
               width: double.infinity,
               padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
               child: Column(
-                //  crossAxisAlignment: CrossAxisAlignment.center,
-                //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
                     children: [
@@ -162,10 +162,12 @@ class _LockscreenState extends State<Lockscreen> {
                                   color: Colors.white,
                                   fontFamily: 'TitilliumWeb'),
                             )
-                          : const Text(
-                              "Set Pincode",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                          : Text(
+                              fPincode == null
+                                  ? "Set Pincode"
+                                  : "Re-Enter your password",
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.white),
                             )
                     ],
                   ),
@@ -430,15 +432,59 @@ class _LockscreenState extends State<Lockscreen> {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
+
                       // pin6FocusNode.unfocus();
                     } else {
-                      pincodes = (pin1.text +
-                          pin2.text +
-                          pin3.text +
-                          pin4.text +
-                          pin5.text +
-                          pin6.text);
-                      Navigator.pop(context, pincodes);
+                      if (fPincode != null) {
+                        if (fPincode ==
+                            pin1.text +
+                                pin2.text +
+                                pin3.text +
+                                pin4.text +
+                                pin5.text +
+                                pin6.text) {
+                          pincodes = (pin1.text +
+                              pin2.text +
+                              pin3.text +
+                              pin4.text +
+                              pin5.text +
+                              pin6.text);
+                          Navigator.pop(context, pincodes);
+                        } else {
+                          setState(() {
+                            pin1.clear();
+                            pin2.clear();
+                            pin3.clear();
+                            pin4.clear();
+                            pin5.clear();
+                            pin6.clear();
+                            pin1FocusNode.requestFocus();
+                          });
+                          const snackBar = SnackBar(
+                            content: Text("Password not match"),
+                            duration: Duration(milliseconds: 500),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      } else {
+                        setState(() {
+                          fPincode = pin1.text +
+                              pin2.text +
+                              pin3.text +
+                              pin4.text +
+                              pin5.text +
+                              pin6.text;
+                          setState(() {
+                            pin1.clear();
+                            pin2.clear();
+                            pin3.clear();
+                            pin4.clear();
+                            pin5.clear();
+                            pin6.clear();
+                            pin1FocusNode.requestFocus();
+                          });
+                        });
+                      }
                     }
                   }
                 },

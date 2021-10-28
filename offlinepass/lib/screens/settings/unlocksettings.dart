@@ -35,6 +35,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
   getstring() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     pincodes = sharedPreferences.getString("pincode");
+    fingerprints = sharedPreferences.getBool("fingerprints");
   }
 
   @override
@@ -79,6 +80,10 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                             SharedPreferences pref =
                                 await SharedPreferences.getInstance();
                             pref.setString("pincode", value);
+                            bool? fingerprint = pref.getBool("fingerprints");
+                            fingerprint == true
+                                ? fingerprintinitialindex = 1
+                                : 0;
                             if (value != null) {
                               setState(() {
                                 initialindex = 1;
