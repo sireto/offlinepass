@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:offlinepass/models/pass_model.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/services/db_operation.dart';
 import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,8 @@ class PassOperation extends DbOperation {
   @override
   Future remove(PassModel passModel) async {
     // TODO: implement remove
+    var data = passModel.toMap(passModel: passModel);
+    PasswordManager.preferences.remove('$data');
     var result = await _store.record(passModel.id).delete(_db);
     return result;
   }

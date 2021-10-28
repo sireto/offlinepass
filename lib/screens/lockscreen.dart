@@ -46,16 +46,16 @@ class _LockscreenState extends State<Lockscreen> {
 
   @override
   void initState() {
-    _otpTextStyle = const TextStyle(fontSize: 18, color: Colors.black);
+    _otpTextStyle = const TextStyle(fontSize: 18, color: Colors.white);
     _otpInputDecoration = InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
         counterText: '',
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.grey, width: 1.5)),
+            borderSide: const BorderSide(color: Colors.white, width: 1)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.grey, width: 1.5)));
+            borderSide: const BorderSide(color: Colors.white, width: 1)));
     pin1FocusNode = FocusNode();
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();

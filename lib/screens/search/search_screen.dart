@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/renewpassword.dart';
 
 import '../../constants.dart';
@@ -9,7 +10,8 @@ import 'package:offlinepass/components/string_extension.dart';
 
 class Search extends SearchDelegate {
   final List datas;
-  Search({required this.datas});
+  final BuildContext context;
+  Search({required this.datas, required this.context});
   @override
   TextStyle get searchFieldStyle => TextStyle(
       fontSize: 16, color: Colors.black38, fontWeight: FontWeight.w300);
@@ -23,12 +25,16 @@ class Search extends SearchDelegate {
 
     return theme.copyWith(
       appBarTheme: AppBarTheme(
-        elevation: 0.0,
-        brightness: colorScheme.brightness,
-        backgroundColor: Colors.white,
-        iconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-        // textTheme: TextTheme(subhe: TextStyle(color: Colors.grey))
-      ),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            // fontFamily: 'TitilliumWeb',
+            fontSize: 14,
+          ),
+          elevation: 0.0,
+          brightness: colorScheme.brightness,
+          backgroundColor: Colors.white,
+          iconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+          toolbarTextStyle: TextStyle(color: Colors.blue)),
       inputDecorationTheme: searchFieldDecorationTheme ??
           InputDecorationTheme(
             hintStyle: searchFieldStyle,
@@ -44,7 +50,7 @@ class Search extends SearchDelegate {
         onPressed: () {
           query = '';
         },
-        icon: query.length != 0 ? Icon(Icons.clear) : Icon(null),
+        icon: query.length != 0 ? Icon(Icons.clear, size: 22) : Icon(null),
       )
     ];
   }
@@ -52,7 +58,10 @@ class Search extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios_new_rounded),
+      icon: Icon(
+        Icons.arrow_back_ios_new_rounded,
+        size: 22,
+      ),
       onPressed: () {
         close(context, null);
       },
@@ -106,15 +115,15 @@ class Search extends SearchDelegate {
               child: Row(
                 children: [
                   Container(
-                      height: 40,
-                      width: 40,
+                      height: 45,
+                      width: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: icons[data.url]!['color']),
                       child: Icon(
                         icons[data.url]!['icon'],
                         color: Colors.white,
-                        size: 30,
+                        size: 26,
                       )),
                   widthspace(20),
                   Flexible(
@@ -129,15 +138,16 @@ class Search extends SearchDelegate {
                               .capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'TitilliumWeb',
-                              fontWeight: FontWeight.bold),
+                            fontSize: 16,
+                            // fontFamily: 'TitilliumWeb',
+                            // fontWeight: FontWeight.bold
+                          ),
                         ),
                         //  heightspace(5),
                         Text(
                           data.user!,
                           style: const TextStyle(
-                              fontSize: 15,
+                              color: Colors.grey,
                               //  fontFamily: 'TitilliumWeb',
                               fontWeight: FontWeight.w400),
                         )
@@ -160,16 +170,19 @@ class Search extends SearchDelegate {
             Row(
               children: [
                 Container(
-                  width: screenWidth * 0.2,
+                  //  width: screenWidth * 0.2,
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      Clipboard.setData(ClipboardData(text: 'datas[i].pass'));
-                      // const snackBar = SnackBar(
-                      //   content: Text("Copied to Clipboard"),
-                      //   duration: Duration(milliseconds: 20),
-                      // );
-                      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      
+                     Clipboard.setData(ClipboardData(
+                          text: PasswordManager().generatePassword(
+                              passModel: data)));
+                      final snackBar = SnackBar(
+                        content: Text("Copied to Clipboard"),
+                        backgroundColor: Colors.grey.shade600,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       Fluttertoast.showToast(
                           msg: "Copied to clipboard",
                           toastLength: Toast.LENGTH_SHORT,

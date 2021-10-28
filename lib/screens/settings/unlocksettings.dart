@@ -61,7 +61,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
                   color: Colors.grey.withOpacity(0.2),
-                  width: 1,
+                  width: 0.5,
                 )),
                 child: Container(
                   padding: const EdgeInsets.all(10),
@@ -97,21 +97,22 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                           children: [
                             Row(
                               children: [
-                                const Icon(FontAwesomeIcons.lock),
+                                const Icon(Icons.lock_rounded,color: Colors.black87,),
                                 widthspace(20),
                                 const Text(
                                   "Pin code",
                                   style: TextStyle(
-                                      fontSize: 20, fontFamily: 'TitilliumWeb'),
+                                      fontSize: 18, fontFamily: 'TitilliumWeb'),
                                 )
                               ],
                             ),
                             ToggleSwitch(
                               minWidth: 50.0,
+                             // minHeight: 35.0,
                               cornerRadius: 20.0,
                               activeBgColors: [
-                                [Colors.green[800]!],
-                                [Colors.red[800]!]
+                                [Colors.red.shade800],
+                                [Colors.green[800]!]
                               ],
                               activeFgColor: Colors.white,
                               inactiveBgColor: Colors.grey,
@@ -175,12 +176,12 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(FontAwesomeIcons.fingerprint),
+                                    const Icon(Icons.fingerprint_rounded,color: Colors.black87,),
                                     widthspace(20),
                                     const Text(
                                       "Fingerprint Lock",
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 18,
                                           fontFamily: 'TitilliumWeb'),
                                     )
                                   ],
@@ -189,8 +190,8 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                   minWidth: 50.0,
                                   cornerRadius: 20.0,
                                   activeBgColors: [
-                                    [Colors.green[800]!],
-                                    [Colors.red[800]!]
+                                    [Colors.red.shade800],
+                                    [Colors.green[800]!]
                                   ],
                                   activeFgColor: Colors.white,
                                   inactiveBgColor: Colors.grey,

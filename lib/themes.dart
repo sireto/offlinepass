@@ -5,21 +5,22 @@ ThemeData theme() => ThemeData(
       brightness: Brightness.light,
       primaryColor: Colors.blueAccent,
       appBarTheme: appBarTheme(),
+      textTheme:
+          TextTheme(headline6: TextStyle(fontSize: 16, color: Colors.black,fontWeight: FontWeight.w400)),
       scaffoldBackgroundColor: Colors.white,
     );
 
-AppBarTheme appBarTheme() => AppBarTheme(
+AppBarTheme appBarTheme() => const AppBarTheme(
     color: kprimarycolor,
-    centerTitle: true,
+    centerTitle: false,
     elevation: 0.0,
-  
-    titleTextStyle: const TextStyle(
+    titleTextStyle: TextStyle(
       color: Colors.white,
-      fontFamily: 'TitilliumWeb',
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
+      // fontFamily: 'TitilliumWeb',
+      fontSize: 17,
+      fontWeight: FontWeight.w400,
     ),
-    textTheme: const TextTheme(
+    textTheme: TextTheme(
       headline6: TextStyle(
         color: Colors.white,
         fontFamily: 'TitilliumWeb',
@@ -27,7 +28,7 @@ AppBarTheme appBarTheme() => AppBarTheme(
         fontWeight: FontWeight.w700,
       ),
     ),
-    actionsIconTheme:IconThemeData(color: Colors.white) ,
+    actionsIconTheme: IconThemeData(color: Colors.white),
     iconTheme: IconThemeData(color: Colors.white));
 SizedBox heightspace(double height) {
   return SizedBox(

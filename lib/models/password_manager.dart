@@ -11,24 +11,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PasswordManager {
   static late final String msk;
   static late final SharedPreferences preferences;
-  static const int passwordValidity = 86400 * 90;
+  static const int passwordValidity = 86400 * 1;
   String generatePassword({
     required PassModel passModel,
-    bool newPass = true,
-    int? index = 0,
+    bool newPass = false,
+    bool generate = false,
+    int? index,
   }) {
     var data = passModel.toMap(passModel: passModel);
-    index = preferences.getInt('$data');
+    if (index == null) {
+      index = preferences.getInt('$data');
+    }
     print("index $index");
     // if (!customIndex) {
     if (newPass) {
-      if (index == null || index == '') {
-        preferences.setInt('$data', 0);
-      } else {
-        preferences.setInt('$data', ++index);
-        index--;
-      }
+      // if (index == null || index == '') {
+      //   print("index null");
+      //   preferences.setInt('$data', 0);
+      // } else {
+      print("index not null");
+      index = index! + 1;
+
+      preferences.setInt('$data', index);
+      //index--;
+      // }
+    } else if (generate) {
+      preferences.setInt('$data', index!);
     }
+    print("index $index");
+
     //}
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
 
@@ -45,7 +56,7 @@ class PasswordManager {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     preferences.setString('startingDate', formatter.format(now));
-    PushNotification().showNotification(1, 86400 * 90);
+    PushNotification().showNotification(1, 86400 * 2);
   }
 
   void removeStartingDate() {
@@ -60,7 +71,7 @@ class PasswordManager {
     final startingDate = preferences.getString('startingDate');
     Duration difference =
         DateTime.parse(nowDate).difference(DateTime.parse(startingDate!));
-    print("validity" + (90 - difference.inDays).toString());
-    return 90 - difference.inDays;
+    print("validity" + (1 - difference.inDays).toString());
+    return 2 - difference.inDays;
   }
 }

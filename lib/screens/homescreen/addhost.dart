@@ -77,13 +77,16 @@ class _AddhostState extends State<Addhost> {
             password.text != ""
                 ? Container(
                     width: screenWidth,
-                    color: Colors.yellow.shade700,
+                    color: Colors.green.shade400,
                     padding:
                         EdgeInsets.only(left: 15.0, top: 12.0, bottom: 12.0),
                     child: Text(
-                      "Expires in 90 days.",
+                      "Expires in 2 days.",
                       style: TextStyle(
-                        fontFamily: "TitilliumWeb",
+                        color: Colors.white,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   )
@@ -97,8 +100,7 @@ class _AddhostState extends State<Addhost> {
                     "Add an App/Site",
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'TitilliumWeb',
+                      fontWeight: FontWeight.w300,
                     ),
                     //  style: TextStyle(fontSize: 20),
                   ),
@@ -131,9 +133,10 @@ class _AddhostState extends State<Addhost> {
                                   controller: appSiteUrl,
                                   cursorColor: kprimarycolor,
                                   style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontFamily: 'TitilliumWeb'),
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                    // fontFamily: 'TitilliumWeb'
+                                  ),
                                   scrollPadding:
                                       const EdgeInsets.only(bottom: 250),
                                   decoration: InputDecoration(
@@ -198,9 +201,10 @@ class _AddhostState extends State<Addhost> {
                           TextFormField(
                             cursorColor: kprimarycolor,
                             style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontFamily: 'TitilliumWeb'),
+                              fontSize: 16,
+                              color: Colors.black87,
+                              // fontFamily: 'TitilliumWeb'
+                            ),
                             controller: usernameEmailPhone,
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
@@ -239,9 +243,11 @@ class _AddhostState extends State<Addhost> {
                                   bool result =
                                       await _dbOperation.contain(passModel);
                                   if (result) {
-                                    const snackBar = SnackBar(
-                                        content: Text(
-                                            "Host and username already exist"));
+                                    final snackBar = SnackBar(
+                                      content: Text(
+                                          "Host and username already exist"),
+                                      backgroundColor: Colors.grey.shade500,
+                                    );
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
 
@@ -255,9 +261,16 @@ class _AddhostState extends State<Addhost> {
                                     }
                                     passModel.id =
                                         await _dbOperation.add(passModel);
+                                    final snackBar = SnackBar(
+                                      content: Text("Password generated successfully"),
+                                      backgroundColor: Colors.grey.shade500,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                     setState(() {
                                       password.text =
                                           passwordManager.generatePassword(
+                                              generate: true,
                                               passModel: passModel);
                                     });
                                   }
@@ -266,9 +279,9 @@ class _AddhostState extends State<Addhost> {
                               child: const Text(
                                 "Generate Password",
                                 style: TextStyle(
-                                  fontSize: 16,
                                   color: Colors.white,
-                                  fontFamily: 'TitilliumWeb',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
                                 ),
                                 // style: TextStyle(color: ktextcolor, fontSize: 16),
                               ),
@@ -287,8 +300,7 @@ class _AddhostState extends State<Addhost> {
                           style: TextStyle(
                               color: ktextcolor,
                               fontSize: 16,
-                              fontFamily: 'TitilliumWeb',
-                              fontWeight: FontWeight.w500),
+                              fontWeight: FontWeight.w300),
                         )
                       : SizedBox(),
 
@@ -299,9 +311,9 @@ class _AddhostState extends State<Addhost> {
                               obscureText: visibletext,
                               controller: password,
                               style: TextStyle(
-                                  color: ktextcolor,
-                                  fontSize: 14,
-                               ),
+                                color: ktextcolor,
+                                fontSize: 14,
+                              ),
                               readOnly: true,
                               decoration: InputDecoration(
                                   focusedBorder: InputBorder.none,
@@ -311,7 +323,7 @@ class _AddhostState extends State<Addhost> {
                                       visibletext
                                           ? IconButton(
                                               padding: EdgeInsets.only(
-                                               bottom:8.0,   left: 20.0),
+                                                  bottom: 8.0, left: 20.0),
                                               onPressed: () {
                                                 setState(() {
                                                   visibility();
@@ -323,7 +335,7 @@ class _AddhostState extends State<Addhost> {
                                               ))
                                           : IconButton(
                                               padding: EdgeInsets.only(
-                                                 bottom:8.0, left: 20.0),
+                                                  bottom: 8.0, left: 20.0),
                                               onPressed: () {
                                                 setState(() {
                                                   visibility();
@@ -335,13 +347,16 @@ class _AddhostState extends State<Addhost> {
                                               )),
                                       IconButton(
                                           padding: EdgeInsets.only(
-                                             bottom:8.0,  left: 0.0),
+                                              bottom: 8.0, left: 0.0),
                                           onPressed: () {
                                             Clipboard.setData(ClipboardData(
                                                 text: password.text));
-                                            const snackBar = SnackBar(
-                                                content: Text(
-                                                    "Copied to Clipboard"));
+                                            final snackBar = SnackBar(
+                                              content:
+                                                  Text("Copied to Clipboard"),
+                                              backgroundColor:
+                                                  Colors.grey.shade600,
+                                            );
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(snackBar);
                                           },

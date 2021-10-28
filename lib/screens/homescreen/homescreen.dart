@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //print(passwordManager.validDays());
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kprimarycolor,
+        // backgroundColor: kprimarycolor,
         title: const Text(
           "Offline Pass",
         ),
@@ -47,19 +47,22 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: Container(
             margin: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
-                color: Colors.black, shape: BoxShape.circle),
-            child: const Icon(Icons.lock_rounded,)),
+                color: Colors.white, shape: BoxShape.circle),
+            child: const Icon(
+              Icons.lock_rounded,
+              color: kprimarycolor,
+            )),
         actions: [
           IconButton(
               onPressed: () {
-                showSearch(context: context, delegate: Search(datas: datas));
+                showSearch(context: context, delegate: Search(datas: datas,context: context));
               },
               icon: const Icon(
                 Icons.search_rounded,
-               // color: Colors.white70,
-                size: 21,
+                // color: Colors.white70,
+                //size: 21,
               )),
-              IconButton(
+          IconButton(
               onPressed: () {
                 Navigator.push(
                     context,
@@ -68,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               icon: const Icon(
                 Icons.lock,
-                
-              //  color: Colors.white70,
+
+                //  color: Colors.white70,
               )),
           // IconButton(
           //     onPressed: () {},
@@ -90,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.4,
+                        height: screenHeight * 0.25,
                         child: const Center(
                           child: Image(
                             image: AssetImage("asset/logo.png"),
@@ -102,8 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         "No Apps/Websites  added yet",
                         style: TextStyle(
                             fontSize: 16,
-                            fontFamily: 'TitilliumWeb',
-                            fontWeight: FontWeight.bold),
+                            // fontFamily: 'TitilliumWeb',
+                            fontWeight: FontWeight.w500),
                       ),
                       heightspace(10),
                       const Text(
@@ -111,26 +114,35 @@ class _HomeScreenState extends State<HomeScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
-                            fontFamily: 'TitilliumWeb',
+                            // fontFamily: 'TitilliumWeb',
                           )),
                     ],
                   ),
                 ),
               );
             } else {
-              print("snap:" + snapshots.data.toString());
-              print("datas: ${datas.length}");
-              print("snap datas: ${snapshots.data.length}");
               return Column(
                 children: [
-               datas.isEmpty?SizedBox():   Container(
-                    width: screenWidth,
-                    color: Colors.yellow.shade700,
-                    padding: EdgeInsets.only(left: 15.0, top: 12.0, bottom: 12.0),
-                    child: Text("Passwords expires after " +
-                        passwordManager.validDays().toString() +
-                        " days. Renew the passwords to make them recoverable with your Master Security Key (MSK). "),
-                  ),
+                  passwordManager.validDays() > 1
+                      ? SizedBox()
+                      : Container(
+                          width: screenWidth,
+                          color: Colors.red,
+                          padding: EdgeInsets.only(
+                              left: 15.0, top: 12.0, bottom: 12.0),
+                          child: Text(
+                            "Passwords expires after " +
+                                passwordManager.validDays().toString() +
+                                " days. Renew the passwords to make them recoverable with your Master Security Key (MSK). ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                              //  fontFamily: 'TitilliumWeb',
+                            ),
+                          ),
+                        ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
@@ -162,7 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }
                                     });
                                   },
-                                  child: emailUserView(snapshots.data[index]));
+                                  child: emailUserView(
+                                      snapshots.data[index]));
                             }),
                       ),
                     ),
@@ -199,12 +212,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Container emailUserView(var data) {
     return Container(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 5, bottom: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: screenWidth * 0.6,
+             width: screenWidth * 0.6,
               child: Row(
                 children: [
                   Container(
@@ -231,15 +244,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               .capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'TitilliumWeb',
-                              fontWeight: FontWeight.bold),
+                            fontSize: 16,
+                            // fontFamily: 'TitilliumWeb',
+                            // fontWeight: FontWeight.bold
+                          ),
                         ),
                         //  heightspace(5),
                         Text(
                           data.user!,
                           style: const TextStyle(
                               fontSize: 15,
+                              color: Colors.grey,
                               //  fontFamily: 'TitilliumWeb',
                               fontWeight: FontWeight.w400),
                         )
@@ -262,14 +277,16 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 Container(
-                  width: screenWidth * 0.2,
+                  // width: screenWidth * 0.2,
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      Clipboard.setData(ClipboardData(text: 'datas[i].pass'));
-                      const snackBar = SnackBar(
+                      Clipboard.setData(ClipboardData(
+                          text: passwordManager.generatePassword(
+                              passModel: data)));
+                      final snackBar = SnackBar(
                         content: Text("Copied to Clipboard"),
-                        duration: Duration(milliseconds: 20),
+                        backgroundColor: Colors.grey.shade600,
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
@@ -277,10 +294,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Copy Password",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontFamily: 'TitilliumWeb',
-                      ),
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400
+                          // fontFamily: 'TitilliumWeb',
+                          ),
                     ),
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
