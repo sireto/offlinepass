@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/models/pass_model.dart';
@@ -27,6 +29,11 @@ class OldPassword extends StatefulWidget {
 class _OldPasswordState extends State<OldPassword> {
   PasswordManager _passwordManager = PasswordManager();
   late int count;
+  final initialdate = DateTime.now();
+  late String _startDate =
+      DateFormat("yyyy-MM-dd").format(initialdate.subtract(Duration(days: 90)));
+  late String _endDate = DateFormat("yyyy-MM-dd").format(initialdate);
+  String? selectdate;
   @override
   void initState() {
     // TODO: implement initState
@@ -69,7 +76,7 @@ class _OldPasswordState extends State<OldPassword> {
               )
             : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Container(
-                  width: screenWidth ,
+                  width: screenWidth,
                   child: Row(
                     children: [
                       Container(
@@ -120,13 +127,45 @@ class _OldPasswordState extends State<OldPassword> {
                 heightspace(20),
                 Column(
                   children: [
-                    const Text(
-                      "Passwords :",
-                      style: TextStyle(
-                          color: ktextcolor,
-                          fontSize: 16,
-                          // fontFamily: 'TitilliumWeb',
-                          fontWeight: FontWeight.w500),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Passwords :",
+                          style: TextStyle(
+                              color: ktextcolor,
+                              fontSize: 16,
+                              // fontFamily: 'TitilliumWeb',
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Row(
+                          children: [
+                            selectdate == null
+                                ? Text(DateFormat("MMM dd yyyy")
+                                    .format(initialdate))
+                                : Text(selectdate!),
+                            // ElevatedButton(
+                            //     onPressed: () {
+                            //       print(initialdate);
+                            //       print(_startDate);
+                            //       print(_endDate);
+                            //       pickdate();
+                            //       // print(selectdate);
+                            //     },
+                            //     style:
+                            //         ElevatedButton.styleFrom(primary: kbuttonColor),
+                            //     //pickdate,
+                            //     child: selectdate == null
+                            //         ? Text(DateFormat("MMM dd yyyy")
+                            //             .format(initialdate))
+                            //         : Text(selectdate!)),
+                            widthspace(10),
+                            IconButton(
+                                onPressed: pickdate,
+                                icon: const Icon(FontAwesomeIcons.calendar))
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -169,10 +208,29 @@ class _OldPasswordState extends State<OldPassword> {
                                 )),
                             border: InputBorder.none)),
                   ),
-                )
+                ),
               ]),
       ),
     );
+  }
+
+  Future pickdate() async {
+    final newdate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.parse(_startDate),
+        firstDate: DateTime.parse(_startDate),
+        initialEntryMode: DatePickerEntryMode.calendar,
+        lastDate: DateTime.parse(_endDate));
+
+    if (newdate == null) return;
+    setState(() {
+      // isChanged = true;
+      selectdate = DateFormat("MMM dd yyyy").format(newdate);
+      print(selectdate);
+      // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
+      // _endDate =
+      //     DateFormat("yyyy-MM-dd").format(newdate.add(Duration(days: 14)));
+    });
   }
 
   // void visibility() {

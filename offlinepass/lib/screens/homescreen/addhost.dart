@@ -126,8 +126,8 @@ class _AddhostState extends State<Addhost> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return knullUrl;
-                                } else if (!kusernamevalidator
-                                    .hasMatch(value)) {
+                                } else if (!kurlvalidatior.hasMatch(value) ||
+                                    value.length <= 13) {
                                   return kvalidurl;
                                 }
                                 return null;
@@ -285,10 +285,22 @@ class _AddhostState extends State<Addhost> {
                                                             14
                                                         ? checkindex == index
                                                             ? Text(
-                                                                appSiteUrl.text
-                                                                    .substring(
-                                                                        12, 14)
-                                                                    .toUpperCase(),
+                                                                appSiteUrl.text.substring(
+                                                                            0,
+                                                                            5) ==
+                                                                        "https"
+                                                                    ? appSiteUrl
+                                                                        .text
+                                                                        .substring(
+                                                                            12,
+                                                                            14)
+                                                                        .toUpperCase()
+                                                                    : appSiteUrl
+                                                                        .text
+                                                                        .substring(
+                                                                            11,
+                                                                            13)
+                                                                        .toUpperCase(),
                                                                 style: const TextStyle(
                                                                     color: Colors
                                                                         .white),
@@ -327,7 +339,6 @@ class _AddhostState extends State<Addhost> {
                                   passModel = PassModel(
                                     url: appSiteUrl.text,
                                     user: usernameEmailPhone.text,
-                                    color: currentcolor,
                                   );
                                   bool result =
                                       await _dbOperation.contain(passModel);

@@ -217,11 +217,9 @@ class _HomeScreenState extends State<HomeScreen> {
         width: screenWidth,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         
           children: [
             Flexible(
               child: Row(
-                
                 children: [
                   Container(
                       height: 45,
@@ -255,7 +253,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         //  heightspace(5),
                         Text(
-                          
                           data.user!,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -281,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
             //     },
             //     icon: Icon(Icons.copy)),
             IconButton(
-                padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
+                // padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(
                       text: passwordManager.generatePassword(passModel: data)));
@@ -294,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: const Icon(
                   Icons.copy_rounded,
                   color: Colors.grey,
+                  size: 30,
                 )),
           ],
         ));

@@ -183,7 +183,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                         ],
                       ),
                     ),
-                    heightspace(20),
+                    // heightspace(5),
                     _supportState == _SupportState.supported
                         ? const Divider(
                             height: 2,
