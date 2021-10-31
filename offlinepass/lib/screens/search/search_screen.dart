@@ -106,12 +106,13 @@ class Search extends SearchDelegate {
 
   Container emailUserView(var data) {
     return Container(
+      width: screenWidth,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: screenWidth * 0.6,
+            Flexible(
+             // width: screenWidth * 0.6,
               child: Row(
                 children: [
                   Container(
@@ -126,7 +127,7 @@ class Search extends SearchDelegate {
                         size: 26,
                       )),
                   widthspace(20),
-                  Flexible(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,6 +147,7 @@ class Search extends SearchDelegate {
                         //  heightspace(5),
                         Text(
                           data.user!,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               color: Colors.grey,
                               //  fontFamily: 'TitilliumWeb',
@@ -167,15 +169,10 @@ class Search extends SearchDelegate {
             //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
             //     },
             //     icon: Icon(Icons.copy)),
-            Row(
-              children: [
-                Container(
-                  //  width: screenWidth * 0.2,
-                  height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      
-                     Clipboard.setData(ClipboardData(
+               IconButton(
+                padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
+                onPressed: () {
+                    Clipboard.setData(ClipboardData(
                           text: PasswordManager().generatePassword(
                               passModel: data)));
                       final snackBar = SnackBar(
@@ -183,34 +180,12 @@ class Search extends SearchDelegate {
                         backgroundColor: Colors.grey.shade600,
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      Fluttertoast.showToast(
-                          msg: "Copied to clipboard",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
-                    },
-                    child: const Text(
-                      "Copy Password",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontFamily: 'TitilliumWeb',
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        // padding:
-                        //     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        primary: Colors.grey.shade500),
-                  ),
-                ),
-              ],
-            ),
+                },
+                icon: const Icon(
+                  Icons.copy_rounded,
+                  color: Colors.grey,
+                )),
+           
           ],
         ));
   }
