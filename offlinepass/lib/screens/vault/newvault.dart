@@ -48,7 +48,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                   text: TextSpan(
                       style: TextStyle(
                           fontSize: 15,
-                         // fontFamily: 'TitilliumWeb',
+                          // fontFamily: 'TitilliumWeb',
                           color: Colors.grey.shade700),
                       children: [
                     TextSpan(text: "App has generated a "),
@@ -101,7 +101,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 ],
               ),
               heightspace(25),
-               Text(
+              Text(
                 "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
                 style: TextStyle(
                     fontFamily: 'TitilliumWeb',
@@ -112,9 +112,9 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
               const Text(
                 "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
                 style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'TitilliumWeb',
-                  ),
+                  fontSize: 14,
+                  fontFamily: 'TitilliumWeb',
+                ),
               ),
               heightspace(25),
               Container(

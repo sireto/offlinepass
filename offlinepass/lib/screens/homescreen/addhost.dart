@@ -52,6 +52,18 @@ class _AddhostState extends State<Addhost> {
     FontAwesomeIcons.telegram,
     FontAwesomeIcons.linkedin,
   ];
+  List<Color> colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.grey,
+    Colors.brown,
+    Colors.cyan,
+    Colors.yellow,
+    Colors.purple,
+  ];
+  var checkindex = 0;
+  Color currentcolor = Colors.red;
   final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -78,9 +90,9 @@ class _AddhostState extends State<Addhost> {
                 ? Container(
                     width: screenWidth,
                     color: Colors.green.shade400,
-                    padding:
-                        EdgeInsets.only(left: 15.0, top: 12.0, bottom: 12.0),
-                    child: Text(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, top: 12.0, bottom: 12.0),
+                    child: const Text(
                       "Expires in 2 days.",
                       style: TextStyle(
                         color: Colors.white,
@@ -114,6 +126,9 @@ class _AddhostState extends State<Addhost> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return knullUrl;
+                                } else if (!kusernamevalidator
+                                    .hasMatch(value)) {
+                                  return kvalidurl;
                                 }
                                 return null;
                               },
@@ -132,6 +147,11 @@ class _AddhostState extends State<Addhost> {
                               textFieldConfiguration: TextFieldConfiguration(
                                   controller: appSiteUrl,
                                   cursorColor: kprimarycolor,
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      appSiteUrl.text = value;
+                                    });
+                                  },
                                   style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.black87,
@@ -230,6 +250,73 @@ class _AddhostState extends State<Addhost> {
                                 )),
                           ),
                           heightspace(20),
+                          !url.contains(appSiteUrl.text) &&
+                                  appSiteUrl.text != ""
+                              ? Container(
+                                  height: 50,
+                                  width: screenWidth,
+                                  child: ListView.builder(
+                                      //  shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: colors.length,
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            print(colors[index]);
+                                            setState(() {
+                                              checkindex = index;
+                                              currentcolor = colors[index];
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 50,
+                                            width: 50,
+                                            margin: const EdgeInsets.only(
+                                                right: 10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              // shape: BoxShape.circle,
+                                              color: colors[index],
+                                            ),
+                                            child: Center(
+                                                child: appSiteUrl.text != ""
+                                                    ? appSiteUrl.text.length >
+                                                            14
+                                                        ? checkindex == index
+                                                            ? Text(
+                                                                appSiteUrl.text
+                                                                    .substring(
+                                                                        12, 14)
+                                                                    .toUpperCase(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              )
+                                                            : null
+                                                        : checkindex == index
+                                                            ? const Center(
+                                                                child: Icon(
+                                                                    Icons
+                                                                        .check))
+                                                            : null
+                                                    : checkindex == index
+                                                        ? const Center(
+                                                            child: Icon(
+                                                                Icons.check))
+                                                        : null),
+                                          ),
+                                        );
+                                      }),
+                                )
+                              : const SizedBox(),
+                          !url.contains(appSiteUrl.text) &&
+                                  appSiteUrl.text != ""
+                              ? heightspace(20)
+                              : const SizedBox(),
                           Container(
                             // padding: const EdgeInsets.only(left: 30, right: 30),
                             width: screenWidth,
@@ -238,8 +325,10 @@ class _AddhostState extends State<Addhost> {
                               onPressed: () async {
                                 if (_key.currentState!.validate()) {
                                   passModel = PassModel(
-                                      url: appSiteUrl.text,
-                                      user: usernameEmailPhone.text);
+                                    url: appSiteUrl.text,
+                                    user: usernameEmailPhone.text,
+                                    color: currentcolor,
+                                  );
                                   bool result =
                                       await _dbOperation.contain(passModel);
                                   if (result) {
@@ -262,7 +351,9 @@ class _AddhostState extends State<Addhost> {
                                     passModel.id =
                                         await _dbOperation.add(passModel);
                                     final snackBar = SnackBar(
-                                      content: Text("Password generated successfully"),
+                                      content: Text(
+                                          "Password generated successfully"),
+                                      duration: Duration(milliseconds: 500),
                                       backgroundColor: Colors.grey.shade500,
                                     );
                                     ScaffoldMessenger.of(context)

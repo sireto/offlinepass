@@ -6,8 +6,6 @@ import 'package:offlinepass/components/local_auth_api.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/firstscreen.dart';
 import 'package:offlinepass/main.dart';
-import 'package:offlinepass/models/password_manager.dart';
-import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,19 +41,20 @@ class _LockscreenState extends State<Lockscreen> {
   TextEditingController pin6 = TextEditingController();
   final LocalAuthentication auth = LocalAuthentication();
   _SupportState _supportState = _SupportState.unknown;
+  String? fPincode;
 
   @override
   void initState() {
-    _otpTextStyle = const TextStyle(fontSize: 18, color: Colors.white);
+    _otpTextStyle = const TextStyle(fontSize: 18, color: Colors.black);
     _otpInputDecoration = InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
         counterText: '',
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.white, width: 1)),
+            borderSide: const BorderSide(color: Colors.black54, width: 1.5)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.white, width: 1)));
+            borderSide: const BorderSide(color: Colors.black54, width: 1.5)));
     pin1FocusNode = FocusNode();
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
@@ -98,7 +97,6 @@ class _LockscreenState extends State<Lockscreen> {
     pin6FocusNode.dispose();
     _focusNode2.dispose();
     _focusNode3.dispose();
-   
     _focusNode4.dispose();
     _focusNode5.dispose();
     _focusNode6.dispose();
@@ -142,16 +140,18 @@ class _LockscreenState extends State<Lockscreen> {
               width: double.infinity,
               padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
                     children: [
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 150,
+                        width: 150,
                         child: const Image(image: AssetImage("asset/logo.png")),
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white)),
                       ),
                       heightspace(20),
                       (pincodes != null)
@@ -164,10 +164,12 @@ class _LockscreenState extends State<Lockscreen> {
                                   color: Colors.white,
                                   fontFamily: 'TitilliumWeb'),
                             )
-                          : const Text(
-                              "Set Pincode",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                          : Text(
+                              fPincode == null
+                                  ? "Set a New Pincode"
+                                  : "Re-Enter your password",
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.white),
                             )
                     ],
                   ),
@@ -207,14 +209,13 @@ class _LockscreenState extends State<Lockscreen> {
             height: 50,
             child: TextFormField(
               focusNode: pin1FocusNode,
-              
               // obscureText: true,
               controller: pin1,
               keyboardType: TextInputType.number,
               style: _otpTextStyle,
               maxLength: 1,
               textAlign: TextAlign.center,
-              cursorColor: Colors.grey,
+              cursorColor: Colors.black54,
               decoration: _otpInputDecoration,
 
               onChanged: (value) {
@@ -244,7 +245,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.grey,
+                cursorColor: Colors.black54,
                 decoration: _otpInputDecoration,
                 maxLength: 1,
                 onChanged: (value) {
@@ -281,7 +282,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.grey,
+                cursorColor: Colors.black,
                 decoration: _otpInputDecoration,
                 onChanged: (value) {
                   // pin3 = value;
@@ -315,7 +316,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.grey,
+                cursorColor: Colors.black,
                 controller: pin4,
                 maxLength: 1,
                 decoration: _otpInputDecoration,
@@ -351,7 +352,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.grey,
+                cursorColor: Colors.black,
                 maxLength: 1,
                 decoration: _otpInputDecoration,
                 onChanged: (value) {
@@ -391,7 +392,7 @@ class _LockscreenState extends State<Lockscreen> {
                 maxLength: 1,
 
                 textAlign: TextAlign.center,
-                cursorColor: Colors.grey,
+                cursorColor: Colors.black,
                 decoration: _otpInputDecoration,
                 onChanged: (value) {
                   // pin6 = value;
@@ -415,9 +416,7 @@ class _LockscreenState extends State<Lockscreen> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PasswordManager.msk != ''
-                                    ? HomeScreen()
-                                    : Firstscreen()),
+                                builder: (context) => const Firstscreen()),
                             (route) => false);
                       } else {
                         setState(() {
@@ -435,15 +434,59 @@ class _LockscreenState extends State<Lockscreen> {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
+
                       // pin6FocusNode.unfocus();
                     } else {
-                      pincodes = (pin1.text +
-                          pin2.text +
-                          pin3.text +
-                          pin4.text +
-                          pin5.text +
-                          pin6.text);
-                      Navigator.pop(context, pincodes);
+                      if (fPincode != null) {
+                        if (fPincode ==
+                            pin1.text +
+                                pin2.text +
+                                pin3.text +
+                                pin4.text +
+                                pin5.text +
+                                pin6.text) {
+                          pincodes = (pin1.text +
+                              pin2.text +
+                              pin3.text +
+                              pin4.text +
+                              pin5.text +
+                              pin6.text);
+                          Navigator.pop(context, pincodes);
+                        } else {
+                          setState(() {
+                            pin1.clear();
+                            pin2.clear();
+                            pin3.clear();
+                            pin4.clear();
+                            pin5.clear();
+                            pin6.clear();
+                            pin1FocusNode.requestFocus();
+                          });
+                          const snackBar = SnackBar(
+                            content: Text("Password not match"),
+                            duration: Duration(milliseconds: 500),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      } else {
+                        setState(() {
+                          fPincode = pin1.text +
+                              pin2.text +
+                              pin3.text +
+                              pin4.text +
+                              pin5.text +
+                              pin6.text;
+                          setState(() {
+                            pin1.clear();
+                            pin2.clear();
+                            pin3.clear();
+                            pin4.clear();
+                            pin5.clear();
+                            pin6.clear();
+                            pin1FocusNode.requestFocus();
+                          });
+                        });
+                      }
                     }
                   }
                 },

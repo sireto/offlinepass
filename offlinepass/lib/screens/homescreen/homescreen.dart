@@ -7,7 +7,7 @@ import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/renewpassword.dart';
 import 'package:offlinepass/screens/search/search_screen.dart';
-import 'package:offlinepass/screens/settings/unlocksettings.dart';
+import 'package:offlinepass/screens/settings/settings.dart';
 import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/components/string_extension.dart';
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context) => const Unlocksettings()));
               },
               icon: const Icon(
-                Icons.lock,
+                Icons.settings,
 
                 //  color: Colors.white70,
               )),
