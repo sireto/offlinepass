@@ -52,6 +52,18 @@ class _AddhostState extends State<Addhost> {
     FontAwesomeIcons.telegram,
     FontAwesomeIcons.linkedin,
   ];
+  List<Color> colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.grey,
+    Colors.brown,
+    Colors.cyan,
+    Colors.yellow,
+    Colors.purple,
+  ];
+  var checkindex = 0;
+  Color currentcolor = Colors.red;
   final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -71,6 +83,7 @@ class _AddhostState extends State<Addhost> {
           "Add an App or Website",
         ),
       ),
+
       body: WillPopScope(
         onWillPop: () async {
           Navigator.pop(context, passModel);
@@ -103,6 +116,7 @@ class _AddhostState extends State<Addhost> {
                   children: [
                     const Text(
                       "Add an App/Site",
+
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w300,
@@ -213,15 +227,39 @@ class _AddhostState extends State<Addhost> {
                               controller: usernameEmailPhone,
                               validator: (String? value) {
                                 if (value == null || value.isEmpty) {
-                                  return knullEmail;
+
+                                  return knullUrl;
+                                } else if (!kusernamevalidator
+                                    .hasMatch(value)) {
+                                  return kvalidurl;
                                 }
                                 return null;
                               },
-                              decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        const BorderSide(color: kprimarycolor),
-                                    borderRadius: BorderRadius.circular(8),
+                              suggestionsCallback: (pattern) {
+                                return url
+                                    .where((e) => e
+                                        .toLowerCase()
+                                        .contains(pattern.toLowerCase()))
+                                    .toList();
+                              },
+                              transitionBuilder:
+                                  (context, suggestionsBox, controller) {
+                                return suggestionsBox;
+                              },
+                              hideSuggestionsOnKeyboardHide: true,
+                              textFieldConfiguration: TextFieldConfiguration(
+                                  controller: appSiteUrl,
+                                  cursorColor: kprimarycolor,
+                                  onSubmitted: (value) {
+                                    setState(() {
+                                      appSiteUrl.text = value;
+                                    });
+                                  },
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                    // fontFamily: 'TitilliumWeb'
+
                                   ),
                                   labelText: "Username/email or phone",
                                   labelStyle: const TextStyle(
@@ -234,27 +272,122 @@ class _AddhostState extends State<Addhost> {
                                     borderRadius: BorderRadius.circular(8),
                                   )),
                             ),
-                            heightspace(20),
-                            Container(
-                              // padding: const EdgeInsets.only(left: 30, right: 30),
-                              width: screenWidth,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  if (_key.currentState!.validate()) {
-                                    passModel = PassModel(
-                                        url: appSiteUrl.text,
-                                        user: usernameEmailPhone.text);
-                                    bool result =
-                                        await _dbOperation.contain(passModel);
-                                    if (result) {
-                                      final snackBar = SnackBar(
-                                        content: Text(
-                                            "Host and username already exist"),
-                                        backgroundColor: Colors.grey.shade500,
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
+
+                            controller: usernameEmailPhone,
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return knullEmail;
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: kprimarycolor),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                labelText: "Username/email or phone",
+                                labelStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                    fontFamily: 'TitilliumWeb'),
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(8),
+                                )),
+                          ),
+                          heightspace(20),
+                          !url.contains(appSiteUrl.text) &&
+                                  appSiteUrl.text != ""
+                              ? Container(
+                                  height: 50,
+                                  width: screenWidth,
+                                  child: ListView.builder(
+                                      //  shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: colors.length,
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            print(colors[index]);
+                                            setState(() {
+                                              checkindex = index;
+                                              currentcolor = colors[index];
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 50,
+                                            width: 50,
+                                            margin: const EdgeInsets.only(
+                                                right: 10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              // shape: BoxShape.circle,
+                                              color: colors[index],
+                                            ),
+                                            child: Center(
+                                                child: appSiteUrl.text != ""
+                                                    ? appSiteUrl.text.length >
+                                                            14
+                                                        ? checkindex == index
+                                                            ? Text(
+                                                                appSiteUrl.text
+                                                                    .substring(
+                                                                        12, 14)
+                                                                    .toUpperCase(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              )
+                                                            : null
+                                                        : checkindex == index
+                                                            ? const Center(
+                                                                child: Icon(
+                                                                    Icons
+                                                                        .check))
+                                                            : null
+                                                    : checkindex == index
+                                                        ? const Center(
+                                                            child: Icon(
+                                                                Icons.check))
+                                                        : null),
+                                          ),
+                                        );
+                                      }),
+                                )
+                              : const SizedBox(),
+                          !url.contains(appSiteUrl.text) &&
+                                  appSiteUrl.text != ""
+                              ? heightspace(20)
+                              : const SizedBox(),
+                          Container(
+                            // padding: const EdgeInsets.only(left: 30, right: 30),
+                            width: screenWidth,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (_key.currentState!.validate()) {
+                                  passModel = PassModel(
+                                    url: appSiteUrl.text,
+                                    user: usernameEmailPhone.text,
+                                    color: currentcolor,
+                                  );
+                                  bool result =
+                                      await _dbOperation.contain(passModel);
+                                  if (result) {
+                                    final snackBar = SnackBar(
+                                      content: Text(
+                                          "Host and username already exist"),
+                                      backgroundColor: Colors.grey.shade500,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+
 
                                       passModel = PassModel();
                                     } else {
@@ -281,6 +414,24 @@ class _AddhostState extends State<Addhost> {
                                                 passModel: passModel);
                                       });
                                     }
+
+                                    passModel.id =
+                                        await _dbOperation.add(passModel);
+                                    final snackBar = SnackBar(
+                                      content: Text(
+                                          "Password generated successfully"),
+                                      duration: Duration(milliseconds: 500),
+                                      backgroundColor: Colors.grey.shade500,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    setState(() {
+                                      password.text =
+                                          passwordManager.generatePassword(
+                                              generate: true,
+                                              passModel: passModel);
+                                    });
+
                                   }
                                 },
                                 child: const Text(

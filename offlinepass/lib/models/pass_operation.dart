@@ -27,7 +27,6 @@ class PassOperation extends DbOperation {
   @override
   Future<List<PassModel>> getAll() async {
     final snapshots = await _store.find(_db);
-
     return snapshots
         .map((snapshot) => PassModel.fromMap(snapshot.key, snapshot.value))
         .toList();
