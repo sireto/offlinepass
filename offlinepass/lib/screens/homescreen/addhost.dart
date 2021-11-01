@@ -245,6 +245,7 @@ class _AddhostState extends State<Addhost> {
                                     fontSize: 16,
                                     color: Colors.black87,
                                     // fontFamily: 'TitilliumWeb'
+
                                   ),
                                   controller: usernameEmailPhone,
                                   validator: (String? value) {
@@ -375,160 +376,170 @@ class _AddhostState extends State<Addhost> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snackBar);
 
-                                          passModel = PassModel();
-                                        } else {
-                                          bool result =
-                                              await _dbOperation.isEmpty();
+                                      passModel = PassModel();
+                                    } else {
+                                      bool result =
+                                          await _dbOperation.isEmpty();
 
-                                          if (result) {
-                                            print("database empty");
-                                            passwordManager.setNowDate();
-                                          }
-                                          passModel.id =
-                                              await _dbOperation.add(passModel);
-                                          final snackBar = SnackBar(
-                                            content: Text(
-                                                "Password generated successfully"),
-                                            duration:
-                                                Duration(milliseconds: 500),
-                                            backgroundColor:
-                                                Colors.grey.shade500,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          setState(() {
-                                            password.text = passwordManager
-                                                .generatePassword(
-                                                    generate: true,
-                                                    passModel: passModel);
-                                          });
-                                        }
+                                      if (result) {
+                                        print("database empty");
+                                        passwordManager.setNowDate();
                                       }
-                                    },
-                                    child: const Text(
-                                      "Generate Password",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      // style: TextStyle(color: ktextcolor, fontSize: 16),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        primary: kbuttonColor,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8))),
-                                  ),
-                                ),
-                              ],
-                            )),
-                        heightspace(20),
-                        password.text != ""
-                            ? const Text(
-                                "Password",
-                                style: TextStyle(
-                                    color: ktextcolor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w300),
-                              )
-                            : SizedBox(),
+                                      passModel.id =
+                                          await _dbOperation.add(passModel);
+                                      final snackBar = SnackBar(
+                                        content: Text(
+                                            "Password generated successfully"),
+                                        backgroundColor: Colors.grey.shade500,
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      setState(() {
+                                        password.text =
+                                            passwordManager.generatePassword(
+                                                generate: true,
+                                                passModel: passModel);
+                                      });
+                                    }
 
-                        password.text != ""
-                            ? Container(
-                                width: screenWidth,
-                                child: TextFormField(
-                                    obscureText: visibletext,
-                                    controller: password,
-                                    style: TextStyle(
-                                      color: ktextcolor,
-                                      fontSize: 14,
-                                    ),
-                                    readOnly: true,
-                                    decoration: InputDecoration(
-                                        focusedBorder: InputBorder.none,
-                                        suffixIcon: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            visibletext
-                                                ? IconButton(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 8.0,
-                                                        left: 20.0),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        visibility();
-                                                      });
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.visibility,
-                                                      color: Colors.grey,
-                                                    ))
-                                                : IconButton(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 8.0,
-                                                        left: 20.0),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        visibility();
-                                                      });
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.visibility_off,
-                                                      color: Colors.grey,
-                                                    )),
-                                            IconButton(
+                                    passModel.id =
+                                        await _dbOperation.add(passModel);
+                                    final snackBar = SnackBar(
+                                      content: Text(
+                                          "Password generated successfully"),
+                                      duration: Duration(milliseconds: 500),
+                                      backgroundColor: Colors.grey.shade500,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    setState(() {
+                                      password.text =
+                                          passwordManager.generatePassword(
+                                              generate: true,
+                                              passModel: passModel);
+                                    });
+
+                                  }
+                                },
+                                child: const Text(
+                                  "Generate Password",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  // style: TextStyle(color: ktextcolor, fontSize: 16),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    primary: kbuttonColor,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8))),
+                              ),
+                            ),
+                          ],
+                        )),
+                    heightspace(20),
+                    password.text != ""
+                        ? const Text(
+                            "Password",
+                            style: TextStyle(
+                                color: ktextcolor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300),
+                          )
+                        : SizedBox(),
+
+                    password.text != ""
+                        ? Container(
+                            width: screenWidth,
+                            child: TextFormField(
+                                obscureText: visibletext,
+                                controller: password,
+                                style: TextStyle(
+                                  color: ktextcolor,
+                                  fontSize: 14,
+                                ),
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                    focusedBorder: InputBorder.none,
+                                    suffixIcon: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        visibletext
+                                            ? IconButton(
                                                 padding: EdgeInsets.only(
-                                                    bottom: 8.0, left: 0.0),
+                                                    bottom: 8.0, left: 20.0),
                                                 onPressed: () {
-                                                  Clipboard.setData(
-                                                      ClipboardData(
-                                                          text: password.text));
-                                                  final snackBar = SnackBar(
-                                                    content: Text(
-                                                        "Copied to Clipboard"),
-                                                    backgroundColor:
-                                                        Colors.grey.shade600,
-                                                  );
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackBar);
+                                                  setState(() {
+                                                    visibility();
+                                                  });
                                                 },
                                                 icon: const Icon(
-                                                  Icons.copy_rounded,
+                                                  Icons.visibility,
+                                                  color: Colors.grey,
+                                                ))
+                                            : IconButton(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 8.0, left: 20.0),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    visibility();
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.visibility_off,
                                                   color: Colors.grey,
                                                 )),
-                                          ],
-                                        ),
-                                        border: InputBorder.none)),
-                              )
-                            : SizedBox(),
+                                        IconButton(
+                                            padding: EdgeInsets.only(
+                                                bottom: 8.0, left: 0.0),
+                                            onPressed: () {
+                                              Clipboard.setData(ClipboardData(
+                                                  text: password.text));
+                                              final snackBar = SnackBar(
+                                                content:
+                                                    Text("Copied to Clipboard"),
+                                                backgroundColor:
+                                                    Colors.grey.shade600,
+                                              );
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            },
+                                            icon: const Icon(
+                                              Icons.copy_rounded,
+                                              color: Colors.grey,
+                                            )),
+                                      ],
+                                    ),
+                                    border: InputBorder.none)),
+                          )
+                        : SizedBox(),
 
-                        // ElevatedButton(
-                        //   onPressed: () {
-                        //     Clipboard.setData(ClipboardData(text: password.text));
-                        //     const snackBar =
-                        //         SnackBar(content: Text("Copied to Clipboard"));
-                        //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        //   },
-                        //   child: const Text(
-                        //     "Copy",
-                        //     style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontSize: 16,
-                        //       fontFamily: 'TitilliumWeb',
-                        //     ),
-                        //   ),
-                        //   style: ElevatedButton.styleFrom(
-                        //       padding: const EdgeInsets.symmetric(
-                        //           vertical: 10, horizontal: 20),
-                        //       primary: Colors.grey.shade500),
-                        // ),
-                      ],
-                    ),
-                  ),
-                ],
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Clipboard.setData(ClipboardData(text: password.text));
+                    //     const snackBar =
+                    //         SnackBar(content: Text("Copied to Clipboard"));
+                    //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    //   },
+                    //   child: const Text(
+                    //     "Copy",
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //       fontSize: 16,
+                    //       fontFamily: 'TitilliumWeb',
+                    //     ),
+                    //   ),
+                    //   style: ElevatedButton.styleFrom(
+                    //       padding: const EdgeInsets.symmetric(
+                    //           vertical: 10, horizontal: 20),
+                    //       primary: Colors.grey.shade500),
+                    // ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       );
