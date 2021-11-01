@@ -98,10 +98,11 @@ class _ConfirmvaultState extends State<Confirmvault> {
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
                               'msk', widget.msk);
-                          Navigator.push(
+                          Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()));
+                                  builder: (context) => HomeScreen()),
+                              (r) => false);
                         } else {
                           final snackBar = SnackBar(
                             content: Text("MSK doesnot matched!!"),

@@ -74,8 +74,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                   bool result = await _dbOperation.isEmpty();
 
                   if (result) {
-                    print("remove date");
-                    passwordManager.removeStartingDate();
+                    passwordManager.cancelNotification();
                   }
                   final snackBar = SnackBar(
                     content: Text(
