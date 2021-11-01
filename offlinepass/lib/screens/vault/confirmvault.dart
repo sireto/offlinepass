@@ -42,11 +42,9 @@ class _ConfirmvaultState extends State<Confirmvault> {
               heightspace(10),
               const Text(
                 "Master Security Key",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400
-                //  fontFamily: 'TitilliumWeb',
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400
+                    //  fontFamily: 'TitilliumWeb',
+                    ),
               ),
               heightspace(20),
               Container(
@@ -56,11 +54,12 @@ class _ConfirmvaultState extends State<Confirmvault> {
                 // padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: _mskController,
-                  style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   decoration: InputDecoration(
                       hintText: "Paste MSK here",
                       // label: const Text("MSK"),
-                      hintStyle: TextStyle(fontSize: 15,fontWeight: FontWeight.w400),
+                      hintStyle:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
                 ),
@@ -69,10 +68,9 @@ class _ConfirmvaultState extends State<Confirmvault> {
               Text(
                 "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
                 style: TextStyle(
-                  fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
-                  color: Colors.grey.shade700
-                ),
+                    fontFamily: 'TitilliumWeb',
+                    fontSize: 14,
+                    color: Colors.grey.shade700),
               ),
               heightspace(10),
               const Text(
@@ -100,10 +98,11 @@ class _ConfirmvaultState extends State<Confirmvault> {
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
                               'msk', widget.msk);
-                          Navigator.push(
+                          Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()));
+                                  builder: (context) => HomeScreen()),
+                              (r) => false);
                         } else {
                           final snackBar = SnackBar(
                             content: Text("MSK doesnot matched!!"),
@@ -124,11 +123,11 @@ class _ConfirmvaultState extends State<Confirmvault> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,
-                      //  fontFamily: 'TitilliumWeb',
+                        //  fontFamily: 'TitilliumWeb',
                       ),
                       // style: TextStyle(color: ktextcolor, fontSize: 16),
                     ),
-                    // style: ElevatedButton.styleFrom(primary: Colors.grey),
+                    style: ElevatedButton.styleFrom(primary: kprimarycolor),
                   ))
             ],
           ),
