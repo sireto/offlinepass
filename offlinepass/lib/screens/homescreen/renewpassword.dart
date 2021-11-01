@@ -6,6 +6,7 @@ import 'package:offlinepass/models/pass_model.dart';
 import 'package:offlinepass/models/pass_operation.dart';
 import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/old_pass_screen.dart';
+import 'package:offlinepass/screens/pass_summary_screen.dart';
 import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/components/string_extension.dart';
@@ -89,6 +90,12 @@ class _RenewPasswordState extends State<RenewPassword> {
                       MaterialPageRoute(
                           builder: (context) =>
                               OldPassword(passModel: widget.passModel)));
+                } else if (value == 2) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Passsummary(passModel: widget.passModel)));
                 }
               },
               padding: const EdgeInsets.all(4.0),

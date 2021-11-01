@@ -183,7 +183,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                         ],
                       ),
                     ),
-                    heightspace(20),
+                    heightspace(5),
                     _supportState == _SupportState.supported
                         ? const Divider(
                             height: 2,
@@ -235,9 +235,25 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                       fingerprintinitialindex = 0;
                                     });
                                     sharedPreferences.remove("fingerprints");
-                                  } else if (index == 1) {
+                                  } else if (index == 1 && initialindex == 0) {
+                                    const snackbar = SnackBar(
+                                      content: Text("Please set pincode first"),
+                                      duration: Duration(milliseconds: 500),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackbar);
+                                    setState(() {
+                                      fingerprintinitialindex = 0;
+                                    });
+                                  } else if (index == 1 && initialindex == 1) {
                                     sharedPreferences.setBool(
                                         "fingerprints", true);
+                                    const snackbar = SnackBar(
+                                      content: Text("Fingerprint lock added"),
+                                      duration: Duration(milliseconds: 500),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackbar);
                                   }
                                 },
                               ),
