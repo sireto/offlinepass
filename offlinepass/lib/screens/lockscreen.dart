@@ -45,16 +45,19 @@ class _LockscreenState extends State<Lockscreen> {
 
   @override
   void initState() {
-    _otpTextStyle = const TextStyle(fontSize: 18, color: Colors.black);
+    _otpTextStyle = const TextStyle(
+      fontSize: 18,
+      color: Colors.white38,
+    );
     _otpInputDecoration = InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
         counterText: '',
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.black54, width: 1.5)),
+            borderSide: const BorderSide(color: Colors.white, width: 1.5)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.black54, width: 1.5)));
+            borderSide: const BorderSide(color: Colors.white, width: 1.5)));
     pin1FocusNode = FocusNode();
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
@@ -209,13 +212,14 @@ class _LockscreenState extends State<Lockscreen> {
             height: 50,
             child: TextFormField(
               focusNode: pin1FocusNode,
+
               // obscureText: true,
               controller: pin1,
               keyboardType: TextInputType.number,
               style: _otpTextStyle,
               maxLength: 1,
               textAlign: TextAlign.center,
-              cursorColor: Colors.black54,
+              cursorColor: Colors.white38,
               decoration: _otpInputDecoration,
 
               onChanged: (value) {
@@ -245,7 +249,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.black54,
+                cursorColor: Colors.white38,
                 decoration: _otpInputDecoration,
                 maxLength: 1,
                 onChanged: (value) {
@@ -282,7 +286,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.black,
+                cursorColor: Colors.white38,
                 decoration: _otpInputDecoration,
                 onChanged: (value) {
                   // pin3 = value;
@@ -316,7 +320,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.black,
+                cursorColor: Colors.white38,
                 controller: pin4,
                 maxLength: 1,
                 decoration: _otpInputDecoration,
@@ -352,7 +356,7 @@ class _LockscreenState extends State<Lockscreen> {
                 keyboardType: TextInputType.number,
                 style: _otpTextStyle,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.black,
+                cursorColor: Colors.white38,
                 maxLength: 1,
                 decoration: _otpInputDecoration,
                 onChanged: (value) {
@@ -392,7 +396,7 @@ class _LockscreenState extends State<Lockscreen> {
                 maxLength: 1,
 
                 textAlign: TextAlign.center,
-                cursorColor: Colors.black,
+                cursorColor: Colors.white38,
                 decoration: _otpInputDecoration,
                 onChanged: (value) {
                   // pin6 = value;
