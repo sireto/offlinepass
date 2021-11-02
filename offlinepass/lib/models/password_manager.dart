@@ -11,14 +11,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PasswordManager {
   static late final String msk;
   static late final SharedPreferences preferences;
-  static int passwordValidity = 2 * 60;
+  static int passwordValidity = 30 * 86400;
   String generatePassword({
     required PassModel passModel,
     bool newPass = false,
     bool generate = false,
     int? index,
+    required int currentTimeStamp,
   }) {
-    int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    // int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
     int oct26timestamp = 1635257614;

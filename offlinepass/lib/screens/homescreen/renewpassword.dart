@@ -42,8 +42,8 @@ class _RenewPasswordState extends State<RenewPassword> {
   void initState() {
     // TODO: implement initState
     pswd = passwordManager.generatePassword(
-      passModel: widget.passModel,
-    );
+        passModel: widget.passModel,
+        currentTimeStamp: DateTime.now().millisecondsSinceEpoch ~/ 1000);
     password = TextEditingController(text: pswd);
     super.initState();
   }
@@ -307,7 +307,10 @@ class _RenewPasswordState extends State<RenewPassword> {
                       setState(() {
                         isGenerated = true;
                         pswd = passwordManager.generatePassword(
-                            newPass: true, passModel: widget.passModel);
+                            newPass: true,
+                            passModel: widget.passModel,
+                            currentTimeStamp:
+                                DateTime.now().millisecondsSinceEpoch ~/ 1000);
                         newPassword.text = pswd;
                         final snackBar = SnackBar(
                           content: Text("Password generated successfully"),

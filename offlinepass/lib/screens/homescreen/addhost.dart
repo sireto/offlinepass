@@ -405,7 +405,11 @@ class _AddhostState extends State<Addhost> {
                                                 password.text = passwordManager
                                                     .generatePassword(
                                                         generate: true,
-                                                        passModel: passModel);
+                                                        passModel: passModel,
+                                                        currentTimeStamp: DateTime
+                                                                    .now()
+                                                                .millisecondsSinceEpoch ~/
+                                                            1000);
                                               });
                                             }
                                           }

@@ -35,11 +35,13 @@ class _OldPasswordState extends State<OldPassword> {
   late String _endDate = DateFormat("yyyy-MM-dd").format(initialdate);
   String? selectdate;
   String? newInitialDate;
+  int? currentTimeStamp;
   @override
   void initState() {
     // TODO: implement initState
     count = PasswordManager.preferences
         .getInt('${widget.passModel.toMap(passModel: widget.passModel)}')!;
+    currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     super.initState();
   }
 
@@ -179,7 +181,9 @@ class _OldPasswordState extends State<OldPassword> {
                     width: screenWidth,
                     child: TextFormField(
                         initialValue: _passwordManager.generatePassword(
-                            passModel: widget.passModel, index: index),
+                            passModel: widget.passModel,
+                            index: index,
+                            currentTimeStamp: currentTimeStamp!),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -195,7 +199,9 @@ class _OldPasswordState extends State<OldPassword> {
                                   Clipboard.setData(ClipboardData(
                                       text: _passwordManager.generatePassword(
                                           passModel: widget.passModel,
-                                          index: index)));
+                                          index: index,
+                                          currentTimeStamp:
+                                              currentTimeStamp!)));
                                   final snackBar = SnackBar(
                                     content: Text("Copied to Clipboard"),
                                     backgroundColor: Colors.grey.shade600,
@@ -229,6 +235,8 @@ class _OldPasswordState extends State<OldPassword> {
       newInitialDate = DateFormat("yyyy-MM-dd").format(newdate);
       selectdate = DateFormat("MMM dd yyyy").format(newdate);
       print(selectdate);
+      currentTimeStamp =
+          DateTime.parse(newInitialDate!).millisecondsSinceEpoch ~/ 1000;
       // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
       // _endDate =
       //     DateFormat("yyyy-MM-dd").format(newdate.add(Duration(days: 14)));

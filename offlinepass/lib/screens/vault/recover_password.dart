@@ -83,7 +83,7 @@ class _RecoverpasswordState extends State<Recoverpassword> {
   @override
   void initState() {
     // TODO: implement initState
-    currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
+    currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     super.initState();
   }
 
@@ -487,7 +487,8 @@ class _RecoverpasswordState extends State<Recoverpassword> {
       newInitialDate = DateFormat("yyyy-MM-dd").format(newdate);
       selectdate = DateFormat("MMM dd yyyy").format(newdate);
       print(selectdate);
-      currentTimeStamp = DateTime.parse(newInitialDate!).millisecondsSinceEpoch;
+      currentTimeStamp =
+          DateTime.parse(newInitialDate!).millisecondsSinceEpoch ~/ 1000;
 
       // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
       // _endDate =

@@ -106,13 +106,13 @@ class Search extends SearchDelegate {
 
   Container emailUserView(var data) {
     return Container(
-      width: screenWidth,
+        width: screenWidth,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-             // width: screenWidth * 0.6,
+              // width: screenWidth * 0.6,
               child: Row(
                 children: [
                   Container(
@@ -169,23 +169,24 @@ class Search extends SearchDelegate {
             //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
             //     },
             //     icon: Icon(Icons.copy)),
-               IconButton(
+            IconButton(
                 padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
                 onPressed: () {
-                    Clipboard.setData(ClipboardData(
-                          text: PasswordManager().generatePassword(
-                              passModel: data)));
-                      final snackBar = SnackBar(
-                        content: Text("Copied to Clipboard"),
-                        backgroundColor: Colors.grey.shade600,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Clipboard.setData(ClipboardData(
+                      text: PasswordManager().generatePassword(
+                          currentTimeStamp:
+                              DateTime.now().millisecondsSinceEpoch ~/ 1000,
+                          passModel: data)));
+                  final snackBar = SnackBar(
+                    content: Text("Copied to Clipboard"),
+                    backgroundColor: Colors.grey.shade600,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },
                 icon: const Icon(
                   Icons.copy_rounded,
                   color: Colors.grey,
                 )),
-           
           ],
         ));
   }

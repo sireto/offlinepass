@@ -168,7 +168,10 @@ class _PasssummaryState extends State<Passsummary> {
                                     initialValue:
                                         _passwordManager.generatePassword(
                                             passModel: widget.passModel,
-                                            index: index),
+                                            index: index,
+                                            currentTimeStamp: DateTime.now()
+                                                    .millisecondsSinceEpoch ~/
+                                                1000),
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -188,6 +191,10 @@ class _PasssummaryState extends State<Passsummary> {
                                                       .generatePassword(
                                                           passModel:
                                                               widget.passModel,
+                                                          currentTimeStamp:
+                                                              DateTime.now()
+                                                                      .millisecondsSinceEpoch ~/
+                                                                  1000,
                                                           index: index)));
                                               final snackBar = SnackBar(
                                                 content:
