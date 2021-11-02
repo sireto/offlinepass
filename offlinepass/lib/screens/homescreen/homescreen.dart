@@ -123,26 +123,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else {
+              int validDays = passwordManager.validDays();
+              print(validDays);
               return Column(
                 children: [
-                  passwordManager.validDays() > 1
+                  passwordManager.checkValidity()
                       ? SizedBox()
                       : Container(
                           width: screenWidth,
                           color: Colors.red,
                           padding: EdgeInsets.only(
-                              left: 15.0, top: 12.0, bottom: 12.0),
-                          child: Text(
-                            "Passwords expires after " +
-                                passwordManager.validDays().toString() +
-                                " days. Renew the passwords to make them recoverable with your Master Security Key (MSK). ",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                              //  fontFamily: 'TitilliumWeb',
-                            ),
+                              left: 15.0, top: 4.0, bottom: 12.0, right: 4.0),
+                          child: Column(
+                            children: [
+                              Align(
+                                  alignment: Alignment.topRight,
+                                  child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          passwordManager.checkValidity(
+                                              changeValidity: true);
+                                        });
+                                      },
+                                      child: Icon(Icons.close))),
+                              heightspace(2.0),
+                              Text(
+                                !passwordManager.checkValidity() ||
+                                        validDays <= 1
+                                    ? "Passwords expired. Renew the passwords to make them recoverable with your Master Security Key (MSK)."
+                                    : "Passwords expires after  ${validDays.toString()}  minutes. Renew the passwords to make them recoverable with your Master Security Key (MSK). ",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w300,
+                                  //  fontFamily: 'TitilliumWeb',
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                   Expanded(
@@ -199,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Future data = Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Addhost()));
           data.then((value) {
-            if (value.url != null) {
+            if (value.id != null) {
               setState(() {
                 datas.insert(0, value);
               });

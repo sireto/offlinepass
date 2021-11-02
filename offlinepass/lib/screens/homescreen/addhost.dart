@@ -408,25 +408,6 @@ class _AddhostState extends State<Addhost> {
                                                         passModel: passModel);
                                               });
                                             }
-
-                                            // passModel.id = await _dbOperation
-                                            //     .add(passModel);
-                                            // final snackBar = SnackBar(
-                                            //   content: Text(
-                                            //       "Password generated successfully"),
-                                            //   duration:
-                                            //       Duration(milliseconds: 500),
-                                            //   backgroundColor:
-                                            //       Colors.grey.shade500,
-                                            // );
-                                            // ScaffoldMessenger.of(context)
-                                            //     .showSnackBar(snackBar);
-                                            // setState(() {
-                                            //   password.text = passwordManager
-                                            //       .generatePassword(
-                                            //           generate: true,
-                                            //           passModel: passModel);
-                                            // });
                                           }
                                         },
                                         child: const Text(
