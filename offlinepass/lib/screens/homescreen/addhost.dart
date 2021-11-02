@@ -54,16 +54,7 @@ class _AddhostState extends State<Addhost> {
     FontAwesomeIcons.telegram,
     FontAwesomeIcons.linkedin,
   ];
-  List<Color> colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.grey,
-    Colors.brown,
-    Colors.cyan,
-    Colors.yellow,
-    Colors.purple,
-  ];
+
   var checkindex = 0;
   Color currentcolor = Colors.red;
   final _key = GlobalKey<FormState>();
@@ -101,9 +92,9 @@ class _AddhostState extends State<Addhost> {
                               color: Colors.green.shade400,
                               padding: const EdgeInsets.only(
                                   left: 15.0, top: 12.0, bottom: 12.0),
-                              child: const Text(
-                                "Expires in 2 days.",
-                                style: TextStyle(
+                              child: Text(
+                                "Expires in ${passwordManager.validDays()} minutes",
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontStyle: FontStyle.italic,
                                   fontSize: 15,
@@ -365,52 +356,70 @@ class _AddhostState extends State<Addhost> {
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           if (_key.currentState!.validate()) {
-                                            passModel = PassModel(
-                                              url: appSiteUrl.text,
-                                              user: usernameEmailPhone.text,
-                                            );
-                                            bool result = await _dbOperation
-                                                .contain(passModel);
-                                            if (result) {
-                                              final snackBar = SnackBar(
-                                                content: Text(
-                                                    "Host and username already exist"),
-                                                backgroundColor:
-                                                    Colors.grey.shade500,
+                                            if (password.text == "") {
+                                              passModel = PassModel(
+                                                url: appSiteUrl.text,
+                                                user: usernameEmailPhone.text,
                                               );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
-                                              setState(() {
-                                                passModel = PassModel();
-                                              });
-                                            } else {
-                                              bool result =
-                                                  await _dbOperation.isEmpty();
-
+                                              bool result = await _dbOperation
+                                                  .contain(passModel);
                                               if (result) {
-                                                print("database empty");
-                                                passwordManager.setNowDate();
+                                                final snackBar = SnackBar(
+                                                  content: const Text(
+                                                      "Host and username already exist"),
+                                                  backgroundColor:
+                                                      Colors.grey.shade500,
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              } else {
+                                                if (!url.contains(
+                                                        appSiteUrl.text) &&
+                                                    appSiteUrl.text != "") {
+                                                  passModel.colorIndex =
+                                                      checkindex;
+                                                }
+                                                passModel.id =
+                                                    await _dbOperation
+                                                        .add(passModel);
+                                                final snackBar = SnackBar(
+                                                  content: const Text(
+                                                      "Password generated successfully"),
+                                                  backgroundColor:
+                                                      Colors.grey.shade500,
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                                setState(() {
+                                                  password.text = passwordManager
+                                                      .generatePassword(
+                                                          generate: true,
+                                                          passModel: passModel,
+                                                          currentTimeStamp:
+                                                              DateTime.now()
+                                                                      .millisecondsSinceEpoch ~/
+                                                                  1000);
+                                                });
                                               }
-                                              passModel.id = await _dbOperation
-                                                  .add(passModel);
+                                            } else {
                                               final snackBar = SnackBar(
-                                                content: Text(
-                                                    "Password generated successfully"),
+                                                content: const Text(
+                                                    "Password already generated"),
                                                 backgroundColor:
                                                     Colors.grey.shade500,
                                               );
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
-                                              setState(() {
-                                                password.text = passwordManager
-                                                    .generatePassword(
-                                                        generate: true,
-                                                        passModel: passModel,
-                                                        currentTimeStamp: DateTime
-                                                                    .now()
-                                                                .millisecondsSinceEpoch ~/
-                                                            1000);
-                                              });
+                                              // setState(() {
+                                              //   password.text = passwordManager
+                                              //       .generatePassword(
+                                              //           generate: true,
+                                              //           passModel: passModel,
+                                              //           currentTimeStamp: DateTime
+                                              //                       .now()
+                                              //                   .millisecondsSinceEpoch ~/
+                                              //               1000);
+                                              // });
                                             }
                                           }
                                         },

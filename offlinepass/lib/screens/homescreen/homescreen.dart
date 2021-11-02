@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<PassModel> datas = [];
+  List<PassModel>? datas;
   PasswordManager passwordManager = PasswordManager();
   Future? getPsws;
   final DbOperation _dbOperation = PassOperation();
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // print('bitcoin'.codeUnits.toList().runtimeType);
-    //print(passwordManager.validDays());
+    print(passwordManager.validDays());
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: kprimarycolor,
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 showSearch(
                     context: context,
-                    delegate: Search(datas: datas, context: context));
+                    delegate: Search(datas: datas!, context: context));
               },
               icon: const Icon(
                 Icons.search_rounded,
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         future: getPsws,
         builder: (context, AsyncSnapshot snapshots) {
           if (snapshots.connectionState == ConnectionState.done) {
-            if (!snapshots.hasData || datas.isEmpty) {
+            if (!snapshots.hasData || datas!.isEmpty) {
               return Center(
                 child: SingleChildScrollView(
                   child: Column(
@@ -128,11 +128,11 @@ class _HomeScreenState extends State<HomeScreen> {
               return Column(
                 children: [
                   passwordManager.checkValidity()
-                      ? SizedBox()
+                      ? const SizedBox()
                       : Container(
                           width: screenWidth,
                           color: Colors.red,
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               left: 15.0, top: 4.0, bottom: 12.0, right: 4.0),
                           child: Column(
                             children: [
@@ -145,13 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                               changeValidity: true);
                                         });
                                       },
-                                      child: Icon(Icons.close))),
+                                      child: const Icon(Icons.close_rounded))),
                               heightspace(2.0),
-                              Text(
-                                !passwordManager.checkValidity() ||
-                                        validDays <= 1
-                                    ? "Passwords expired. Renew the passwords to make them recoverable with your Master Security Key (MSK)."
-                                    : "Passwords expires after  ${validDays.toString()}  minutes. Renew the passwords to make them recoverable with your Master Security Key (MSK). ",
+                              const Text(
+                                "Passwords expired. Renew the passwords to make them recoverable with your Master Security Key (MSK).",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontStyle: FontStyle.italic,
@@ -166,7 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 20.0),
                         child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -189,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       //print(value);
                                       if (value) {
                                         setState(() {
-                                          datas.removeAt(index);
+                                          datas!.removeAt(index);
                                         });
                                       }
                                     });
@@ -219,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
           data.then((value) {
             if (value.id != null) {
               setState(() {
-                datas.insert(0, value);
+                datas!.insert(0, value);
               });
             }
           });
@@ -244,12 +242,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: icons[data.url]!['color']),
-                      child: Icon(
-                        icons[data.url]!['icon'],
-                        color: Colors.white,
-                        size: 26,
-                      )),
+                          color: data.colorIndex != null
+                              ? colors[data.colorIndex]
+                              : icons[data.url]!['color']),
+                      child: data.colorIndex != null
+                          ? Center(
+                              child: Text(
+                                data.url.substring(0, 2).toUpperCase(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    color: Colors.white),
+                              ),
+                            )
+                          : Icon(
+                              icons[data.url]!['icon'],
+                              color: Colors.white,
+                              size: 26,
+                            )),
                   widthspace(20),
                   Expanded(
                     child: Column(
@@ -258,10 +268,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data.url!
-                              .substring(0, data.url!.length - 4)
-                              .toString()
-                              .capitalize(),
+                          data.url!.contains('.com')
+                              ? data.url!
+                                  .substring(0, data.url!.length - 4)
+                                  .toString()
+                                  .capitalize()
+                              : data.url!.toString().capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16,
@@ -320,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future? getPasswords() async {
     datas = await _dbOperation.getAll();
-    datas = datas.reversed.toList();
+    datas = datas!.reversed.toList();
     print("get passwords");
     print(datas);
     // if (datas.isNotEmpty) {

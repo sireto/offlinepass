@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class PassModel {
   int? id;
+  int? colorIndex;
   final String? url;
   final String? user;
 
@@ -11,6 +12,7 @@ class PassModel {
       EncryptedSharedPreferences();
   PassModel({
     this.id,
+    this.colorIndex,
     this.url,
     this.user,
   });
@@ -18,11 +20,13 @@ class PassModel {
   factory PassModel.fromMap(int key, Map<String, dynamic> map) => PassModel(
         id: key,
         url: map['url'],
+        colorIndex:map['colorIndex'],
         user: map['user'],
       );
 
   Map<String, dynamic> toMap({PassModel? passModel}) => {
-        'url': passModel!.url,
+    'colorIndex':passModel!.colorIndex,
+        'url': passModel.url,
         'user': passModel.user,
       };
 }
