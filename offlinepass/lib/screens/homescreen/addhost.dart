@@ -35,14 +35,14 @@ class _AddhostState extends State<Addhost> {
   FocusNode _urlFocusNode = FocusNode();
   bool visibletext = true;
   List<String> url = [
-    "https://www.facebook.com",
-    "https://www.gmail.com",
-    "https://www.yahoo.com",
-    "https://www.reddit.com",
-    "https://www.twitch.com",
-    "https://www.twitter.com",
-    "https://www.telegram.com",
-    "https://www.linkedin.com"
+    "Facebook.com",
+    "Gmail.com",
+    "Yahoo.com",
+    "Reddit.com",
+    "Twitch.com",
+    "Twitter.com",
+    "Telegram.com",
+    "Linkedin.com"
   ];
   List icons = const [
     FontAwesomeIcons.facebook,
@@ -71,408 +71,92 @@ class _AddhostState extends State<Addhost> {
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisibile) {
       return GestureDetector(
+          onTap: () {
+            setState(() {
+              appSiteUrl.text = appSiteUrl.text;
+            });
 
-        onTap: () {
-          setState(() {
-            appSiteUrl.text = appSiteUrl.text;
-          });
-
-          _urlFocusNode.unfocus();
-        },
-        child: WillPopScope(
-          onWillPop: () {
-            Navigator.pop(context, passModel);
-            return Future.value(false);
+            _urlFocusNode.unfocus();
           },
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: kprimarycolor,
-              centerTitle: false,
-              automaticallyImplyLeading: true,
-              title: const Text(
-                "Add an App or Website",
-              ),
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  password.text != ""
-                      ? Container(
-                          width: screenWidth,
-                          color: Colors.green.shade400,
-                          padding: const EdgeInsets.only(
-                              left: 15.0, top: 12.0, bottom: 12.0),
-                          child: const Text(
-                            "Expires in 2 days.",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Add an App/Site",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                          ),
-                          //  style: TextStyle(fontSize: 20),
-                        ),
-                        heightspace(20),
-                        Form(
-                            key: _key,
-                            child: Column(
-                              children: [
-                                TypeAheadFormField<String>(
-                                    // key: _urlkey,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return knullUrl;
-                                      } else if (!Uri.parse(value).isAbsolute ||
-                                          value.length <= 13) {
-                                        return kvalidurl;
-                                      }
-                                      return null;
-                                    },
-                                    suggestionsCallback: (pattern) {
-                                      return url
-                                          .where((e) => e
-                                              .toLowerCase()
-                                              .contains(pattern.toLowerCase()))
-                                          .toList();
-                                    },
-                                    transitionBuilder:
-                                        (context, suggestionsBox, controller) {
-                                      return suggestionsBox;
-                                    },
-                                    hideSuggestionsOnKeyboardHide: true,
-                                    textFieldConfiguration:
-                                        TextFieldConfiguration(
-                                            controller: appSiteUrl,
-                                            focusNode: _urlFocusNode,
-                                            cursorColor: kprimarycolor,
-                                            onEditingComplete: () {
-                                              setState(() {
-                                                appSiteUrl.text =
-                                                    appSiteUrl.text;
-                                                _urlFocusNode.unfocus();
-                                              });
-                                            },
-                                            onSubmitted: (value) {
-                                              setState(() {
-                                                appSiteUrl.text = value;
-                                              });
-                                            },
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black87,
-                                              // fontFamily: 'TitilliumWeb'
-                                            ),
-                                            scrollPadding:
-                                                const EdgeInsets.only(
-                                                    bottom: 250),
-                                            decoration: InputDecoration(
-                                              labelText: "App/Site URL",
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: kprimarycolor),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              labelStyle: const TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey,
-                                                  fontFamily: 'TitilliumWeb'),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              suffixIcon: const Icon(
-                                                Icons.arrow_drop_down_outlined,
-                                                size: 30,
-                                                color: Colors.grey,
-                                              ),
-                                            )),
-                                    itemBuilder: (context, suggestion) {
-                                      //  print(suggestion!.statename);
-                                      return ListTile(
-                                        title: Text(suggestion.toString()),
-                                      );
-                                    },
-                                    noItemsFoundBuilder: (context) => Container(
-                                          height: 50,
-                                          child: const Center(
-                                            child: Text(
-                                              "Not listed",
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                          ),
-                                        ),
-                                    onSuggestionSelected: (suggestion) {
-                                      setState(() {
-                                        appSiteUrl.text = suggestion;
-                                      });
-                                    }),
-                                //     heightspace(20),
-                                // TextFormField(
-                                //   validator: (String? value) {
-                                //     if (value == null || value.isEmpty) {
-                                //       return knullUrl;
-                                //     }
-                                //     //  else if (!kurlvalidatior.contains(value)) {
-                                //     //   return kvalidurl;
-                                //     // }
-                                //     return null;
-                                //   },
-                                //   decoration: InputDecoration(
-                                //       label: const Text("App/Site URL"),
-                                //       border: OutlineInputBorder(
-                                //         borderSide: const BorderSide(color: Colors.black),
-                                //         borderRadius: BorderRadius.circular(8),
-                                //       )),
-                                // ),
-                                heightspace(20),
-                                TextFormField(
-                                  cursorColor: kprimarycolor,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                    // fontFamily: 'TitilliumWeb'
-
-                                  ),
-                                  controller: usernameEmailPhone,
-                                  validator: (String? value) {
-                                    if (value == null || value.isEmpty) {
-                                      return knullEmail;
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: kprimarycolor),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      labelText: "Username/email or phone",
-                                      labelStyle: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.grey,
-                                          fontFamily: 'TitilliumWeb'),
-                                      border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.black),
-                                        borderRadius: BorderRadius.circular(8),
-                                      )),
-                                ),
-                                heightspace(20),
-                                !url.contains(appSiteUrl.text) &&
-                                        appSiteUrl.text != ""
-                                    ? Container(
-                                        height: 50,
-                                        width: screenWidth,
-                                        child: ListView.builder(
-                                            //  shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: colors.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  print(colors[index]);
-                                                  setState(() {
-                                                    checkindex = index;
-                                                    currentcolor =
-                                                        colors[index];
-                                                  });
-                                                },
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  margin: const EdgeInsets.only(
-                                                      right: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    // shape: BoxShape.circle,
-                                                    color: colors[index],
-                                                  ),
-                                                  child: Center(
-                                                      child: appSiteUrl.text !=
-                                                              ""
-                                                          ? appSiteUrl.text
-                                                                      .length >
-                                                                  14
-                                                              ? checkindex ==
-                                                                      index
-                                                                  ? Text(
-                                                                      appSiteUrl.text.substring(0, 5) ==
-                                                                              "https"
-                                                                          ? appSiteUrl
-                                                                              .text
-                                                                              .substring(12,
-                                                                                  14)
-                                                                              .toUpperCase()
-                                                                          : appSiteUrl
-                                                                              .text
-                                                                              .substring(11, 13)
-                                                                              .toUpperCase(),
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              Colors.white),
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                    )
-                                                                  : null
-                                                              : checkindex ==
-                                                                      index
-                                                                  ? const Center(
-                                                                      child: Icon(
-                                                                          Icons
-                                                                              .check))
-                                                                  : null
-                                                          : checkindex == index
-                                                              ? const Center(
-                                                                  child: Icon(
-                                                                      Icons
-                                                                          .check))
-                                                              : null),
-                                                ),
-                                              );
-                                            }),
-                                      )
-                                    : const SizedBox(),
-                                !url.contains(appSiteUrl.text) &&
-                                        appSiteUrl.text != ""
-                                    ? heightspace(20)
-                                    : const SizedBox(),
-                                Container(
-                                  // padding: const EdgeInsets.only(left: 30, right: 30),
-                                  width: screenWidth,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (_key.currentState!.validate()) {
-                                        passModel = PassModel(
-                                          url: appSiteUrl.text,
-                                          user: usernameEmailPhone.text,
-                                        );
-                                        bool result = await _dbOperation
-                                            .contain(passModel);
-                                        if (result) {
-                                          final snackBar = SnackBar(
-                                            content: Text(
-                                                "Host and username already exist"),
-                                            backgroundColor:
-                                                Colors.grey.shade500,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-
-                                      passModel = PassModel();
-                                    } else {
-                                      bool result =
-                                          await _dbOperation.isEmpty();
-
-                                      if (result) {
-                                        print("database empty");
-                                        passwordManager.setNowDate();
-                                      }
-                                      passModel.id =
-                                          await _dbOperation.add(passModel);
-                                      final snackBar = SnackBar(
-                                        content: Text(
-                                            "Password generated successfully"),
-                                        backgroundColor: Colors.grey.shade500,
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                      setState(() {
-                                        password.text =
-                                            passwordManager.generatePassword(
-                                                generate: true,
-                                                passModel: passModel);
-                                      });
-                                    }
-
-                                    passModel.id =
-                                        await _dbOperation.add(passModel);
-                                    final snackBar = SnackBar(
-                                      content: Text(
-                                          "Password generated successfully"),
-                                      duration: Duration(milliseconds: 500),
-                                      backgroundColor: Colors.grey.shade500,
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                    setState(() {
-                                      password.text =
-                                          passwordManager.generatePassword(
-                                              generate: true,
-                                              passModel: passModel);
-                                    });
-
-                                  }
-                                },
-                                child: const Text(
-                                  "Generate Password",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  // style: TextStyle(color: ktextcolor, fontSize: 16),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    primary: kbuttonColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8))),
-                              ),
-                            ),
-                          ],
-                        )),
-                    heightspace(20),
-                    password.text != ""
-                        ? const Text(
-                            "Password",
-                            style: TextStyle(
-                                color: ktextcolor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300),
-                          )
-                        : SizedBox(),
-
-                    password.text != ""
-                        ? Container(
-                            width: screenWidth,
-                            child: TextFormField(
-                                obscureText: visibletext,
-                                controller: password,
+          child: WillPopScope(
+              onWillPop: () {
+                Navigator.pop(context, passModel);
+                return Future.value(true);
+              },
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: kprimarycolor,
+                  centerTitle: false,
+                  automaticallyImplyLeading: true,
+                  title: const Text(
+                    "Add an App or Website",
+                  ),
+                ),
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      password.text != ""
+                          ? Container(
+                              width: screenWidth,
+                              color: Colors.green.shade400,
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, top: 12.0, bottom: 12.0),
+                              child: const Text(
+                                "Expires in 2 days.",
                                 style: TextStyle(
-                                  color: ktextcolor,
-                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w300,
                                 ),
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                    focusedBorder: InputBorder.none,
-                                    suffixIcon: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        visibletext
-                                            ? IconButton(
-                                                padding: EdgeInsets.only(
-                                                    bottom: 8.0, left: 20.0),
-                                                onPressed: () {
-
+                              ),
+                            )
+                          : SizedBox(),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Add an App/Site",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                              ),
+                              //  style: TextStyle(fontSize: 20),
+                            ),
+                            heightspace(20),
+                            Form(
+                                key: _key,
+                                child: Column(
+                                  children: [
+                                    TypeAheadFormField<String>(
+                                        // key: _urlkey,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return knullUrl;
+                                          }
+                                          return null;
+                                        },
+                                        suggestionsCallback: (pattern) {
+                                          return url
+                                              .where((e) => e
+                                                  .toLowerCase()
+                                                  .contains(
+                                                      pattern.toLowerCase()))
+                                              .toList();
+                                        },
+                                        transitionBuilder: (context,
+                                            suggestionsBox, controller) {
+                                          return suggestionsBox;
+                                        },
+                                        hideSuggestionsOnKeyboardHide: true,
+                                        textFieldConfiguration:
+                                            TextFieldConfiguration(
+                                                controller: appSiteUrl,
+                                                focusNode: _urlFocusNode,
+                                                cursorColor: kprimarycolor,
+                                                onEditingComplete: () {
                                                   setState(() {
                                                     appSiteUrl.text =
                                                         appSiteUrl.text;
@@ -514,11 +198,14 @@ class _AddhostState extends State<Addhost> {
                                                         BorderRadius.circular(
                                                             8),
                                                   ),
-                                                  suffixIcon: const Icon(
+                                                  suffixIcon: Icon(
                                                     Icons
                                                         .arrow_drop_down_outlined,
                                                     size: 30,
-                                                    color: Colors.grey,
+                                                    color: url.contains(
+                                                            appSiteUrl.text)
+                                                        ? Colors.grey
+                                                        : Colors.white,
                                                   ),
                                                 )),
                                         itemBuilder: (context, suggestion) {
@@ -635,13 +322,14 @@ class _AddhostState extends State<Addhost> {
                                                                   ""
                                                               ? appSiteUrl.text
                                                                           .length >
-                                                                      14
+                                                                      2
                                                                   ? checkindex ==
                                                                           index
                                                                       ? Text(
-                                                                          appSiteUrl.text.substring(0, 5) == "https"
-                                                                              ? appSiteUrl.text.substring(12, 14).toUpperCase()
-                                                                              : appSiteUrl.text.substring(11, 13).toUpperCase(),
+                                                                          appSiteUrl
+                                                                              .text
+                                                                              .substring(0, 2)
+                                                                              .toUpperCase(),
                                                                           style:
                                                                               const TextStyle(color: Colors.white),
                                                                           textAlign:
@@ -692,8 +380,9 @@ class _AddhostState extends State<Addhost> {
                                               );
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
-
-                                              passModel = PassModel();
+                                              setState(() {
+                                                passModel = PassModel();
+                                              });
                                             } else {
                                               bool result =
                                                   await _dbOperation.isEmpty();
@@ -702,14 +391,11 @@ class _AddhostState extends State<Addhost> {
                                                 print("database empty");
                                                 passwordManager.setNowDate();
                                               }
-
                                               passModel.id = await _dbOperation
                                                   .add(passModel);
                                               final snackBar = SnackBar(
                                                 content: Text(
                                                     "Password generated successfully"),
-                                                duration:
-                                                    Duration(milliseconds: 500),
                                                 backgroundColor:
                                                     Colors.grey.shade500,
                                               );
@@ -853,13 +539,7 @@ class _AddhostState extends State<Addhost> {
                     ],
                   ),
                 ),
-
-              ),
-            ],
-          ),
-        ),
-      );
-
+              )));
     });
   }
 

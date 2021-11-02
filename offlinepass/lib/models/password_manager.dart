@@ -29,7 +29,6 @@ class PasswordManager {
     if (index == null) {
       index = preferences.getInt('$data');
     }
-
     if (newPass) {
       index = index! + 1;
       if (storedTimestamp != timeStamp && storedTimestamp != null) {
@@ -56,6 +55,39 @@ class PasswordManager {
     var digest = sha256.convert(bytes);
     var pass =
         Base58Encode(utf8.encode(' "$index" + ${Base58Encode(digest.bytes)}'));
+    print(pass.length);
+    return "$index\$$pass";
+  }
+
+  String recoverPassword({
+    required PassModel passModel,
+    // bool newPass = false,
+    // bool generate = false,
+    int? index,
+    required String rmsk,
+    required int currentTimeStamp,
+  }) {
+    var data = passModel.toMap(passModel: passModel);
+    index = preferences.getInt('$data');
+    if (index == null) {
+      index = 0;
+    } else {
+      index = index + 1;
+      preferences.setInt('$data', index);
+    }
+    print("index $index");
+
+    //}
+    print(currentTimeStamp);
+    int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
+    print("timeStamp: $timeStamp");
+    print("$rmsk");
+    var bytes =
+        utf8.encode("$timeStamp$index$rmsk${passModel.url}${passModel.user}");
+    var digest = sha256.convert(bytes);
+    var pass =
+        Base58Encode(utf8.encode(' "$index" + ${Base58Encode(digest.bytes)}'));
+    print(pass.length);
     return "$index\$$pass";
   }
 
@@ -105,7 +137,6 @@ class PasswordManager {
     }
     return remainingTime;
   }
-
   bool checkValidity({PassModel? passModel, bool changeValidity = false}) {
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;

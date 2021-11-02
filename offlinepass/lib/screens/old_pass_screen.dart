@@ -99,7 +99,7 @@ class _OldPasswordState extends State<OldPassword> {
                             Text(
                               widget.passModel.url!
                                   .substring(
-                                      12, widget.passModel.url!.length - 4)
+                                      0, widget.passModel.url!.length - 4)
                                   .toString()
                                   .capitalize(),
                               overflow: TextOverflow.ellipsis,
