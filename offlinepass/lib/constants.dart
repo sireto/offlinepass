@@ -21,35 +21,20 @@ var screenWidth;
 var screenHeight;
 
 Map<String, Map> icons = {
-  "https://www.facebook.com": {
+  "Facebook.com": {
     'icon': FontAwesomeIcons.facebook,
     'color': Color(0xff3b5998)
   },
-  "https://www.gmail.com": {
-    'icon': FontAwesomeIcons.google,
-    'color': Colors.red
-  },
-  "https://www.yahoo.com": {
-    'icon': FontAwesomeIcons.yahoo,
-    'color': Color(0xff720e9e)
-  },
-  "https://www.reddit.com": {
-    'icon': FontAwesomeIcons.reddit,
-    'color': Color(0xffff4500)
-  },
-  "https://www.twitch.com": {
-    'icon': FontAwesomeIcons.twitch,
-    'color': Color(0xff6441a5)
-  },
-  "https://www.twitter.com": {
-    'icon': FontAwesomeIcons.twitter,
-    'color': Color(0xff00acee)
-  },
-  "https://www.telegram.com": {
+  "Gmail.com": {'icon': FontAwesomeIcons.google, 'color': Colors.red},
+  "Yahoo.com": {'icon': FontAwesomeIcons.yahoo, 'color': Color(0xff720e9e)},
+  "Reddit.com": {'icon': FontAwesomeIcons.reddit, 'color': Color(0xffff4500)},
+  "Twitch.com": {'icon': FontAwesomeIcons.twitch, 'color': Color(0xff6441a5)},
+  "Twitter.com": {'icon': FontAwesomeIcons.twitter, 'color': Color(0xff00acee)},
+  "Telegram.com": {
     'icon': FontAwesomeIcons.telegram,
     'color': Color(0xff0088cc)
   },
-  "https://www.linkedin.com": {
+  "Linkedin.com": {
     'icon': FontAwesomeIcons.linkedin,
     'color': Color(0xff0077b5)
   },

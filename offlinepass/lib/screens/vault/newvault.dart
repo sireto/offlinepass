@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offlinepass/services/notification.dart';
 import 'package:offlinepass/themes.dart';
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:offlinepass/screens/vault/confirmvault.dart';
 
 import '../../constants.dart';
@@ -20,6 +21,7 @@ class NewVaultScreen extends StatefulWidget {
 
 class _NewVaultScreenState extends State<NewVaultScreen> {
   String msk = "";
+  String entropy = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -63,7 +65,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 children: [
                   Container(
                     width: screenWidth * 0.6,
-                    padding: const EdgeInsets.only(top: 12, bottom: 12),
+                    padding: const EdgeInsets.all(12),
                     child: Center(
                       child: Text(
                         msk,
@@ -122,11 +124,14 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                   width: screenWidth,
                   child: ElevatedButton(
                     onPressed: () async {
+                      String entropy = bip39.mnemonicToEntropy(msk);
+                      print(entropy);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => Confirmvault(
                                     msk: msk,
+                                    entropy: entropy,
                                   )));
                     },
                     child: const Text(
@@ -149,23 +154,38 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   }
 
   String generateMsk() {
-    const length = 10;
-    // final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
-    // final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    // final numbers = "0123456789";
-    // final special = "@#=+!£\$%&/)(*><-.^][^~";
-    // String chars = "$lettersuppercase$letterslowercase$numbers$special";
+    String randomMnemonic = bip39.generateMnemonic();
+    print(randomMnemonic);
+    String entropy = bip39.mnemonicToEntropy(randomMnemonic);
+    print(entropy);
+    // String seed = bip39.mnemonicToSeedHex(randomMnemonic);
+    // print(seed);
+    //  print(Base58Encode(utf8.encode(randomMnemonic)));
+    // String mnemonic = bip39.entropyToMnemonic(entropy);
+    // print(mnemonic);
+    // var ss = bip39.mnemonicToSeed(mnemonic);
+    // print(ss);
 
-    var randomIntGen = List.generate(length, (index) {
-      int intRandom = Random.secure().nextInt(9);
+    // isValid = bip39.validateMnemonic('abandon');
+    // print(isValid);
+    // const length = 10;
+    // // final letterslowercase = "abcdefghijklmnopqrstuvwxyz";
+    // // final lettersuppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // // final numbers = "0123456789";
+    // // final special = "@#=+!£\$%&/)(*><-.^][^~";
+    // // String chars = "$lettersuppercase$letterslowercase$numbers$special";
 
-      return intRandom;
-    }).join('');
-    var encodedMsk = Base58Encode(utf8.encode(randomIntGen));
+    // var randomIntGen = List.generate(length, (index) {
+    //   int intRandom = Random.secure().nextInt(9);
+
+    //   return intRandom;
+    // }).join('');
+    // //print(randomIntGen);
+    // var encodedMsk = Base58Encode(utf8.encode(randomIntGen));
     // print(mskGen);
     // print(mskGen.length);
     // print(encodedMsk);
     // print(encodedMsk.length);
-    return encodedMsk;
+    return randomMnemonic;
   }
 }

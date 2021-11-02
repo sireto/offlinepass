@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           data.url!
-                              .substring(12, data.url!.length - 4)
+                              .substring(0, data.url!.length - 4)
                               .toString()
                               .capitalize(),
                           overflow: TextOverflow.ellipsis,

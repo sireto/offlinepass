@@ -7,7 +7,9 @@ import 'package:offlinepass/themes.dart';
 
 class Confirmvault extends StatefulWidget {
   final String msk;
-  const Confirmvault({Key? key, required this.msk}) : super(key: key);
+  final String entropy;
+  const Confirmvault({Key? key, required this.msk, required this.entropy})
+      : super(key: key);
 
   @override
   _ConfirmvaultState createState() => _ConfirmvaultState();
@@ -97,7 +99,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
                               encryptedSharedPreferences =
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
-                              'msk', widget.msk);
+                              'msk', widget.entropy);
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

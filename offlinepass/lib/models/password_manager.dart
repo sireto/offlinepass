@@ -22,6 +22,7 @@ class PasswordManager {
     if (index == null) {
       index = preferences.getInt('$data');
     }
+
     print("index $index");
     // if (!customIndex) {
     if (newPass) {
@@ -45,11 +46,45 @@ class PasswordManager {
     print(currentTimeStamp);
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
     print("timeStamp: $timeStamp");
+    print("$msk");
     var bytes =
         utf8.encode("$timeStamp$index$msk${passModel.url}${passModel.user}");
     var digest = sha256.convert(bytes);
     var pass =
         Base58Encode(utf8.encode(' "$index" + ${Base58Encode(digest.bytes)}'));
+    print(pass.length);
+    return "$index\$$pass";
+  }
+
+  String recoverPassword({
+    required PassModel passModel,
+    // bool newPass = false,
+    // bool generate = false,
+    int? index,
+    required String rmsk,
+    required int currentTimeStamp,
+  }) {
+    var data = passModel.toMap(passModel: passModel);
+    index = preferences.getInt('$data');
+    if (index == null) {
+      index = 0;
+    } else {
+      index = index + 1;
+      preferences.setInt('$data', index);
+    }
+    print("index $index");
+
+    //}
+    print(currentTimeStamp);
+    int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
+    print("timeStamp: $timeStamp");
+    print("$rmsk");
+    var bytes =
+        utf8.encode("$timeStamp$index$rmsk${passModel.url}${passModel.user}");
+    var digest = sha256.convert(bytes);
+    var pass =
+        Base58Encode(utf8.encode(' "$index" + ${Base58Encode(digest.bytes)}'));
+    print(pass.length);
     return "$index\$$pass";
   }
 
@@ -74,11 +109,9 @@ class PasswordManager {
         DateTime.parse(nowDate).difference(DateTime.parse(startingDate!));
     // print("validity" + (1 - difference.inDays).toString());
     int remainingDays = 90 - difference.inDays;
-    if(remainingDays==0){
-        preferences.setString('startingDate', formatter.format(now));
+    if (remainingDays == 0) {
+      preferences.setString('startingDate', formatter.format(now));
     }
     return 90 - difference.inDays;
   }
-
-  
 }

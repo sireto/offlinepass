@@ -1,13 +1,22 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/homescreen.dart';
+import 'package:bip39/bip39.dart' as bip39;
+import 'package:offlinepass/screens/vault/recover_password.dart';
 
 import '/themes.dart';
 
-class Recovervault extends StatelessWidget {
+class Recovervault extends StatefulWidget {
   const Recovervault({Key? key}) : super(key: key);
 
+  @override
+  State<Recovervault> createState() => _RecovervaultState();
+}
+
+class _RecovervaultState extends State<Recovervault> {
+  TextEditingController recovermsk = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +47,7 @@ class Recovervault extends StatelessWidget {
                 // margin: const EdgeInsets.all(10),
                 // padding: const EdgeInsets.all(10),
                 child: TextFormField(
+                  controller: recovermsk,
                   decoration: InputDecoration(
                       hintText: "Paste MSK here",
                       // label: const Text("MSK"),
@@ -66,12 +76,38 @@ class Recovervault extends StatelessWidget {
                   height: 50,
                   width: screenWidth,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()),
-                          (route) => false);
+                    onPressed: () async {
+                      if (recovermsk.text == "" || recovermsk.text.isEmpty) {
+                        const snackBar = SnackBar(
+                          content: Text("Empty msk"),
+                          duration: Duration(seconds: 1),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else if (bip39.validateMnemonic(recovermsk.text) ==
+                          false) {
+                        const snackBar = SnackBar(
+                          content: Text("Invalid msk"),
+                          duration: Duration(seconds: 1),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else
+                      // print(recovermsk.text);
+                      // EncryptedSharedPreferences encryptedSharedPreferences =
+                      //     EncryptedSharedPreferences();
+                      // encryptedSharedPreferences.setString(
+                      //     'rmsk', recovermsk.text);
+
+                      {
+                        String entropy =
+                            bip39.mnemonicToEntropy(recovermsk.text);
+                        print(entropy);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Recoverpassword(
+                                      rmsk: entropy,
+                                    )));
+                      }
                     },
                     child: const Text(
                       "Recover and get started",

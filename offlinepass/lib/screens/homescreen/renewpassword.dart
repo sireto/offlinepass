@@ -79,7 +79,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                   }
                   final snackBar = SnackBar(
                     content: Text(
-                        "${widget.passModel.url!.substring(12, widget.passModel.url!.length - 4).capitalize()} deleted successfully"),
+                        "${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()} deleted successfully"),
                     backgroundColor: Colors.grey.shade500,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -108,7 +108,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                     PopupMenuItem(
                       value: 0,
                       child: Text(
-                        "Delete ${widget.passModel.url!.substring(12, widget.passModel.url!.length - 4).capitalize()}",
+                        "Delete ${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()}",
                         style: TextStyle(
                             fontSize: 15,
                             //  fontFamily: 'TitilliumWeb',
@@ -189,7 +189,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                               Text(
                                 widget.passModel.url!
                                     .substring(
-                                        12, widget.passModel.url!.length - 4)
+                                        0, widget.passModel.url!.length - 4)
                                     .toString()
                                     .capitalize(),
                                 overflow: TextOverflow.ellipsis,
