@@ -11,7 +11,9 @@ import 'package:offlinepass/components/string_extension.dart';
 class Search extends SearchDelegate {
   final List datas;
   final BuildContext context;
-  Search({required this.datas, required this.context});
+  Search({required this.datas, required this.context}) {
+    print(datas);
+  }
   @override
   TextStyle get searchFieldStyle => TextStyle(
       fontSize: 16, color: Colors.black38, fontWeight: FontWeight.w300);
@@ -76,17 +78,28 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var results = [];
+    print(datas);
+    List results = datas;
     if (query.isNotEmpty || query != '') {
       print(datas);
-      results = datas
-          .where((element) => element.url
-              .substring(12, element.url!.length - 4)
-              .contains(query.toLowerCase()))
-          .toList();
+      results = datas.where((element) {
+        if (element.url.contains('.com')) {
+          return element.url
+              .toString()
+              .toLowerCase()
+              .substring(0, element.url!.length - 4)
+              .contains(query.toLowerCase());
+        } else {
+          return element.url
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase());
+        }
+      }).toList();
     }
-    print(results);
+    print(results.length);
     return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15.0),
         itemCount: results.length,
         itemBuilder: (context, index) => InkWell(
             onTap: () {
@@ -106,13 +119,13 @@ class Search extends SearchDelegate {
 
   Container emailUserView(var data) {
     return Container(
-      width: screenWidth,
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        width: screenWidth,
+        padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-             // width: screenWidth * 0.6,
+              // width: screenWidth * 0.6,
               child: Row(
                 children: [
                   Container(
@@ -120,12 +133,24 @@ class Search extends SearchDelegate {
                       width: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: icons[data.url]!['color']),
-                      child: Icon(
-                        icons[data.url]!['icon'],
-                        color: Colors.white,
-                        size: 26,
-                      )),
+                          color: data.colorIndex != null
+                              ? colors[data.colorIndex]
+                              : icons[data.url]!['color']),
+                      child: data.colorIndex != null
+                          ? Center(
+                              child: Text(
+                                data.url.substring(0, 2).toUpperCase(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    color: Colors.white),
+                              ),
+                            )
+                          : Icon(
+                              icons[data.url]!['icon'],
+                              color: Colors.white,
+                              size: 26,
+                            )),
                   widthspace(20),
                   Expanded(
                     child: Column(
@@ -133,10 +158,12 @@ class Search extends SearchDelegate {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data.url!
-                              .substring(12, data.url!.length - 4)
-                              .toString()
-                              .capitalize(),
+                          data.url!.contains('.com')
+                              ? data.url!
+                                  .substring(0, data.url!.length - 4)
+                                  .toString()
+                                  .capitalize()
+                              : data.url!.toString().capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16,
@@ -149,6 +176,7 @@ class Search extends SearchDelegate {
                           data.user!,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
+                              fontSize: 15,
                               color: Colors.grey,
                               //  fontFamily: 'TitilliumWeb',
                               fontWeight: FontWeight.w400),
@@ -169,23 +197,22 @@ class Search extends SearchDelegate {
             //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
             //     },
             //     icon: Icon(Icons.copy)),
-               IconButton(
+            IconButton(
                 padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
                 onPressed: () {
-                    Clipboard.setData(ClipboardData(
-                          text: PasswordManager().generatePassword(
-                              passModel: data)));
-                      final snackBar = SnackBar(
-                        content: Text("Copied to Clipboard"),
-                        backgroundColor: Colors.grey.shade600,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Clipboard.setData(ClipboardData(
+                      text:
+                          PasswordManager().generatePassword(passModel: data)));
+                  final snackBar = SnackBar(
+                    content: Text("Copied to Clipboard"),
+                    backgroundColor: Colors.grey.shade600,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },
                 icon: const Icon(
                   Icons.copy_rounded,
                   color: Colors.grey,
                 )),
-           
           ],
         ));
   }

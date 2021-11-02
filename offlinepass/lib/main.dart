@@ -16,12 +16,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EncryptedSharedPreferences encryptedSharedPreferences =
       EncryptedSharedPreferences();
+      
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   pincodes = sharedPreferences.getString("pincode");
   fingerprints = sharedPreferences.getBool("fingerprints");
   await PushNotification().initialize();
   await InitDb.initialize();
   PasswordManager.preferences = await SharedPreferences.getInstance();
+
   PasswordManager.msk = await encryptedSharedPreferences.getString('msk');
   print("msk:" + PasswordManager.msk);
   // print("startingTime: " + PasswordManager.startingDate.toString());
