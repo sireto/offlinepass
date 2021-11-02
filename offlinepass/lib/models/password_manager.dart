@@ -128,6 +128,7 @@ class PasswordManager {
     }
     return remainingTime;
   }
+
   bool checkValidity({PassModel? passModel, bool changeValidity = false}) {
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
