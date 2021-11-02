@@ -35,6 +35,8 @@ class _RenewPasswordState extends State<RenewPassword> {
   bool visiblenewPass = true;
   bool isDeleted = false;
   late String pswd;
+
+  late int validDays = passwordManager.validDays();
   @override
   void initState() {
     // TODO: implement initState
@@ -47,7 +49,6 @@ class _RenewPasswordState extends State<RenewPassword> {
 
   @override
   Widget build(BuildContext context) {
-    print(pswd);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kprimarycolor,
@@ -139,12 +140,17 @@ class _RenewPasswordState extends State<RenewPassword> {
           children: [
             Container(
               width: screenWidth,
-              color: passwordManager.validDays() > 1
-                  ? Colors.green.shade400
-                  : Colors.red,
+              color:
+                  passwordManager.checkValidity(passModel: widget.passModel) &&
+                          validDays > 1
+                      ? Colors.green.shade400
+                      : Colors.red,
               padding: EdgeInsets.only(left: 15.0, top: 12.0, bottom: 12.0),
               child: Text(
-                "Expires in ${passwordManager.validDays()} days",
+                !passwordManager.checkValidity(passModel: widget.passModel) ||
+                        validDays <= 0
+                    ? "Your Password has been expired."
+                    : "Expires in ${passwordManager.validDays()} minutes",
                 style: TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.italic,
@@ -376,7 +382,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                                               bottom: 8.0, left: 0.0),
                                           onPressed: () {
                                             Clipboard.setData(ClipboardData(
-                                                text: password.text));
+                                                text: newPassword.text));
                                             final snackBar = SnackBar(
                                               content:
                                                   Text("Copied to Clipboard"),

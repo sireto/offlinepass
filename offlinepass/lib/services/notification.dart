@@ -35,6 +35,7 @@ class PushNotification {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
+    print("notification scheduled");
   }
 
   void cancelNotification() async {
