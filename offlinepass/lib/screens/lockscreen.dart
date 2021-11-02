@@ -6,6 +6,8 @@ import 'package:offlinepass/components/local_auth_api.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/firstscreen.dart';
 import 'package:offlinepass/main.dart';
+import 'package:offlinepass/models/password_manager.dart';
+import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -420,7 +422,9 @@ class _LockscreenState extends State<Lockscreen> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Firstscreen()),
+                                builder: (context) => PasswordManager.msk != ''
+                                    ? HomeScreen()
+                                    : Firstscreen()),
                             (route) => false);
                       } else {
                         setState(() {

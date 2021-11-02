@@ -9,6 +9,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/models/pass_model.dart';
@@ -16,6 +17,7 @@ import 'package:offlinepass/models/pass_operation.dart';
 import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
+import 'package:sembast/timestamp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Recoverpassword extends StatefulWidget {
@@ -28,6 +30,14 @@ class Recoverpassword extends StatefulWidget {
 
 class _RecoverpasswordState extends State<Recoverpassword> {
   final DbOperation _dbOperation = PassOperation();
+  final initialdate = DateTime.now();
+  late String _startDate =
+      DateFormat("yyyy-MM-dd").format(initialdate.subtract(Duration(days: 90)));
+  late String _endDate = DateFormat("yyyy-MM-dd").format(initialdate);
+  String? selectdate;
+  String? newInitialDate;
+  int? currentTimeStamp;
+  int count = 0;
   //String pass = "";
 
   PassModel passModel = PassModel();
@@ -70,6 +80,12 @@ class _RecoverpasswordState extends State<Recoverpassword> {
   var checkindex = 0;
   Color currentcolor = Colors.red;
   final _key = GlobalKey<FormState>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,9 +150,6 @@ class _RecoverpasswordState extends State<Recoverpassword> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return knullUrl;
-                                      } else if (!Uri.parse(value).isAbsolute ||
-                                          value.length <= 13) {
-                                        return kvalidurl;
                                       }
                                       return null;
                                     },
@@ -274,10 +287,25 @@ class _RecoverpasswordState extends State<Recoverpassword> {
                                 ),
                                 heightspace(20),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      child: Text(""),
-                                    )
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        selectdate ??
+                                            DateFormat("MMM dd yyyy")
+                                                .format(initialdate),
+                                        style: const TextStyle(
+                                            color: ktextcolor,
+                                            fontSize: 16,
+                                            fontFamily: 'TitilliumWeb'),
+                                      ),
+                                    ),
+                                    IconButton(
+                                        onPressed: pickdate,
+                                        icon: const Icon(
+                                            FontAwesomeIcons.calendar))
                                   ],
                                 ),
                                 heightspace(20),
@@ -292,15 +320,22 @@ class _RecoverpasswordState extends State<Recoverpassword> {
                                           url: appSiteUrl.text,
                                           user: usernameEmailPhone.text,
                                         );
+
                                         print(
                                             "${passModel.url},${passModel.user}");
                                         setState(() {
-                                          password.text =
-                                              passwordManager.recoverPassword(
-                                                  passModel: passModel,
-                                                  rmsk: widget.rmsk,
-                                                  currentTimeStamp:
-                                                      1635818969241);
+                                          count++;
+
+                                          password.text == ""
+                                              ? password.text = passwordManager
+                                                  .recoverPassword(
+                                                      passModel: passModel,
+                                                      rmsk: widget.rmsk,
+                                                      currentTimeStamp:
+                                                          currentTimeStamp!,
+                                                      index: 0)
+                                              : null;
+                                          print(password.text);
                                         });
 
                                         // passModel.id = await _dbOperation
@@ -353,73 +388,58 @@ class _RecoverpasswordState extends State<Recoverpassword> {
                             : SizedBox(),
 
                         password.text != ""
-                            ? Container(
-                                width: screenWidth,
-                                child: TextFormField(
-                                    obscureText: visibletext,
-                                    controller: password,
-                                    style: TextStyle(
-                                      color: ktextcolor,
-                                      fontSize: 14,
-                                    ),
-                                    readOnly: true,
-                                    decoration: InputDecoration(
-                                        focusedBorder: InputBorder.none,
-                                        suffixIcon: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            visibletext
-                                                ? IconButton(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 8.0,
-                                                        left: 20.0),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        visibility();
-                                                      });
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.visibility,
-                                                      color: Colors.grey,
-                                                    ))
-                                                : IconButton(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 8.0,
-                                                        left: 20.0),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        visibility();
-                                                      });
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.visibility_off,
-                                                      color: Colors.grey,
-                                                    )),
-                                            IconButton(
-                                                padding: EdgeInsets.only(
-                                                    bottom: 8.0, left: 0.0),
-                                                onPressed: () {
-                                                  Clipboard.setData(
-                                                      ClipboardData(
-                                                          text: password.text));
-                                                  final snackBar = SnackBar(
-                                                    content: Text(
-                                                        "Copied to Clipboard"),
-                                                    duration: Duration(
-                                                        milliseconds: 500),
-                                                    backgroundColor:
-                                                        Colors.grey.shade600,
-                                                  );
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackBar);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.copy_rounded,
-                                                  color: Colors.grey,
-                                                )),
-                                          ],
-                                        ),
-                                        border: InputBorder.none)),
+                            ? ListView.builder(
+                                itemCount: count > 3 ? 3 : count,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) => Container(
+                                  width: screenWidth,
+                                  child: TextFormField(
+                                      initialValue:
+                                          passwordManager.recoverPassword(
+                                              passModel: passModel,
+                                              rmsk: widget.rmsk,
+                                              currentTimeStamp:
+                                                  currentTimeStamp!,
+                                              index: index),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        // fontFamily: 'TitilliumWeb',
+                                      ),
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                          focusedBorder: InputBorder.none,
+                                          suffixIcon: IconButton(
+                                              padding: EdgeInsets.only(
+                                                  bottom: 8.0,
+                                                  left: 0.0,
+                                                  top: 0.0),
+                                              onPressed: () {
+                                                Clipboard.setData(ClipboardData(
+                                                  text: passwordManager
+                                                      .recoverPassword(
+                                                          passModel: passModel,
+                                                          rmsk: widget.rmsk,
+                                                          currentTimeStamp:
+                                                              currentTimeStamp!,
+                                                          index: index),
+                                                ));
+                                                final snackBar = SnackBar(
+                                                  content: Text(
+                                                      "Copied to Clipboard"),
+                                                  backgroundColor:
+                                                      Colors.grey.shade600,
+                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              },
+                                              icon: const Icon(
+                                                Icons.copy_rounded,
+                                                color: Colors.grey,
+                                              )),
+                                          border: InputBorder.none)),
+                                ),
                               )
                             : SizedBox(),
 
@@ -450,6 +470,28 @@ class _RecoverpasswordState extends State<Recoverpassword> {
               ),
             ),
           ));
+    });
+  }
+
+  Future pickdate() async {
+    final newdate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.parse(newInitialDate ?? _endDate),
+        firstDate: DateTime.parse(_startDate),
+        initialEntryMode: DatePickerEntryMode.calendar,
+        lastDate: DateTime.parse(_endDate));
+
+    if (newdate == null) return;
+    setState(() {
+      // isChanged = true;
+      newInitialDate = DateFormat("yyyy-MM-dd").format(newdate);
+      selectdate = DateFormat("MMM dd yyyy").format(newdate);
+      print(selectdate);
+      currentTimeStamp = DateTime.parse(newInitialDate!).millisecondsSinceEpoch;
+
+      // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
+      // _endDate =
+      //     DateFormat("yyyy-MM-dd").format(newdate.add(Duration(days: 14)));
     });
   }
 
