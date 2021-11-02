@@ -38,6 +38,7 @@ class _RecoverpasswordState extends State<Recoverpassword> {
   String? newInitialDate;
   int? currentTimeStamp;
   int count = 0;
+  bool showMore = false;
   //String pass = "";
 
   PassModel passModel = PassModel();
@@ -83,7 +84,7 @@ class _RecoverpasswordState extends State<Recoverpassword> {
   @override
   void initState() {
     // TODO: implement initState
-    currentTimeStamp = DateTime.now().millisecondsSinceEpoch;
+    currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     super.initState();
   }
 
@@ -377,7 +378,7 @@ class _RecoverpasswordState extends State<Recoverpassword> {
                               ],
                             )),
                         heightspace(20),
-                        password.text != ""
+                        (password.text != "" && count != 0)
                             ? const Text(
                                 "Password",
                                 style: TextStyle(
@@ -389,7 +390,11 @@ class _RecoverpasswordState extends State<Recoverpassword> {
 
                         password.text != ""
                             ? ListView.builder(
-                                itemCount: count > 3 ? 3 : count,
+                                itemCount: showMore
+                                    ? count
+                                    : count > 3
+                                        ? 3
+                                        : count,
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) => Container(
@@ -443,6 +448,24 @@ class _RecoverpasswordState extends State<Recoverpassword> {
                               )
                             : SizedBox(),
 
+                        count > 3
+                            ? TextButton(
+                                onPressed: () {
+                                  if (showMore == false) {
+                                    setState(() {
+                                      showMore = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      showMore = false;
+                                    });
+                                  }
+                                },
+                                child: showMore == false
+                                    ? Text("View all passwords")
+                                    : Text("Hide passwords"))
+                            : heightspace(0),
+
                         // ElevatedButton(
                         //   onPressed: () {
                         //     Clipboard.setData(ClipboardData(text: password.text));
@@ -482,12 +505,25 @@ class _RecoverpasswordState extends State<Recoverpassword> {
         lastDate: DateTime.parse(_endDate));
 
     if (newdate == null) return;
+    print(newInitialDate);
+    print(_endDate);
+    if (newInitialDate != null
+        ? newInitialDate == DateFormat("yyyy-MM-dd").format(newdate)
+        : _endDate == DateFormat("yyyy-MM-dd").format(newdate)) {
+    } else {
+      setState(() {
+        count = 0;
+        showMore = false;
+      });
+    }
     setState(() {
       // isChanged = true;
+
       newInitialDate = DateFormat("yyyy-MM-dd").format(newdate);
+      print(newInitialDate);
       selectdate = DateFormat("MMM dd yyyy").format(newdate);
       print(selectdate);
-      currentTimeStamp = DateTime.parse(newInitialDate!).millisecondsSinceEpoch;
+      currentTimeStamp = newdate.millisecondsSinceEpoch ~/ 1000;
 
       // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
       // _endDate =

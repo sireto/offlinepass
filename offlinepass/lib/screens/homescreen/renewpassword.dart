@@ -42,8 +42,8 @@ class _RenewPasswordState extends State<RenewPassword> {
   void initState() {
     // TODO: implement initState
     pswd = passwordManager.generatePassword(
-      passModel: widget.passModel,
-    );
+        passModel: widget.passModel,
+        currentTimeStamp: DateTime.now().millisecondsSinceEpoch ~/ 1000);
     password = TextEditingController(text: pswd);
     super.initState();
   }
@@ -324,17 +324,9 @@ class _RenewPasswordState extends State<RenewPassword> {
                   heightspace(15),
                   ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        isGenerated = true;
-                        pswd = passwordManager.generatePassword(
-                            newPass: true, passModel: widget.passModel);
-                        newPassword.text = pswd;
-                        final snackBar = SnackBar(
-                          content: Text("Password generated successfully"),
-                          backgroundColor: Colors.grey.shade600,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      });
+                      showDialog(
+                          context: this.context,
+                          builder: (context) => conformDialog());
                     },
                     child: const Text(
                       "New Password",
@@ -435,6 +427,66 @@ class _RenewPasswordState extends State<RenewPassword> {
         ),
       ),
     );
+  }
+
+  conformDialog() {
+    return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          // height: 170,
+          child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 15, bottom: 15, left: 10, right: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  //  SizedBox(height: 10),
+                  Center(
+                      child: Text(
+                    "Wanna change your password ?",
+                    style: TextStyle(fontSize: 20),
+                  )),
+                  heightspace(20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              setState(() {
+                                isGenerated = true;
+                                pswd = passwordManager.generatePassword(
+                                    newPass: true,
+                                    passModel: widget.passModel,
+                                    currentTimeStamp:
+                                        DateTime.now().millisecondsSinceEpoch ~/
+                                            1000);
+                                newPassword.text = pswd;
+                                password.text = pswd;
+                                final snackBar = SnackBar(
+                                  content:
+                                      Text("Password generated successfully"),
+                                  backgroundColor: Colors.grey.shade600,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              });
+                            });
+                            Navigator.pop(this.context);
+                          },
+                          child: Text("Yes")),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(this.context);
+                          },
+                          child: Text("No")),
+                    ],
+                  )
+                ],
+              )),
+        ));
   }
 
   void visibility() {

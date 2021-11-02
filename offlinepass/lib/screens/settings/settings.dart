@@ -260,59 +260,61 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                             ],
                           )
                         : heightspace(0),
+                    _supportState == _SupportState.supported
+                        ? heightspace(15)
+                        : heightspace(0),
+                    const Divider(
+                      height: 2,
+                      color: Colors.black,
+                    ),
                     heightspace(15),
-                    const Divider(
-                      height: 2,
-                      color: Colors.black,
-                    ),
-                    heightspace(10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.notifications_active),
-                            widthspace(20),
-                            const Text("Remainder",
-                                style: TextStyle(
-                                    fontSize: 18, fontFamily: 'TitilliumWeb')),
-                          ],
-                        ),
-                        DropdownButton<int>(
-                          underline: const SizedBox(),
-                          value: currentday,
-                          //  dropdownColor: color1,
-                          // iconEnabledColor: text1,
-                          onChanged: (int? newvalue) {
-                            setState(() {
-                              currentday = newvalue!;
-                            });
-                            print(newvalue);
-                          },
-                          style: const TextStyle(
-                              fontSize: 13, fontFamily: "TitilliumWeb"),
-                          items: days
-                              .map<DropdownMenuItem<int>>(
-                                  (int value) => DropdownMenuItem<int>(
-                                        value: value,
-                                        child: Text(
-                                          "$value days",
-                                          style: const TextStyle(
-                                              fontFamily: "TitilliumWeb",
-                                              fontSize: 15,
-                                              color: Colors.black),
-                                        ),
-                                      ))
-                              .toList(),
-                        ),
-                      ],
-                    ),
-                    heightspace(10),
-                    const Divider(
-                      height: 2,
-                      color: Colors.black,
-                    ),
-                    heightspace(20),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Row(
+                    //       children: [
+                    //         const Icon(Icons.notifications_active),
+                    //         widthspace(20),
+                    //         const Text("Remainder",
+                    //             style: TextStyle(
+                    //                 fontSize: 18, fontFamily: 'TitilliumWeb')),
+                    //       ],
+                    //     ),
+                    //     DropdownButton<int>(
+                    //       underline: const SizedBox(),
+                    //       value: currentday,
+                    //       //  dropdownColor: color1,
+                    //       // iconEnabledColor: text1,
+                    //       onChanged: (int? newvalue) {
+                    //         setState(() {
+                    //           currentday = newvalue!;
+                    //         });
+                    //         print(newvalue);
+                    //       },
+                    //       style: const TextStyle(
+                    //           fontSize: 13, fontFamily: "TitilliumWeb"),
+                    //       items: days
+                    //           .map<DropdownMenuItem<int>>(
+                    //               (int value) => DropdownMenuItem<int>(
+                    //                     value: value,
+                    //                     child: Text(
+                    //                       "$value days",
+                    //                       style: const TextStyle(
+                    //                           fontFamily: "TitilliumWeb",
+                    //                           fontSize: 15,
+                    //                           color: Colors.black),
+                    //                     ),
+                    //                   ))
+                    //           .toList(),
+                    //     ),
+                    //   ],
+                    // ),
+                    // heightspace(10),
+                    // const Divider(
+                    //   height: 2,
+                    //   color: Colors.black,
+                    // ),
+                    //  heightspace(20),
                     Row(
                       children: [
                         const Icon(Icons.share),

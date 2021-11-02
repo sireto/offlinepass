@@ -311,7 +311,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 // padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(
-                      text: passwordManager.generatePassword(passModel: data)));
+                      text: passwordManager.generatePassword(
+                          passModel: data,
+                          currentTimeStamp:
+                              DateTime.now().millisecondsSinceEpoch ~/ 1000)));
                   final snackBar = SnackBar(
                     content: Text("Copied to Clipboard"),
                     backgroundColor: Colors.grey.shade600,

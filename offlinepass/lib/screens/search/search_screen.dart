@@ -201,8 +201,10 @@ class Search extends SearchDelegate {
                 padding: EdgeInsets.only(bottom: 8.0, left: 0.0),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(
-                      text:
-                          PasswordManager().generatePassword(passModel: data)));
+                      text: PasswordManager().generatePassword(
+                          passModel: data,
+                          currentTimeStamp:
+                              DateTime.now().millisecondsSinceEpoch ~/ 1000)));
                   final snackBar = SnackBar(
                     content: Text("Copied to Clipboard"),
                     backgroundColor: Colors.grey.shade600,

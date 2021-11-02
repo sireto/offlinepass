@@ -9,16 +9,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PasswordManager {
   static late final String msk;
   static late final SharedPreferences preferences;
-  static int passwordValidity = 3 * 60;
+  static int passwordValidity = 2 * 60;
   String generatePassword({
     required PassModel passModel,
     bool newPass = false,
     bool generate = false,
     int? index,
+    required int currentTimeStamp,
     int? timeStamp,
   }) {
     if (timeStamp == null) {
-      int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      //  int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
     }
 
@@ -76,7 +77,6 @@ class PasswordManager {
 
     print("index $index");
 
-
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
 
     var bytes =
@@ -106,7 +106,6 @@ class PasswordManager {
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     return (currentTimeStamp ~/ passwordValidity) * passwordValidity;
   }
-
 
   bool checkValidity({PassModel? passModel, bool changeValidity = false}) {
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;

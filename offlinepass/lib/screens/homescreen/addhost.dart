@@ -391,12 +391,14 @@ class _AddhostState extends State<Addhost> {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackBar);
                                                 setState(() {
-                                                  password.text =
-                                                      passwordManager
-                                                          .generatePassword(
-                                                              generate: true,
-                                                              passModel:
-                                                                  passModel);
+                                                  password.text = passwordManager
+                                                      .generatePassword(
+                                                          generate: true,
+                                                          passModel: passModel,
+                                                          currentTimeStamp:
+                                                              DateTime.now()
+                                                                      .millisecondsSinceEpoch ~/
+                                                                  1000);
                                                 });
                                               }
                                             } else {
@@ -408,6 +410,16 @@ class _AddhostState extends State<Addhost> {
                                               );
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
+                                              // setState(() {
+                                              //   password.text = passwordManager
+                                              //       .generatePassword(
+                                              //           generate: true,
+                                              //           passModel: passModel,
+                                              //           currentTimeStamp: DateTime
+                                              //                       .now()
+                                              //                   .millisecondsSinceEpoch ~/
+                                              //               1000);
+                                              // });
                                             }
                                           }
                                         },
