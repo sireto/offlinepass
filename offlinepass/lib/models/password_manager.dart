@@ -73,13 +73,9 @@ class PasswordManager {
     required int currentTimeStamp,
   }) {
     var data = passModel.toMap(passModel: passModel);
-    index = preferences.getInt('$data');
-    if (index == null) {
-      index = 0;
-    } else {
-      index = index + 1;
-      preferences.setInt('$data', index);
-    }
+
+    print("index $index");
+
 
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
 
@@ -110,6 +106,7 @@ class PasswordManager {
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     return (currentTimeStamp ~/ passwordValidity) * passwordValidity;
   }
+
 
   bool checkValidity({PassModel? passModel, bool changeValidity = false}) {
     int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;

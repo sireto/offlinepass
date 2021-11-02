@@ -17,6 +17,7 @@ class Confirmvault extends StatefulWidget {
 
 class _ConfirmvaultState extends State<Confirmvault> {
   TextEditingController _mskController = TextEditingController();
+  bool isValue = false;
 
   @override
   void dispose() {
@@ -56,9 +57,32 @@ class _ConfirmvaultState extends State<Confirmvault> {
                 // padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: _mskController,
+                  autofocus: true,
+                  onChanged: (value) {
+                    setState(() {
+                      isValue = true;
+                    });
+                  },
+                  onEditingComplete: () {
+                    if (_mskController.text == "") {
+                      setState(() {
+                        isValue = false;
+                      });
+                    }
+                  },
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   decoration: InputDecoration(
                       hintText: "Paste MSK here",
+                      suffixIcon: isValue
+                          ? IconButton(
+                              onPressed: () {
+                                _mskController.clear();
+                                setState(() {
+                                  isValue = false;
+                                });
+                              },
+                              icon: Icon(Icons.clear))
+                          : null,
                       // label: const Text("MSK"),
                       hintStyle:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w400),

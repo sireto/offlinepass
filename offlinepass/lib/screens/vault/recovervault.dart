@@ -17,6 +17,15 @@ class Recovervault extends StatefulWidget {
 
 class _RecovervaultState extends State<Recovervault> {
   TextEditingController recovermsk = TextEditingController();
+  FocusNode _mskFocus = FocusNode();
+  bool isValue = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _mskFocus.requestFocus();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +57,39 @@ class _RecovervaultState extends State<Recovervault> {
                 // padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: recovermsk,
+                  focusNode: _mskFocus,
+                  onChanged: (value) {
+                    setState(() {
+                      isValue = true;
+                    });
+                  },
+                  onEditingComplete: () {
+                    if (recovermsk.text == "") {
+                      setState(() {
+                        isValue = false;
+                      });
+                      _mskFocus.unfocus();
+                    }
+                  },
+                  onSaved: (value) {
+                    if (recovermsk.text == "") {
+                      setState(() {
+                        isValue = false;
+                      });
+                      _mskFocus.unfocus();
+                    }
+                  },
                   decoration: InputDecoration(
+                      suffixIcon: isValue
+                          ? IconButton(
+                              onPressed: () {
+                                recovermsk.clear();
+                                setState(() {
+                                  isValue = false;
+                                });
+                              },
+                              icon: Icon(Icons.clear))
+                          : null,
                       hintText: "Paste MSK here",
                       // label: const Text("MSK"),
                       border: OutlineInputBorder(
