@@ -132,12 +132,11 @@ class _FirstscreenState extends State<Firstscreen> {
                     "New Vault",
                     style: TextStyle(
                       fontSize: 16,
-                     
                     ),
                     // style: TextStyle(color: ktextcolor, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
-                    style: ElevatedButton.styleFrom(primary: kbuttonColor),
+                  style: ElevatedButton.styleFrom(primary: kbuttonColor),
                 ),
               ),
               heightspace(20),
@@ -157,7 +156,6 @@ class _FirstscreenState extends State<Firstscreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
-                    
                     ),
                     //style: TextStyle(color: ktextcolor, fontSize: 16),
                   ),

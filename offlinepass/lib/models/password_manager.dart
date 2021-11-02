@@ -58,20 +58,11 @@ class PasswordManager {
 
   String recoverPassword({
     required PassModel passModel,
-    // bool newPass = false,
-    // bool generate = false,
     int? index,
     required String rmsk,
     required int currentTimeStamp,
   }) {
     var data = passModel.toMap(passModel: passModel);
-    index = preferences.getInt('$data');
-    if (index == null) {
-      index = 0;
-    } else {
-      index = index + 1;
-      preferences.setInt('$data', index);
-    }
     print("index $index");
 
     //}

@@ -34,6 +34,7 @@ class _OldPasswordState extends State<OldPassword> {
       DateFormat("yyyy-MM-dd").format(initialdate.subtract(Duration(days: 90)));
   late String _endDate = DateFormat("yyyy-MM-dd").format(initialdate);
   String? selectdate;
+  String? newInitialDate;
   @override
   void initState() {
     // TODO: implement initState
@@ -217,7 +218,7 @@ class _OldPasswordState extends State<OldPassword> {
   Future pickdate() async {
     final newdate = await showDatePicker(
         context: context,
-        initialDate: DateTime.parse(_startDate),
+        initialDate: DateTime.parse(newInitialDate ?? _endDate),
         firstDate: DateTime.parse(_startDate),
         initialEntryMode: DatePickerEntryMode.calendar,
         lastDate: DateTime.parse(_endDate));
@@ -225,6 +226,7 @@ class _OldPasswordState extends State<OldPassword> {
     if (newdate == null) return;
     setState(() {
       // isChanged = true;
+      newInitialDate = DateFormat("yyyy-MM-dd").format(newdate);
       selectdate = DateFormat("MMM dd yyyy").format(newdate);
       print(selectdate);
       // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
