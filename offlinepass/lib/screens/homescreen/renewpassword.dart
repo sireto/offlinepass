@@ -64,7 +64,7 @@ class _RenewPasswordState extends State<RenewPassword> {
               Icons.arrow_back,
             )),
         title: Text(
-          widget.passModel.url!,
+          widget.passModel.url!.capitalize(),
         ),
         actions: [
           PopupMenuButton(
@@ -75,9 +75,9 @@ class _RenewPasswordState extends State<RenewPassword> {
                   await _dbOperation.remove(widget.passModel);
                   bool result = await _dbOperation.isEmpty();
 
-                  if (result) {
-                    passwordManager.cancelNotification();
-                  }
+                  // if (result) {
+                  //   passwordManager.cancelNotification();
+                  // }
                   final snackBar = SnackBar(
                     content: Text(
                         "${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()} deleted successfully"),
@@ -109,7 +109,9 @@ class _RenewPasswordState extends State<RenewPassword> {
                     PopupMenuItem(
                       value: 0,
                       child: Text(
-                        "Delete ${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()}",
+                        widget.passModel.url!.contains('.com')
+                            ? "Delete ${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()}"
+                            : "Delete ${widget.passModel.url!.capitalize()}",
                         style: TextStyle(
                             fontSize: 15,
                             //  fontFamily: 'TitilliumWeb',
@@ -180,12 +182,26 @@ class _RenewPasswordState extends State<RenewPassword> {
                             width: 45,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                color: icons[widget.passModel.url]!['color']),
-                            child: Icon(
-                              icons[widget.passModel.url]!['icon'],
-                              color: Colors.white,
-                              size: 26,
-                            )),
+                                color: widget.passModel.colorIndex != null
+                                    ? colors[widget.passModel.colorIndex!]
+                                    : icons[widget.passModel.url]!['color']),
+                            child: widget.passModel.colorIndex != null
+                                ? Center(
+                                    child: Text(
+                                      widget.passModel.url!
+                                          .substring(0, 2)
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          color: Colors.white),
+                                    ),
+                                  )
+                                : Icon(
+                                    icons[widget.passModel.url]!['icon'],
+                                    color: Colors.white,
+                                    size: 26,
+                                  )),
                         widthspace(20),
                         Flexible(
                           child: Column(
@@ -193,11 +209,15 @@ class _RenewPasswordState extends State<RenewPassword> {
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                widget.passModel.url!
-                                    .substring(
-                                        0, widget.passModel.url!.length - 4)
-                                    .toString()
-                                    .capitalize(),
+                                widget.passModel.url!.contains('.com')
+                                    ? widget.passModel.url!
+                                        .substring(
+                                            0, widget.passModel.url!.length - 4)
+                                        .toString()
+                                        .capitalize()
+                                    : widget.passModel.url!
+                                        .toString()
+                                        .capitalize(),
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 16,

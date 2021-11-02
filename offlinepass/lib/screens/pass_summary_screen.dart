@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/models/pass_model.dart';
-import 'package:offlinepass/models/pass_operation.dart';
 import 'package:offlinepass/models/password_manager.dart';
-import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:offlinepass/components/string_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,14 +24,19 @@ class Passsummary extends StatefulWidget {
 
 class _PasssummaryState extends State<Passsummary> {
   PasswordManager _passwordManager = PasswordManager();
-  List date = ["Aug 02 2021", "Oct 31 2021"];
+  List timeStamps = [];
   String? getdate;
+  int? startTimeStamp;
+  int? timeStamp;
   late int count;
+  int? currentTimeStamp;
   @override
   void initState() {
     // TODO: implement initState
     count = PasswordManager.preferences
         .getInt('${widget.passModel.toMap(passModel: widget.passModel)}')!;
+    timeStamps = _passwordManager.getLast1yrpswds(passModel: widget.passModel);
+    print(timeStamps.length);
     super.initState();
   }
 
@@ -66,16 +67,14 @@ class _PasssummaryState extends State<Passsummary> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: count == 0
-              ? Container(
-                  child: Text(
-                    "You haven't changed your password. Once your password is changed, you can view your  passwords summary here.",
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                        fontFamily: "TitilliumWeb",
-                        fontWeight: FontWeight.w400),
-                  ),
+          child: timeStamps.isEmpty
+              ? const Text(
+                  "You haven't change your password since last year.",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
+                      fontFamily: "TitilliumWeb",
+                      fontWeight: FontWeight.w400),
                 )
               : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Container(
@@ -87,12 +86,26 @@ class _PasssummaryState extends State<Passsummary> {
                             width: 45,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                color: icons[widget.passModel.url]!['color']),
-                            child: Icon(
-                              icons[widget.passModel.url]!['icon'],
-                              color: Colors.white,
-                              size: 26,
-                            )),
+                                color: widget.passModel.colorIndex != null
+                                    ? colors[widget.passModel.colorIndex!]
+                                    : icons[widget.passModel.url]!['color']),
+                            child: widget.passModel.colorIndex != null
+                                ? Center(
+                                    child: Text(
+                                      widget.passModel.url!
+                                          .substring(0, 2)
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          color: Colors.white),
+                                    ),
+                                  )
+                                : Icon(
+                                    icons[widget.passModel.url]!['icon'],
+                                    color: Colors.white,
+                                    size: 26,
+                                  )),
                         widthspace(20),
                         Flexible(
                           child: Column(
@@ -100,11 +113,15 @@ class _PasssummaryState extends State<Passsummary> {
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                widget.passModel.url!
-                                    .substring(
-                                        0, widget.passModel.url!.length - 4)
-                                    .toString()
-                                    .capitalize(),
+                                widget.passModel.url!.contains('.com')
+                                    ? widget.passModel.url!
+                                        .substring(
+                                            0, widget.passModel.url!.length - 4)
+                                        .toString()
+                                        .capitalize()
+                                    : widget.passModel.url!
+                                        .toString()
+                                        .capitalize(),
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 16,
@@ -127,7 +144,7 @@ class _PasssummaryState extends State<Passsummary> {
                       ],
                     ),
                   ),
-                  heightspace(30),
+                  heightspace(15),
                   // Column(
                   //   children: const [
                   //     Text(
@@ -142,34 +159,41 @@ class _PasssummaryState extends State<Passsummary> {
                   // ),
                   // heightspace(10),
                   ListView.builder(
-                      itemCount: date.length,
+                      itemCount: timeStamps.length,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              date[index],
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontFamily: 'TitilliumWeb',
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            heightspace(10),
-                            ListView.builder(
-                              itemCount: count > 3 ? 3 : count,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) => Container(
-                                width: screenWidth,
-                                child: TextFormField(
+                      itemBuilder: (context, indx) {
+                        return Container(
+                          padding: const EdgeInsets.only(top: 30.0),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom:
+                                      BorderSide(color: Colors.grey.shade400))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                        timeStamps[indx] * 1000)
+                                    .toString(),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontFamily: 'TitilliumWeb',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              heightspace(10),
+                              ListView.builder(
+                                itemCount: indx == 0 ? count + 1 : 3,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) => TextFormField(
                                     initialValue:
                                         _passwordManager.generatePassword(
                                             passModel: widget.passModel,
+                                            timeStamp: timeStamps[indx],
                                             index: index),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
                                       // fontFamily: 'TitilliumWeb',
@@ -178,7 +202,7 @@ class _PasssummaryState extends State<Passsummary> {
                                     decoration: InputDecoration(
                                         focusedBorder: InputBorder.none,
                                         suffixIcon: IconButton(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 bottom: 8.0,
                                                 left: 0.0,
                                                 top: 0.0),
@@ -190,8 +214,8 @@ class _PasssummaryState extends State<Passsummary> {
                                                               widget.passModel,
                                                           index: index)));
                                               final snackBar = SnackBar(
-                                                content:
-                                                    Text("Copied to Clipboard"),
+                                                content: const Text(
+                                                    "Copied to Clipboard"),
                                                 backgroundColor:
                                                     Colors.grey.shade600,
                                               );
@@ -204,8 +228,8 @@ class _PasssummaryState extends State<Passsummary> {
                                             )),
                                         border: InputBorder.none)),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       })
                 ]),
