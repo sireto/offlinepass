@@ -153,12 +153,14 @@ class _RecovervaultState extends State<Recovervault> {
                         String entropy =
                             bip39.mnemonicToEntropy(recovermsk.text);
                         print(entropy);
-                        Navigator.push(
+                        EncryptedSharedPreferences encryptedSharedPreferences =
+                            EncryptedSharedPreferences();
+                        encryptedSharedPreferences.setString('msk', entropy);
+                        Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Recoverpassword(
-                                      rmsk: entropy,
-                                    )));
+                                builder: (context) => HomeScreen()),
+                            (route) => false);
                       }
                     },
                     child: const Text(
