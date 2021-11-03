@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: kprimarycolor,
         onPressed: () {
           Future data = Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Addhost()));
+              MaterialPageRoute(builder: (context) => Addhost(datas: datas!,)));
           data.then((value) {
             if (value.id != null) {
               setState(() {

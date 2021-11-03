@@ -17,7 +17,8 @@ import 'package:offlinepass/services/db_operation.dart';
 import 'package:offlinepass/themes.dart';
 
 class Addhost extends StatefulWidget {
-  const Addhost({Key? key}) : super(key: key);
+  final datas;
+  const Addhost({Key? key, required this.datas}) : super(key: key);
 
   @override
   _AddhostState createState() => _AddhostState();
@@ -321,8 +322,10 @@ class _AddhostState extends State<Addhost> {
                                                                               .text
                                                                               .substring(0, 2)
                                                                               .toUpperCase(),
-                                                                          style:
-                                                                              const TextStyle(color: Colors.white),
+                                                                          style: const TextStyle(
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 18,
+                                                                              color: Colors.white),
                                                                           textAlign:
                                                                               TextAlign.center,
                                                                         )
@@ -357,13 +360,30 @@ class _AddhostState extends State<Addhost> {
                                         onPressed: () async {
                                           if (_key.currentState!.validate()) {
                                             if (password.text == "") {
+                                              print(appSiteUrl.text);
                                               passModel = PassModel(
                                                 url: appSiteUrl.text,
                                                 user: usernameEmailPhone.text,
                                               );
-                                              bool result = await _dbOperation
-                                                  .contain(passModel);
-                                              if (result) {
+                                              // fails logic
+
+                                              // bool result = await _dbOperation
+                                              //     .contain(passModel);
+                                              // List datas = [];
+                                              // datas.forEach((element) { })
+                                              print(widget.datas);
+                                              var results = widget.datas
+                                                  .map((element) =>
+                                                      element.url
+                                                              .toString()
+                                                              .toLowerCase() ==
+                                                          appSiteUrl.text &&
+                                                      element.user ==
+                                                          usernameEmailPhone
+                                                              .text)
+                                                  .toList();
+                                              print(results);
+                                              if (results.contains(true)) {
                                                 final snackBar = SnackBar(
                                                   content: const Text(
                                                       "Host and username already exist"),
