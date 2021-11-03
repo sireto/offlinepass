@@ -545,7 +545,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                                     EdgeInsets.only(bottom: 8.0, left: 0.0),
                                 onPressed: () {
                                   Clipboard.setData(
-                                      ClipboardData(text: newPassword.text));
+                                      ClipboardData(text: password.text));
                                   final snackBar = SnackBar(
                                     content: Text("Copied to Clipboard"),
                                     backgroundColor: Colors.grey.shade600,

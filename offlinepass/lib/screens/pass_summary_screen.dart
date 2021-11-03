@@ -174,7 +174,7 @@ class _PasssummaryState extends State<Passsummary> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                DateFormat('yyyy-MM-dd')
+                                DateFormat('MMM dd,yyyy')
                                     .format(DateTime.fromMillisecondsSinceEpoch(
                                         timeStamps[indx] * 1000))
                                     .toString(),

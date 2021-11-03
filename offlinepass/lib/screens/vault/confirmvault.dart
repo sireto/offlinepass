@@ -112,22 +112,22 @@ class _ConfirmvaultState extends State<Confirmvault> {
                           borderRadius: BorderRadius.circular(8))),
                 ),
               ),
-              heightspace(25),
-              Text(
-                "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
-                style: TextStyle(
-                    fontFamily: 'TitilliumWeb',
-                    fontSize: 14,
-                    color: Colors.grey.shade700),
-              ),
-              heightspace(10),
-              const Text(
-                "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
-                style: TextStyle(
-                  fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
-                ),
-              ),
+              // heightspace(25),
+              // Text(
+              //   "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
+              //   style: TextStyle(
+              //       fontFamily: 'TitilliumWeb',
+              //       fontSize: 14,
+              //       color: Colors.grey.shade700),
+              // ),
+              // heightspace(10),
+              // const Text(
+              //   "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
+              //   style: TextStyle(
+              //     fontFamily: 'TitilliumWeb',
+              //     fontSize: 14,
+              //   ),
+              // ),
               heightspace(25),
               Container(
                   height: 50,
@@ -140,19 +140,18 @@ class _ConfirmvaultState extends State<Confirmvault> {
                             content: Text("Vault created successfully"),
                             backgroundColor: Colors.grey.shade600,
                           );
-
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                              (r) => false);
                           EncryptedSharedPreferences
                               encryptedSharedPreferences =
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
                               'msk', widget.entropy);
                           PasswordManager.msk = widget.entropy;
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (r) => false);
                         } else {
                           final snackBar = SnackBar(
                             content: Text("MSK doesnot matched!!"),
