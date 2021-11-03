@@ -84,104 +84,76 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Future value = Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Lockscreen(
-                                      from: "putpincode",
-                                    )));
-                        value.then((value) async {
-                          SharedPreferences pref =
-                              await SharedPreferences.getInstance();
-                          pref.setString("pincode", value);
-                          bool? fingerprint = pref.getBool("fingerprints");
-                          fingerprint == true ? fingerprintinitialindex = 1 : 0;
-                          if (value != null) {
-                            setState(() {
-                              initialindex = 1;
-                            });
-                            const snackBar = SnackBar(
-                              content: Text("Pincode set successfully"),
-                              duration: Duration(milliseconds: 500),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.lock_rounded,
-                                color: Colors.black87,
-                              ),
-                              widthspace(20),
-                              const Text(
-                                "Pin code",
-                                style: TextStyle(
-                                    fontSize: 18, fontFamily: 'TitilliumWeb'),
-                              )
-                            ],
-                          ),
-                          ToggleSwitch(
-                            minWidth: 50.0,
-                            // minHeight: 35.0,
-                            cornerRadius: 20.0,
-                            activeBgColors: [
-                              [Colors.red.shade800],
-                              [Colors.green[800]!]
-                            ],
-                            activeFgColor: Colors.white,
-                            inactiveBgColor: Colors.grey,
-                            inactiveFgColor: Colors.white,
-                            initialLabelIndex: initialindex,
-                            totalSwitches: 2,
-                            labels: ['Off', 'On'],
-                            radiusStyle: true,
-                            onToggle: (index) async {
-                              SharedPreferences sharedPreferences =
-                                  await SharedPreferences.getInstance();
-                              print('switched to: $index');
-                              if (index == 1) {
-                                setState(() {
-                                  initialindex = 0;
-                                });
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.lock_rounded,
+                              color: Colors.black87,
+                            ),
+                            widthspace(20),
+                            const Text(
+                              "Pin code",
+                              style: TextStyle(
+                                  fontSize: 18, fontFamily: 'TitilliumWeb'),
+                            )
+                          ],
+                        ),
+                        ToggleSwitch(
+                          minWidth: 50.0,
+                          // minHeight: 35.0,
+                          cornerRadius: 20.0,
+                          activeBgColors: [
+                            [Colors.red.shade800],
+                            [Colors.green[800]!]
+                          ],
+                          activeFgColor: Colors.white,
+                          inactiveBgColor: Colors.grey,
+                          inactiveFgColor: Colors.white,
+                          initialLabelIndex: initialindex,
+                          totalSwitches: 2,
+                          labels: ['Off', 'On'],
+                          radiusStyle: true,
+                          onToggle: (index) async {
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            print('switched to: $index');
+                            if (index == 1) {
+                              setState(() {
+                                initialindex = 0;
+                              });
 
-                                Future value = Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Lockscreen(
-                                              from: "putpincode",
-                                            )));
-                                value.then((value) {
-                                  sharedPreferences.setString("pincode", value);
-                                  if (value != null) {
-                                    setState(() {
-                                      initialindex = 1;
-                                    });
-                                    const snackBar = SnackBar(
-                                      content: Text("Pincode set successfully"),
-                                      duration: Duration(milliseconds: 500),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                });
-                              } else if (index == 0) {
-                                setState(() {
-                                  initialindex = 0;
-                                });
-                                sharedPreferences.remove("pincode");
-                              }
-                            },
-                          ),
-                        ],
-                      ),
+                              Future value = Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Lockscreen(
+                                            from: "putpincode",
+                                          )));
+                              value.then((value) {
+                                sharedPreferences.setString("pincode", value);
+                                if (value != null) {
+                                  setState(() {
+                                    initialindex = 1;
+                                  });
+                                  const snackBar = SnackBar(
+                                    content: Text("Pincode set successfully"),
+                                    duration: Duration(milliseconds: 500),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              });
+                            } else if (index == 0) {
+                              setState(() {
+                                initialindex = 0;
+                              });
+                              sharedPreferences.remove("pincode");
+                            }
+                          },
+                        ),
+                      ],
                     ),
                     heightspace(5),
                     _supportState == _SupportState.supported

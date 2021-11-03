@@ -345,6 +345,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                       });
                       showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (context) {
                             return StatefulBuilder(
                                 builder: (context, setstate) {
@@ -463,184 +464,204 @@ class _RenewPasswordState extends State<RenewPassword> {
         ),
         content: Container(
           // height: 170,
-          child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 15, bottom: 15, left: 10, right: 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //  SizedBox(height: 10),
-                  const Text(
-                    "Old Password",
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //  SizedBox(height: 10),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () async {
+                      var data =
+                          widget.passModel.toMap(passModel: widget.passModel);
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      int? index = preferences.getInt("$data");
+                      index = index! - 1;
+                      preferences.setInt("$data", index);
+                      setState(() {
+                        visibleOldPass = true;
+                        visiblenewPass = true;
+                      });
+
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.clear)),
+              ),
+              const Text(
+                "Old Password",
+                style: TextStyle(
+                    // color: ktextcolor,
+                    fontSize: 16,
+                    fontFamily: 'TitilliumWeb',
+                    fontWeight: FontWeight.w300),
+              ),
+              heightspace(10),
+              Container(
+                width: screenWidth,
+                child: TextFormField(
+                    obscureText: visibleOldPass,
+                    controller: password,
                     style: TextStyle(
-                        // color: ktextcolor,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
-                        fontWeight: FontWeight.w300),
-                  ),
-                  heightspace(10),
-                  Container(
-                    width: screenWidth,
-                    child: TextFormField(
-                        obscureText: visibleOldPass,
-                        controller: password,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          // fontFamily: 'TitilliumWeb',
-                        ),
-                        readOnly: true,
-                        decoration: InputDecoration(
-                            focusedBorder: InputBorder.none,
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                visibleOldPass
-                                    ? IconButton(
-                                        padding: EdgeInsets.only(
-                                            bottom: 8.0, left: 20.0),
-                                        onPressed: () {
-                                          setstate(() {
-                                            visibleOldPass = !visibleOldPass;
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.visibility,
-                                          color: Colors.grey,
-                                        ))
-                                    : IconButton(
-                                        padding: EdgeInsets.only(
-                                            bottom: 8.0, left: 20.0),
-                                        onPressed: () {
-                                          setstate(() {
-                                            visibleOldPass = !visibleOldPass;
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.visibility_off,
-                                          color: Colors.grey,
-                                        )),
-                                IconButton(
-                                    padding:
-                                        EdgeInsets.only(bottom: 8.0, left: 0.0),
+                      color: Colors.black,
+                      fontSize: 14,
+                      // fontFamily: 'TitilliumWeb',
+                    ),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            visibleOldPass
+                                ? IconButton(
+                                    padding: EdgeInsets.only(
+                                        bottom: 8.0, left: 20.0),
                                     onPressed: () {
-                                      Clipboard.setData(ClipboardData(
-                                          text: newPassword.text));
-                                      final snackBar = SnackBar(
-                                        content: Text("Copied to Clipboard"),
-                                        backgroundColor: Colors.grey.shade600,
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
+                                      setstate(() {
+                                        visibleOldPass = !visibleOldPass;
+                                      });
                                     },
                                     icon: const Icon(
-                                      Icons.copy_rounded,
+                                      Icons.visibility,
                                       color: Colors.grey,
-                                    )),
-                              ],
-                            ),
-                            border: InputBorder.none)),
-                  ),
-                  heightspace(20),
-                  const Text(
-                    "New Password",
-                    style: TextStyle(
-                        // color: ktextcolor,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
-                        fontWeight: FontWeight.w300),
-                  ),
-                  heightspace(10),
-                  Container(
-                    width: screenWidth,
-                    child: TextFormField(
-                        obscureText: visiblenewPass,
-                        controller: newPassword,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          // fontFamily: 'TitilliumWeb',
-                        ),
-                        readOnly: true,
-                        decoration: InputDecoration(
-                            focusedBorder: InputBorder.none,
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                visiblenewPass
-                                    ? IconButton(
-                                        padding: EdgeInsets.only(
-                                            bottom: 8.0, left: 20.0),
-                                        onPressed: () {
-                                          setstate(() {
-                                            visiblenewPass = !visiblenewPass;
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.visibility,
-                                          color: Colors.grey,
-                                        ))
-                                    : IconButton(
-                                        padding: EdgeInsets.only(
-                                            bottom: 8.0, left: 20.0),
-                                        onPressed: () {
-                                          setstate(() {
-                                            visiblenewPass = !visiblenewPass;
-                                          });
-                                        },
-                                        icon: const Icon(
-                                          Icons.visibility_off,
-                                          color: Colors.grey,
-                                        )),
-                                IconButton(
-                                    padding:
-                                        EdgeInsets.only(bottom: 8.0, left: 0.0),
+                                    ))
+                                : IconButton(
+                                    padding: EdgeInsets.only(
+                                        bottom: 8.0, left: 20.0),
                                     onPressed: () {
-                                      Clipboard.setData(ClipboardData(
-                                          text: newPassword.text));
-                                      final snackBar = SnackBar(
-                                        content: Text("Copied to Clipboard"),
-                                        backgroundColor: Colors.grey.shade600,
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
+                                      setstate(() {
+                                        visibleOldPass = !visibleOldPass;
+                                      });
                                     },
                                     icon: const Icon(
-                                      Icons.copy_rounded,
+                                      Icons.visibility_off,
                                       color: Colors.grey,
                                     )),
-                              ],
-                            ),
-                            border: InputBorder.none)),
-                  ),
-                  heightspace(20),
-                  Text(
-                    "Have  you changed your password ?",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        // color: ktextcolor,
-                        fontSize: 16,
-                        fontFamily: 'TitilliumWeb',
-                        fontWeight: FontWeight.w300),
-                  ),
-                  heightspace(20),
-                  Center(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            password.text = newPassword.text;
-                          });
-                          Navigator.pop(this.context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                            primary: kbuttonColor,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 10)),
-                        child: Text("Yes")),
-                  )
-                ],
-              )),
+                            IconButton(
+                                padding:
+                                    EdgeInsets.only(bottom: 8.0, left: 0.0),
+                                onPressed: () {
+                                  Clipboard.setData(
+                                      ClipboardData(text: newPassword.text));
+                                  final snackBar = SnackBar(
+                                    content: Text("Copied to Clipboard"),
+                                    backgroundColor: Colors.grey.shade600,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                icon: const Icon(
+                                  Icons.copy_rounded,
+                                  color: Colors.grey,
+                                )),
+                          ],
+                        ),
+                        border: InputBorder.none)),
+              ),
+              heightspace(20),
+              const Text(
+                "New Password",
+                style: TextStyle(
+                    // color: ktextcolor,
+                    fontSize: 16,
+                    fontFamily: 'TitilliumWeb',
+                    fontWeight: FontWeight.w300),
+              ),
+              heightspace(10),
+              Container(
+                width: screenWidth,
+                child: TextFormField(
+                    obscureText: visiblenewPass,
+                    controller: newPassword,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      // fontFamily: 'TitilliumWeb',
+                    ),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            visiblenewPass
+                                ? IconButton(
+                                    padding: EdgeInsets.only(
+                                        bottom: 8.0, left: 20.0),
+                                    onPressed: () {
+                                      setstate(() {
+                                        visiblenewPass = !visiblenewPass;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.visibility,
+                                      color: Colors.grey,
+                                    ))
+                                : IconButton(
+                                    padding: EdgeInsets.only(
+                                        bottom: 8.0, left: 20.0),
+                                    onPressed: () {
+                                      setstate(() {
+                                        visiblenewPass = !visiblenewPass;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.grey,
+                                    )),
+                            IconButton(
+                                padding:
+                                    EdgeInsets.only(bottom: 8.0, left: 0.0),
+                                onPressed: () {
+                                  Clipboard.setData(
+                                      ClipboardData(text: newPassword.text));
+                                  final snackBar = SnackBar(
+                                    content: Text("Copied to Clipboard"),
+                                    backgroundColor: Colors.grey.shade600,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                icon: const Icon(
+                                  Icons.copy_rounded,
+                                  color: Colors.grey,
+                                )),
+                          ],
+                        ),
+                        border: InputBorder.none)),
+              ),
+              heightspace(20),
+              Text(
+                "Have  you changed your password ?",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    // color: ktextcolor,
+                    fontSize: 16,
+                    fontFamily: 'TitilliumWeb',
+                    fontWeight: FontWeight.w300),
+              ),
+              heightspace(20),
+              Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        password.text = newPassword.text;
+
+                        visibleOldPass = true;
+                        visiblenewPass = true;
+                      });
+                      Navigator.pop(this.context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: kbuttonColor,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 10)),
+                    child: Text("Yes")),
+              )
+            ],
+          ),
         ));
   }
 
