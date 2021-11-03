@@ -45,6 +45,8 @@ class _OldPasswordState extends State<OldPassword> {
     count = PasswordManager.preferences
         .getInt('${widget.passModel.toMap(passModel: widget.passModel)}')!;
     currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    currentTimeStamp = (currentTimeStamp! ~/ PasswordManager.passwordValidity) *
+        PasswordManager.passwordValidity;
     super.initState();
   }
 
@@ -303,6 +305,9 @@ class _OldPasswordState extends State<OldPassword> {
       print(selectdate);
       currentTimeStamp =
           DateTime.parse(newInitialDate!).millisecondsSinceEpoch ~/ 1000;
+      currentTimeStamp =
+          (currentTimeStamp! ~/ PasswordManager.passwordValidity) *
+              PasswordManager.passwordValidity;
       // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
       // _endDate =
       //     DateFormat("yyyy-MM-dd").format(newdate.add(Duration(days: 14)));

@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:offlinepass/models/pass_model.dart';
+import 'package:sembast/timestamp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PasswordManager {
@@ -26,6 +27,7 @@ class PasswordManager {
     var data = passModel.toMap(passModel: passModel);
     int? storedTimestamp = preferences.getInt('timestamp$data');
     int? mainTimeStamp = preferences.getInt('maintimestamp');
+    print("storrdTimeStamp: $storedTimestamp!");
 
     if (mainTimeStamp == null) {
       preferences.setInt('maintimestamp', timeStamp);
@@ -33,6 +35,7 @@ class PasswordManager {
     // ignore: prefer_conditional_assignment
     if (index == null) {
       index = preferences.getInt('$data');
+      print("index $index");
     }
     if (newPass) {
       index = index! + 1;
@@ -47,9 +50,11 @@ class PasswordManager {
       int? startTimeStamp = preferences.getInt('starttimestamp$data');
       // print("starttimestamp: $startTimeStamp");
       if (startTimeStamp == null) {
-        // print("starttimeset");
+        print("starttimeset");
+
         preferences.setInt('starttimestamp$data', timeStamp);
       }
+      print("timestamp: $timeStamp");
       preferences.setInt('timestamp$data', timeStamp);
       preferences.setInt('$data', index!);
     }
