@@ -360,9 +360,8 @@ class _UnlocksettingsState extends State<Unlocksettings> {
     );
   }
 
-  void _launchURL() async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  void _launchURL() async => await launch(_url);
+  // : throw 'Could not launch $_url';
 }
 
 enum _SupportState {
