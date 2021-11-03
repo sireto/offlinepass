@@ -32,32 +32,32 @@ List<Color> colors = [
   Colors.purple,
 ];
 Map<String, Map> icons = {
-  "Facebook.com": {
+  "facebook.com": {
     'icon': FontAwesomeIcons.facebook,
     'color': const Color(0xff3b5998)
   },
-  "Gmail.com": {'icon': FontAwesomeIcons.google, 'color': Colors.red},
+  "gmail.com": {'icon': FontAwesomeIcons.google, 'color': Colors.red},
   "Yahoo.com": {
     'icon': FontAwesomeIcons.yahoo,
     'color': const Color(0xff720e9e)
   },
-  "Reddit.com": {
+  "reddit.com": {
     'icon': FontAwesomeIcons.reddit,
     'color': const Color(0xffff4500)
   },
-  "Twitch.com": {
+  "twitch.com": {
     'icon': FontAwesomeIcons.twitch,
     'color': const Color(0xff6441a5)
   },
-  "Twitter.com": {
+  "twitter.com": {
     'icon': FontAwesomeIcons.twitter,
     'color': const Color(0xff00acee)
   },
-  "Telegram.com": {
+  "telegram.com": {
     'icon': FontAwesomeIcons.telegram,
     'color': const Color(0xff0088cc)
   },
-  "Linkedin.com": {
+  "linkedin.com": {
     'icon': FontAwesomeIcons.linkedin,
     'color': const Color(0xff0077b5)
   },
