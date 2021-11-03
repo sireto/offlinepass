@@ -108,22 +108,22 @@ class _RecovervaultState extends State<Recovervault> {
                           borderRadius: BorderRadius.circular(8))),
                 ),
               ),
-              heightspace(25),
-              const Text(
-                "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
-                style: TextStyle(
-                  fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
-                ),
-              ),
-              heightspace(10),
-              const Text(
-                "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
-                style: TextStyle(
-                  fontFamily: 'TitilliumWeb',
-                  fontSize: 14,
-                ),
-              ),
+              // heightspace(25),
+              // const Text(
+              //   "This is the only time the Master Security Key (MSK) is shown so copy the key and store it safely. You’ll need the key on the next screen..",
+              //   style: TextStyle(
+              //     fontFamily: 'TitilliumWeb',
+              //     fontSize: 14,
+              //   ),
+              // ),
+              // heightspace(10),
+              // const Text(
+              //   "Note: Without this key, the app can not recover your passwords later so please keep it safe and secure.",
+              //   style: TextStyle(
+              //     fontFamily: 'TitilliumWeb',
+              //     fontSize: 14,
+              //   ),
+              // ),
               heightspace(25),
               Container(
                   height: 50,

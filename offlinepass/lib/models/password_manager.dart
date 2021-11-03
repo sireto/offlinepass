@@ -8,7 +8,7 @@ import 'package:sembast/timestamp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PasswordManager {
-  static late final String msk;
+  static String? msk;
   static late final SharedPreferences preferences;
   static int passwordValidity = 86400 * 90;
   String generatePassword({

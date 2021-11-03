@@ -26,7 +26,7 @@ Future<void> main() async {
   PasswordManager.preferences = await SharedPreferences.getInstance();
 
   PasswordManager.msk = await encryptedSharedPreferences.getString('msk');
-  print("msk:" + PasswordManager.msk);
+  //print("msk:" + PasswordManager.msk);
   // print("startingTime: " + PasswordManager.startingDate.toString());
 
   runApp(const MyApp());

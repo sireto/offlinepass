@@ -120,7 +120,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                             SharedPreferences sharedPreferences =
                                 await SharedPreferences.getInstance();
                             print('switched to: $index');
-                            if (index == 1) {
+                            if (index == 1 && initialindex == 0) {
                               setState(() {
                                 initialindex = 0;
                               });
@@ -145,7 +145,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                       .showSnackBar(snackBar);
                                 }
                               });
-                            } else if (index == 0) {
+                            } else if (index == 0 && initialindex == 1) {
                               print("i am click");
                               Future value = Navigator.push(
                                   context,
@@ -360,9 +360,8 @@ class _UnlocksettingsState extends State<Unlocksettings> {
     );
   }
 
-  void _launchURL() async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  void _launchURL() async => await launch(_url);
+  // : throw 'Could not launch $_url';
 }
 
 enum _SupportState {

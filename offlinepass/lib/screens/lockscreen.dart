@@ -88,7 +88,9 @@ class _LockscreenState extends State<Lockscreen> {
     if (isauthenticate) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const Firstscreen()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  PasswordManager.msk != '' ? HomeScreen() : Firstscreen()),
           (route) => false);
     }
   }
