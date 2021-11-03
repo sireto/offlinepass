@@ -37,14 +37,14 @@ class _AddhostState extends State<Addhost> {
 
   bool visibletext = true;
   List<String> url = [
-    "Facebook.com",
+    "facebook.com",
     "Gmail.com",
-    "Yahoo.com",
-    "Reddit.com",
-    "Twitch.com",
-    "Twitter.com",
-    "Telegram.com",
-    "Linkedin.com"
+    "yahoo.com",
+    "reddit.com",
+    "twitch.com",
+    "twitter.com",
+    "telegram.com",
+    "linkedin.com"
   ];
   List icons = const [
     FontAwesomeIcons.facebook,
