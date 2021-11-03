@@ -1,6 +1,7 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:offlinepass/themes.dart';
@@ -145,6 +146,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
                               'msk', widget.entropy);
+                          PasswordManager.msk = widget.entropy;
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

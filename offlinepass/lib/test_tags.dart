@@ -30,6 +30,7 @@ class _TestTagsState extends State<TestTags> {
       body: SafeArea(
           child: Container(
         child: TypeAheadFormField<String>(
+
             // key: _urlkey,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -63,7 +64,7 @@ class _TestTagsState extends State<TestTags> {
                   print("searchRext: $searchText");
                   setState(() {
                     appSiteUrl.text = searchText;
-                    _urlFocusNode.unfocus();
+                    //  _urlFocusNode.unfocus();
                   });
                 },
                 onSubmitted: (value) {
@@ -121,6 +122,7 @@ class _TestTagsState extends State<TestTags> {
               print("searchRext: $searchText");
               setState(() {
                 appSiteUrl.text = searchText;
+                // _urlFocusNode.requestFocus();
               });
             }),
       )),

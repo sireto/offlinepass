@@ -34,16 +34,17 @@ class _AddhostState extends State<Addhost> {
   TextEditingController appSiteUrl = TextEditingController();
   TextEditingController usernameEmailPhone = TextEditingController();
   FocusNode _urlFocusNode = FocusNode();
+
   bool visibletext = true;
   List<String> url = [
-    "Facebook.com",
-    "Gmail.com",
-    "Yahoo.com",
-    "Reddit.com",
-    "Twitch.com",
-    "Twitter.com",
-    "Telegram.com",
-    "Linkedin.com"
+    "facebook.com",
+    "gmail.com",
+    "yahoo.com",
+    "reddit.com",
+    "twitch.com",
+    "twitter.com",
+    "telegram.com",
+    "linkedin.com"
   ];
   List icons = const [
     FontAwesomeIcons.facebook,
@@ -63,6 +64,7 @@ class _AddhostState extends State<Addhost> {
     // TODO: implement dispose
     password.dispose();
     _urlFocusNode.dispose();
+
     appSiteUrl.dispose();
     usernameEmailPhone.dispose();
     super.dispose();
@@ -253,6 +255,12 @@ class _AddhostState extends State<Addhost> {
                                     heightspace(20),
                                     TextFormField(
                                       cursorColor: kprimarycolor,
+                                      //   focusNode: _urserFocusNode,
+                                      onTap: () {
+                                        setState(() {
+                                          appSiteUrl.text = appSiteUrl.text;
+                                        });
+                                      },
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
