@@ -38,7 +38,7 @@ class _AddhostState extends State<Addhost> {
   bool visibletext = true;
   List<String> url = [
     "facebook.com",
-    "Gmail.com",
+    "gmail.com",
     "yahoo.com",
     "reddit.com",
     "twitch.com",
