@@ -27,6 +27,13 @@ class _RecovervaultState extends State<Recovervault> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _mskFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -68,16 +75,20 @@ class _RecovervaultState extends State<Recovervault> {
                       setState(() {
                         isValue = false;
                       });
-                      _mskFocus.unfocus();
                     }
+                    setState(() {
+                      _mskFocus.unfocus();
+                    });
                   },
                   onSaved: (value) {
                     if (recovermsk.text == "") {
                       setState(() {
                         isValue = false;
                       });
-                      _mskFocus.unfocus();
                     }
+                    setState(() {
+                      _mskFocus.unfocus();
+                    });
                   },
                   decoration: InputDecoration(
                       suffixIcon: isValue
