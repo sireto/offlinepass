@@ -7,6 +7,7 @@ import 'package:offlinepass/services/notification.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/firstscreen.dart';
 import 'package:offlinepass/screens/homescreen/homescreen.dart';
+import 'package:offlinepass/test_tags.dart';
 import 'package:offlinepass/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EncryptedSharedPreferences encryptedSharedPreferences =
       EncryptedSharedPreferences();
-      
+
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   pincodes = sharedPreferences.getString("pincode");
   fingerprints = sharedPreferences.getBool("fingerprints");

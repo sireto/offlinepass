@@ -58,6 +58,16 @@ class _AddhostState extends State<Addhost> {
 
   var checkindex = 0;
   Color currentcolor = Colors.red;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    password.dispose();
+    _urlFocusNode.dispose();
+    appSiteUrl.dispose();
+    usernameEmailPhone.dispose();
+    super.dispose();
+  }
+
   final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -94,7 +104,7 @@ class _AddhostState extends State<Addhost> {
                               padding: const EdgeInsets.only(
                                   left: 15.0, top: 12.0, bottom: 12.0),
                               child: Text(
-                                "Expires in ${passwordManager.validDays()} minutes",
+                                "Expires in ${passwordManager.validDays()} days",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontStyle: FontStyle.italic,
@@ -361,6 +371,7 @@ class _AddhostState extends State<Addhost> {
                                           if (_key.currentState!.validate()) {
                                             if (password.text == "") {
                                               print(appSiteUrl.text);
+                                              print(usernameEmailPhone.text);
                                               passModel = PassModel(
                                                 url: appSiteUrl.text,
                                                 user: usernameEmailPhone.text,
@@ -371,16 +382,19 @@ class _AddhostState extends State<Addhost> {
                                               //     .contain(passModel);
                                               // List datas = [];
                                               // datas.forEach((element) { })
+                                              print(appSiteUrl.text);
                                               print(widget.datas);
                                               var results = widget.datas
-                                                  .map((element) =>
-                                                      element.url
-                                                              .toString()
-                                                              .toLowerCase() ==
-                                                          appSiteUrl.text &&
-                                                      element.user ==
-                                                          usernameEmailPhone
-                                                              .text)
+                                                  .map((element) => element.url
+                                                                  .toString()
+                                                                  .toLowerCase() ==
+                                                              appSiteUrl.text
+                                                                  .toLowerCase() &&
+                                                          element.user ==
+                                                              usernameEmailPhone
+                                                                  .text
+                                                      ? true
+                                                      : false)
                                                   .toList();
                                               print(results);
                                               if (results.contains(true)) {
@@ -402,6 +416,8 @@ class _AddhostState extends State<Addhost> {
                                                 passModel.id =
                                                     await _dbOperation
                                                         .add(passModel);
+                                                print(passModel.toMap(
+                                                    passModel: passModel));
                                                 final snackBar = SnackBar(
                                                   content: const Text(
                                                       "Password generated successfully"),

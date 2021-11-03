@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:offlinepass/constants.dart';
 import 'package:offlinepass/models/pass_model.dart';
 import 'package:offlinepass/models/password_manager.dart';
@@ -173,8 +174,9 @@ class _PasssummaryState extends State<Passsummary> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                        timeStamps[indx] * 1000)
+                                DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.fromMillisecondsSinceEpoch(
+                                        timeStamps[indx] * 1000))
                                     .toString(),
                                 style: const TextStyle(
                                     color: Colors.black,
