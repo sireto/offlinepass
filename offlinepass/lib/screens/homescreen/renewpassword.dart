@@ -161,7 +161,7 @@ class _RenewPasswordState extends State<RenewPassword> {
                 !passwordManager.checkValidity(passModel: widget.passModel) ||
                         validDays <= 0
                     ? "Your Password has been expired."
-                    : "Expires in ${passwordManager.validDays()} minutes",
+                    : "Expires in ${passwordManager.validDays()} days",
                 style: TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.italic,

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PasswordManager {
   static late final String msk;
   static late final SharedPreferences preferences;
-  static int passwordValidity = 2 * 60;
+  static int passwordValidity = 86400 * 90;
   String generatePassword({
     required PassModel passModel,
     bool newPass = false,
@@ -98,8 +98,8 @@ class PasswordManager {
     int baseTimeStamp =
         (currentTimeStamp ~/ passwordValidity) * passwordValidity;
     int diff = currentTimeStamp - baseTimeStamp;
-    int remainingTime = 180 - diff;
-    return remainingTime ~/ 60;
+    int remainingTime = 86400 * 90 - diff;
+    return remainingTime ~/ 86400;
   }
 
   int getCurrentTimeStamp() {
@@ -145,12 +145,12 @@ class PasswordManager {
     print("currrentTimeStamp: $currentTimeStamp");
     if (currentTimeStamp == storedtimeStamp) {
       print("same");
-      int diff = (storedtimeStamp! - startTimeStamp!) ~/ 60;
+      int diff = (storedtimeStamp! - startTimeStamp!) ~/ 86400;
       print(diff);
-      for (int i = 0; i <= diff; i = i + 3) {
-        timeStamp = storedtimeStamp - i * 60;
+      for (int i = 0; i <= diff; i = i + 90) {
+        timeStamp = storedtimeStamp - i * 86400;
         timeStamps.add(timeStamp);
-        if (i == 9) {
+        if (i == 270) {
           break;
         }
       }
@@ -158,15 +158,15 @@ class PasswordManager {
       return timeStamps;
     } else {
       print("different");
-      int diff = (currentTimeStamp - storedtimeStamp!) ~/ 60;
+      int diff = (currentTimeStamp - storedtimeStamp!) ~/ 86400;
       print(diff);
-      if (diff > 9) {
+      if (diff > 270) {
         return timeStamps;
       } else {
-        for (int i = 0; i <= 9 - diff; i = i + 3) {
+        for (int i = 0; i <= 270 - diff; i = i + 90) {
           //   print(i);
 
-          timeStamp = storedtimeStamp - i * 60;
+          timeStamp = storedtimeStamp - i * 86400;
           timeStamps.add(timeStamp);
           if (timeStamp == startTimeStamp) {
             break;
