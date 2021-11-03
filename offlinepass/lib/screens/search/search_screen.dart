@@ -72,8 +72,43 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
+    print(datas);
+    List results = datas;
+    if (query.isNotEmpty || query != '') {
+      print(datas);
+      results = datas.where((element) {
+        if (element.url.contains('.com')) {
+          return element.url
+              .toString()
+              .toLowerCase()
+              .substring(0, element.url!.length - 4)
+              .contains(query.toLowerCase());
+        } else {
+          return element.url
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase());
+        }
+      }).toList();
+    }
+    print(results.length);
+    return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20.0),
+        itemCount: results.length,
+        itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RenewPassword(
+                            passModel: results[index],
+                            // url: datas[index]["url"],
+                            // email: datas[index]["email"],
+                            // password: datas[index]
+                            // ["password"]
+                          )));
+            },
+            child: emailUserView(results[index])));
   }
 
   @override
