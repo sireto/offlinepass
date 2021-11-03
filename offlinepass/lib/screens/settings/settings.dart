@@ -47,9 +47,6 @@ class _UnlocksettingsState extends State<Unlocksettings> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Settings",
-          style: TextStyle(
-            fontFamily: 'TitilliumWeb',
-          ),
         ),
         centerTitle: false,
       ),
