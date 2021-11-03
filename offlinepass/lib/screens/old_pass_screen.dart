@@ -36,6 +36,9 @@ class _OldPasswordState extends State<OldPassword> {
   String? selectdate;
   String? newInitialDate;
   int? currentTimeStamp;
+  bool showMore = false;
+  bool isDateChange = false;
+  bool generateMore = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -64,159 +67,193 @@ class _OldPasswordState extends State<OldPassword> {
           "Old Passwords",
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: count == 0
-            ? Container(
-                child: Text(
-                  "You haven't changed your password. Once your password is changed, you can view your old passwords here.",
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15,
-                      fontFamily: "TitilliumWeb",
-                      fontWeight: FontWeight.w400),
-                ),
-              )
-            : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Container(
-                  width: screenWidth,
-                  child: Row(
-                    children: [
-                      Container(
-                          height: 45,
-                          width: 45,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: icons[widget.passModel.url]!['color']),
-                          child: Icon(
-                            icons[widget.passModel.url]!['icon'],
-                            color: Colors.white,
-                            size: 26,
-                          )),
-                      widthspace(20),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.passModel.url!
-                                  .substring(
-                                      0, widget.passModel.url!.length - 4)
-                                  .toString()
-                                  .capitalize(),
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                // fontFamily: 'TitilliumWeb',
-                                // fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            //  heightspace(5),
-                            Text(
-                              widget.passModel.user!,
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.grey,
-                                  //  fontFamily: 'TitilliumWeb',
-                                  fontWeight: FontWeight.w400),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                heightspace(20),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              width: screenWidth,
+              child: Row(
+                children: [
+                  Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: icons[widget.passModel.url]!['color']),
+                      child: Icon(
+                        icons[widget.passModel.url]!['icon'],
+                        color: Colors.white,
+                        size: 26,
+                      )),
+                  widthspace(20),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "Passwords :",
-                          style: TextStyle(
-                              color: ktextcolor,
-                              fontSize: 16,
-                              // fontFamily: 'TitilliumWeb',
-                              fontWeight: FontWeight.w500),
+                        Text(
+                          widget.passModel.url!
+                              .substring(0, widget.passModel.url!.length - 4)
+                              .toString()
+                              .capitalize(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            // fontFamily: 'TitilliumWeb',
+                            // fontWeight: FontWeight.bold
+                          ),
                         ),
-                        Row(
-                          children: [
-                            selectdate == null
-                                ? Text(DateFormat("MMM dd yyyy")
-                                    .format(initialdate))
-                                : Text(selectdate!),
-                            // ElevatedButton(
-                            //     onPressed: () {
-                            //       print(initialdate);
-                            //       print(_startDate);
-                            //       print(_endDate);
-                            //       pickdate();
-                            //       // print(selectdate);
-                            //     },
-                            //     style:
-                            //         ElevatedButton.styleFrom(primary: kbuttonColor),
-                            //     //pickdate,
-                            //     child: selectdate == null
-                            //         ? Text(DateFormat("MMM dd yyyy")
-                            //             .format(initialdate))
-                            //         : Text(selectdate!)),
-                            widthspace(10),
-                            IconButton(
-                                onPressed: pickdate,
-                                icon: const Icon(FontAwesomeIcons.calendar))
-                          ],
-                        ),
+                        //  heightspace(5),
+                        Text(
+                          widget.passModel.user!,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey,
+                              //  fontFamily: 'TitilliumWeb',
+                              fontWeight: FontWeight.w400),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            heightspace(20),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Passwords :",
+                      style: TextStyle(
+                          color: ktextcolor,
+                          fontSize: 16,
+                          // fontFamily: 'TitilliumWeb',
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Row(
+                      children: [
+                        selectdate == null
+                            ? Text(
+                                DateFormat("MMM dd yyyy").format(initialdate))
+                            : Text(selectdate!),
+                        // ElevatedButton(
+                        //     onPressed: () {
+                        //       print(initialdate);
+                        //       print(_startDate);
+                        //       print(_endDate);
+                        //       pickdate();
+                        //       // print(selectdate);
+                        //     },
+                        //     style:
+                        //         ElevatedButton.styleFrom(primary: kbuttonColor),
+                        //     //pickdate,
+                        //     child: selectdate == null
+                        //         ? Text(DateFormat("MMM dd yyyy")
+                        //             .format(initialdate))
+                        //         : Text(selectdate!)),
+                        widthspace(10),
+                        IconButton(
+                            onPressed: pickdate,
+                            icon: const Icon(FontAwesomeIcons.calendar))
                       ],
                     ),
                   ],
                 ),
-                heightspace(10),
-                ListView.builder(
-                  itemCount: count > 3 ? 3 : count,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => Container(
-                    width: screenWidth,
-                    child: TextFormField(
-                        initialValue: _passwordManager.generatePassword(
-                            passModel: widget.passModel,
-                            index: index,
-                            currentTimeStamp: currentTimeStamp!),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          // fontFamily: 'TitilliumWeb',
-                        ),
-                        readOnly: true,
-                        decoration: InputDecoration(
-                            focusedBorder: InputBorder.none,
-                            suffixIcon: IconButton(
-                                padding: EdgeInsets.only(
-                                    bottom: 8.0, left: 0.0, top: 0.0),
-                                onPressed: () {
-                                  Clipboard.setData(ClipboardData(
-                                      text: _passwordManager.generatePassword(
-                                          passModel: widget.passModel,
-                                          index: index,
-                                          currentTimeStamp:
-                                              currentTimeStamp!)));
-                                  final snackBar = SnackBar(
-                                    content: Text("Copied to Clipboard"),
-                                    backgroundColor: Colors.grey.shade600,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                },
-                                icon: const Icon(
-                                  Icons.copy_rounded,
-                                  color: Colors.grey,
-                                )),
-                            border: InputBorder.none)),
+              ],
+            ),
+            heightspace(10),
+            count == 0
+                ? Container(
+                    child: Text(
+                      "You haven't changed your password. Once your password is changed, you can view your old passwords here.",
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15,
+                          fontFamily: "TitilliumWeb",
+                          fontWeight: FontWeight.w400),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: showMore || generateMore
+                        ? count
+                        : count > 3
+                            ? 3
+                            : count,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => Container(
+                      width: screenWidth,
+                      child: TextFormField(
+                          initialValue: _passwordManager.generatePassword(
+                              passModel: widget.passModel,
+                              index: index,
+                              currentTimeStamp: currentTimeStamp!),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            // fontFamily: 'TitilliumWeb',
+                          ),
+                          readOnly: true,
+                          decoration: InputDecoration(
+                              focusedBorder: InputBorder.none,
+                              suffixIcon: IconButton(
+                                  padding: EdgeInsets.only(
+                                      bottom: 8.0, left: 0.0, top: 0.0),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: _passwordManager.generatePassword(
+                                            passModel: widget.passModel,
+                                            index: index,
+                                            currentTimeStamp:
+                                                currentTimeStamp!)));
+                                    final snackBar = SnackBar(
+                                      content: Text("Copied to Clipboard"),
+                                      backgroundColor: Colors.grey.shade600,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  },
+                                  icon: const Icon(
+                                    Icons.copy_rounded,
+                                    color: Colors.grey,
+                                  )),
+                              border: InputBorder.none)),
+                    ),
                   ),
-                ),
-              ]),
+            newInitialDate == null
+                ? count > 3
+                    ? TextButton(
+                        onPressed: () {
+                          if (showMore == false) {
+                            setState(() {
+                              showMore = true;
+                            });
+                          } else {
+                            setState(() {
+                              showMore = false;
+                            });
+                          }
+                        },
+                        child: showMore == false
+                            ? Text("View all passwords")
+                            : Text("Hide passwords"))
+                    : heightspace(0)
+                : count != 0 && isDateChange
+                    ? TextButton(
+                        onPressed: () {
+                          setState(() {
+                            count = count + 3;
+                            generateMore = true;
+                          });
+                        },
+                        child: Text("Generate more"))
+                    : heightspace(0),
+          ]),
+        ),
       ),
     );
   }
@@ -230,6 +267,18 @@ class _OldPasswordState extends State<OldPassword> {
         lastDate: DateTime.parse(_endDate));
 
     if (newdate == null) return;
+    print(newInitialDate);
+    print(_endDate);
+    if (newInitialDate != null
+        ? newInitialDate == DateFormat("yyyy-MM-dd").format(newdate)
+        : _endDate == DateFormat("yyyy-MM-dd").format(newdate)) {
+    } else {
+      setState(() {
+        count = 3;
+        isDateChange = true;
+        showMore = false;
+      });
+    }
     setState(() {
       // isChanged = true;
       newInitialDate = DateFormat("yyyy-MM-dd").format(newdate);
