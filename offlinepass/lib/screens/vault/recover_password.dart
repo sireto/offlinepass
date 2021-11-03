@@ -31,8 +31,8 @@ class Recoverpassword extends StatefulWidget {
 class _RecoverpasswordState extends State<Recoverpassword> {
   final DbOperation _dbOperation = PassOperation();
   final initialdate = DateTime.now();
-  late String _startDate =
-      DateFormat("yyyy-MM-dd").format(initialdate.subtract(Duration(days: 90)));
+  late String _startDate = DateFormat("yyyy-MM-dd")
+      .format(initialdate.subtract(Duration(days: 365)));
   late String _endDate = DateFormat("yyyy-MM-dd").format(initialdate);
   String? selectdate;
   String? newInitialDate;
@@ -80,16 +80,23 @@ class _RecoverpasswordState extends State<Recoverpassword> {
   ];
   var checkindex = 0;
   Color currentcolor = Colors.red;
+  //int? baseTimeStamp;
   final _key = GlobalKey<FormState>();
   @override
   void initState() {
     // TODO: implement initState
     currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    currentTimeStamp = (currentTimeStamp! ~/ PasswordManager.passwordValidity) *
+        PasswordManager.passwordValidity;
+    // baseTimeStamp = passwordManager.getCurrentTimeStamp();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // baseTimeStamp = passwordManager.getCurrentTimeStamp();
+    // print(DateTime.fromMillisecondsSinceEpoch(baseTimeStamp! * 1000));
     return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisibile) {
       return GestureDetector(
           onTap: () {
@@ -524,7 +531,9 @@ class _RecoverpasswordState extends State<Recoverpassword> {
       selectdate = DateFormat("MMM dd yyyy").format(newdate);
       print(selectdate);
       currentTimeStamp = newdate.millisecondsSinceEpoch ~/ 1000;
-
+      currentTimeStamp =
+          (currentTimeStamp! ~/ PasswordManager.passwordValidity) *
+              PasswordManager.passwordValidity;
       // _startDate = DateFormat("yyyy-MM-dd").format(newdate);
       // _endDate =
       //     DateFormat("yyyy-MM-dd").format(newdate.add(Duration(days: 14)));
