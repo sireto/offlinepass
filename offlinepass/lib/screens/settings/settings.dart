@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:offlinepass/components/local_auth_api.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:offlinepass/main.dart';
 import 'package:offlinepass/screens/lockscreen.dart';
 import 'package:offlinepass/themes.dart';
@@ -22,6 +24,7 @@ class _UnlocksettingsState extends State<Unlocksettings> {
   _SupportState _supportState = _SupportState.unknown;
   List<int> days = [90, 60, 30];
   int currentday = 90;
+  static const _url = 'https://github.com/sireto/offlinepass';
   @override
   void initState() {
     // TODO: implement initState
@@ -143,10 +146,30 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                 }
                               });
                             } else if (index == 0) {
-                              setState(() {
-                                initialindex = 0;
+                              print("i am click");
+                              Future value = Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Lockscreen(from: "confirm")));
+                              value.then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    initialindex = 0;
+                                  });
+                                  sharedPreferences.remove("pincode");
+                                  const snackBar = SnackBar(
+                                    content: Text("Pincode removed"),
+                                    duration: Duration(milliseconds: 500),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                } else {
+                                  setState(() {
+                                    initialindex = 1;
+                                  });
+                                }
                               });
-                              sharedPreferences.remove("pincode");
                             }
                           },
                         ),
@@ -200,10 +223,22 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                       await SharedPreferences.getInstance();
                                   print('switched to: $index');
                                   if (index == 0) {
-                                    setState(() {
-                                      fingerprintinitialindex = 0;
-                                    });
-                                    sharedPreferences.remove("fingerprints");
+                                    final isauthenticate =
+                                        await LocalAuthApi.authenticate();
+                                    if (isauthenticate) {
+                                      setState(() {
+                                        fingerprintinitialindex = 0;
+                                      });
+                                      sharedPreferences.remove("fingerprints");
+                                    } else {
+                                      setState(() {
+                                        fingerprintinitialindex = 1;
+                                      });
+                                    }
+                                    // setState(() {
+                                    //   fingerprintinitialindex = 0;
+                                    // });
+
                                   } else if (index == 1 && initialindex == 0) {
                                     const snackbar = SnackBar(
                                       content: Text("Please set pincode first"),
@@ -215,14 +250,25 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                       fingerprintinitialindex = 0;
                                     });
                                   } else if (index == 1 && initialindex == 1) {
-                                    sharedPreferences.setBool(
-                                        "fingerprints", true);
-                                    const snackbar = SnackBar(
-                                      content: Text("Fingerprint lock added"),
-                                      duration: Duration(milliseconds: 500),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackbar);
+                                    final isauthenticate =
+                                        await LocalAuthApi.authenticate();
+                                    if (isauthenticate) {
+                                      sharedPreferences.setBool(
+                                          "fingerprints", true);
+                                      const snackbar = SnackBar(
+                                        content: Text("Fingerprint lock added"),
+                                        duration: Duration(milliseconds: 500),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackbar);
+                                      setState(() {
+                                        fingerprintinitialindex = 1;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        fingerprintinitialindex = 0;
+                                      });
+                                    }
                                   }
                                 },
                               ),
@@ -284,14 +330,19 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                     //   color: Colors.black,
                     // ),
                     //  heightspace(20),
-                    Row(
-                      children: [
-                        const Icon(Icons.share),
-                        widthspace(20),
-                        const Text("Share",
-                            style: TextStyle(
-                                fontSize: 18, fontFamily: 'TitilliumWeb')),
-                      ],
+                    InkWell(
+                      onTap: _launchURL,
+                      child: Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.github),
+                          widthspace(20),
+                          Expanded(
+                            child: const Text(_url,
+                                style: TextStyle(
+                                    fontSize: 18, fontFamily: 'TitilliumWeb')),
+                          ),
+                        ],
+                      ),
                     ),
                     heightspace(20),
                     const Divider(
@@ -308,6 +359,10 @@ class _UnlocksettingsState extends State<Unlocksettings> {
       ),
     );
   }
+
+  void _launchURL() async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 }
 
 enum _SupportState {

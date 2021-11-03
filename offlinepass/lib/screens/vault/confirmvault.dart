@@ -18,12 +18,20 @@ class Confirmvault extends StatefulWidget {
 
 class _ConfirmvaultState extends State<Confirmvault> {
   TextEditingController _mskController = TextEditingController();
+  FocusNode _mskfocus = FocusNode();
   bool isValue = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _mskfocus.requestFocus();
+    super.initState();
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _mskController.dispose();
+    _mskfocus.dispose();
     super.dispose();
   }
 
@@ -58,7 +66,17 @@ class _ConfirmvaultState extends State<Confirmvault> {
                 // padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: _mskController,
-                  autofocus: true,
+                  focusNode: _mskfocus,
+                  onSaved: (value) {
+                    if (_mskController.text == "") {
+                      setState(() {
+                        isValue = false;
+                      });
+                    }
+                    setState(() {
+                      _mskfocus.unfocus();
+                    });
+                  },
                   onChanged: (value) {
                     setState(() {
                       isValue = true;
@@ -70,6 +88,9 @@ class _ConfirmvaultState extends State<Confirmvault> {
                         isValue = false;
                       });
                     }
+                    setState(() {
+                      _mskfocus.unfocus();
+                    });
                   },
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   decoration: InputDecoration(
@@ -119,18 +140,19 @@ class _ConfirmvaultState extends State<Confirmvault> {
                             content: Text("Vault created successfully"),
                             backgroundColor: Colors.grey.shade600,
                           );
+
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (r) => false);
                           EncryptedSharedPreferences
                               encryptedSharedPreferences =
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
                               'msk', widget.entropy);
                           PasswordManager.msk = widget.entropy;
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                              (r) => false);
                         } else {
                           final snackBar = SnackBar(
                             content: Text("MSK doesnot matched!!"),

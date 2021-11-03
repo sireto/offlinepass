@@ -1,6 +1,7 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -24,6 +25,13 @@ class _RecovervaultState extends State<Recovervault> {
     // TODO: implement initState
     _mskFocus.requestFocus();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _mskFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,16 +76,20 @@ class _RecovervaultState extends State<Recovervault> {
                       setState(() {
                         isValue = false;
                       });
-                      _mskFocus.unfocus();
                     }
+                    setState(() {
+                      _mskFocus.unfocus();
+                    });
                   },
                   onSaved: (value) {
                     if (recovermsk.text == "") {
                       setState(() {
                         isValue = false;
                       });
-                      _mskFocus.unfocus();
                     }
+                    setState(() {
+                      _mskFocus.unfocus();
+                    });
                   },
                   decoration: InputDecoration(
                       suffixIcon: isValue
@@ -142,12 +154,15 @@ class _RecovervaultState extends State<Recovervault> {
                         String entropy =
                             bip39.mnemonicToEntropy(recovermsk.text);
                         print(entropy);
-                        Navigator.push(
+                        EncryptedSharedPreferences encryptedSharedPreferences =
+                            EncryptedSharedPreferences();
+                        encryptedSharedPreferences.setString('msk', entropy);
+                        PasswordManager.msk = entropy;
+                        Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Recoverpassword(
-                                      rmsk: entropy,
-                                    )));
+                                builder: (context) => HomeScreen()),
+                            (route) => false);
                       }
                     },
                     child: const Text(

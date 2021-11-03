@@ -163,7 +163,9 @@ class _LockscreenState extends State<Lockscreen> {
                           ? Text(
                               widget.from == "main"
                                   ? "Please Enter a Pincode"
-                                  : "Set a New Pincode",
+                                  : widget.from == "confirm"
+                                      ? "Please Enter a Pincode"
+                                      : "Set a New Pincode",
                               style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
@@ -444,6 +446,31 @@ class _LockscreenState extends State<Lockscreen> {
                       }
 
                       // pin6FocusNode.unfocus();
+                    } else if (widget.from == "confirm") {
+                      if (pincodes ==
+                          (pin1.text +
+                              pin2.text +
+                              pin3.text +
+                              pin4.text +
+                              pin5.text +
+                              pin6.text)) {
+                        Navigator.pop(context, pincodes);
+                      } else {
+                        setState(() {
+                          pin1.clear();
+                          pin2.clear();
+                          pin3.clear();
+                          pin4.clear();
+                          pin5.clear();
+                          pin6.clear();
+                          pin1FocusNode.requestFocus();
+                        });
+                        const snackBar = SnackBar(
+                          content: Text("Password not match"),
+                          duration: Duration(milliseconds: 500),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     } else {
                       if (fPincode != null) {
                         if (fPincode ==
