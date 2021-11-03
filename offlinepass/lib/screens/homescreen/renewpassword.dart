@@ -81,8 +81,9 @@ class _RenewPasswordState extends State<RenewPassword> {
                   //   passwordManager.cancelNotification();
                   // }
                   final snackBar = SnackBar(
-                    content: Text(
-                        "${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()} deleted successfully"),
+                    content: Text(widget.passModel.url!.contains('.com')
+                        ? "Delete ${widget.passModel.url!.substring(0, widget.passModel.url!.length - 4).capitalize()}"
+                        : "Delete ${widget.passModel.url!.capitalize()}"),
                     backgroundColor: Colors.grey.shade500,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
