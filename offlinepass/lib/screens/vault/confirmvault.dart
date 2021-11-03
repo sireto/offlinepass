@@ -140,18 +140,19 @@ class _ConfirmvaultState extends State<Confirmvault> {
                             content: Text("Vault created successfully"),
                             backgroundColor: Colors.grey.shade600,
                           );
+
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (r) => false);
                           EncryptedSharedPreferences
                               encryptedSharedPreferences =
                               EncryptedSharedPreferences();
                           encryptedSharedPreferences.setString(
                               'msk', widget.entropy);
                           PasswordManager.msk = widget.entropy;
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                              (r) => false);
                         } else {
                           final snackBar = SnackBar(
                             content: Text("MSK doesnot matched!!"),

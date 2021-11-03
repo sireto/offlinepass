@@ -1,6 +1,7 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:offlinepass/constants.dart';
+import 'package:offlinepass/models/password_manager.dart';
 import 'package:offlinepass/screens/homescreen/addhost.dart';
 import 'package:offlinepass/screens/homescreen/homescreen.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -156,6 +157,7 @@ class _RecovervaultState extends State<Recovervault> {
                         EncryptedSharedPreferences encryptedSharedPreferences =
                             EncryptedSharedPreferences();
                         encryptedSharedPreferences.setString('msk', entropy);
+                        PasswordManager.msk = entropy;
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(

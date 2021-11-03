@@ -37,17 +37,6 @@ class _UnlocksettingsState extends State<Unlocksettings> {
     super.initState();
   }
 
-  Future biometric() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    final isauthenticate = await LocalAuthApi.authenticate();
-    if (isauthenticate) {
-      setState(() {
-        fingerprintinitialindex = 0;
-      });
-      sharedPreferences.remove("fingerprints");
-    }
-  }
-
   getstring() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     pincodes = sharedPreferences.getString("pincode");
@@ -234,7 +223,18 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                       await SharedPreferences.getInstance();
                                   print('switched to: $index');
                                   if (index == 0) {
-                                    biometric();
+                                    final isauthenticate =
+                                        await LocalAuthApi.authenticate();
+                                    if (isauthenticate) {
+                                      setState(() {
+                                        fingerprintinitialindex = 0;
+                                      });
+                                      sharedPreferences.remove("fingerprints");
+                                    } else {
+                                      setState(() {
+                                        fingerprintinitialindex = 1;
+                                      });
+                                    }
                                     // setState(() {
                                     //   fingerprintinitialindex = 0;
                                     // });
@@ -250,14 +250,25 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                       fingerprintinitialindex = 0;
                                     });
                                   } else if (index == 1 && initialindex == 1) {
-                                    sharedPreferences.setBool(
-                                        "fingerprints", true);
-                                    const snackbar = SnackBar(
-                                      content: Text("Fingerprint lock added"),
-                                      duration: Duration(milliseconds: 500),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackbar);
+                                    final isauthenticate =
+                                        await LocalAuthApi.authenticate();
+                                    if (isauthenticate) {
+                                      sharedPreferences.setBool(
+                                          "fingerprints", true);
+                                      const snackbar = SnackBar(
+                                        content: Text("Fingerprint lock added"),
+                                        duration: Duration(milliseconds: 500),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackbar);
+                                      setState(() {
+                                        fingerprintinitialindex = 1;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        fingerprintinitialindex = 0;
+                                      });
+                                    }
                                   }
                                 },
                               ),
