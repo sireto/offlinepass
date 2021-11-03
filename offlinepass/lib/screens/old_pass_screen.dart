@@ -81,12 +81,26 @@ class _OldPasswordState extends State<OldPassword> {
                       width: 45,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: icons[widget.passModel.url]!['color']),
-                      child: Icon(
-                        icons[widget.passModel.url]!['icon'],
-                        color: Colors.white,
-                        size: 26,
-                      )),
+                          color: widget.passModel.colorIndex != null
+                              ? colors[widget.passModel.colorIndex!]
+                              : icons[widget.passModel.url]!['color']),
+                      child: widget.passModel.colorIndex != null
+                          ? Center(
+                              child: Text(
+                                widget.passModel.url!
+                                    .substring(0, 2)
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    color: Colors.white),
+                              ),
+                            )
+                          : Icon(
+                              icons[widget.passModel.url]!['icon'],
+                              color: Colors.white,
+                              size: 26,
+                            )),
                   widthspace(20),
                   Flexible(
                     child: Column(
@@ -94,15 +108,17 @@ class _OldPasswordState extends State<OldPassword> {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.passModel.url!
-                              .substring(0, widget.passModel.url!.length - 4)
-                              .toString()
-                              .capitalize(),
+                          widget.passModel.url!.contains('.com')
+                              ? widget.passModel.url!
+                                  .substring(
+                                      0, widget.passModel.url!.length - 4)
+                                  .toString()
+                                  .capitalize()
+                              : widget.passModel.url!.toString().capitalize(),
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 16,
                             // fontFamily: 'TitilliumWeb',
-                            // fontWeight: FontWeight.bold
                           ),
                         ),
                         //  heightspace(5),
@@ -110,8 +126,9 @@ class _OldPasswordState extends State<OldPassword> {
                           widget.passModel.user!,
                           style: const TextStyle(
                               fontSize: 15,
-                              color: Colors.grey,
                               //  fontFamily: 'TitilliumWeb',
+                              //fontStyle: FontStyle.italic,
+                              color: Colors.grey,
                               fontWeight: FontWeight.w400),
                         )
                       ],
