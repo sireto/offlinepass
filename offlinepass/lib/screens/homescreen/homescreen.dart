@@ -212,8 +212,12 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: kprimarycolor,
         onPressed: () {
-          Future data = Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Addhost(datas: datas!,)));
+          Future data = Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Addhost(
+                        datas: datas!,
+                      )));
           data.then((value) {
             if (value.id != null) {
               setState(() {
@@ -318,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final snackBar = SnackBar(
                     content: Text("Copied to Clipboard"),
                     backgroundColor: Colors.grey.shade600,
+                    duration: Duration(seconds: 1),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },

@@ -411,6 +411,8 @@ class _AddhostState extends State<Addhost> {
                                                       "Host and username already exist"),
                                                   backgroundColor:
                                                       Colors.grey.shade500,
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                 );
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackBar);
@@ -431,6 +433,8 @@ class _AddhostState extends State<Addhost> {
                                                       "Password generated successfully"),
                                                   backgroundColor:
                                                       Colors.grey.shade500,
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                 );
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackBar);
@@ -451,6 +455,7 @@ class _AddhostState extends State<Addhost> {
                                                     "Password already generated"),
                                                 backgroundColor:
                                                     Colors.grey.shade500,
+                                                duration: Duration(seconds: 1),
                                               );
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
@@ -554,6 +559,8 @@ class _AddhostState extends State<Addhost> {
                                                             "Copied to Clipboard"),
                                                         backgroundColor: Colors
                                                             .grey.shade600,
+                                                        duration: Duration(
+                                                            seconds: 1),
                                                       );
                                                       ScaffoldMessenger.of(
                                                               context)

@@ -139,6 +139,7 @@ class _ConfirmvaultState extends State<Confirmvault> {
                           final snackBar = SnackBar(
                             content: Text("Vault created successfully"),
                             backgroundColor: Colors.grey.shade600,
+                            duration: Duration(seconds: 1),
                           );
                           EncryptedSharedPreferences
                               encryptedSharedPreferences =

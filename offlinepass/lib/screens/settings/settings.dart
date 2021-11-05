@@ -222,7 +222,8 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                   SharedPreferences sharedPreferences =
                                       await SharedPreferences.getInstance();
                                   print('switched to: $index');
-                                  if (index == 0) {
+                                  if (index == 0 &&
+                                      fingerprintinitialindex == 1) {
                                     final isauthenticate =
                                         await LocalAuthApi.authenticate();
                                     if (isauthenticate) {
@@ -239,7 +240,9 @@ class _UnlocksettingsState extends State<Unlocksettings> {
                                     //   fingerprintinitialindex = 0;
                                     // });
 
-                                  } else if (index == 1 && initialindex == 0) {
+                                  } else if (index == 1 &&
+                                      initialindex == 0 &&
+                                      fingerprintinitialindex == 0) {
                                     const snackbar = SnackBar(
                                       content: Text("Please set pincode first"),
                                       duration: Duration(milliseconds: 500),
