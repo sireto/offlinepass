@@ -2,5 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/generate_password": "pages/generate_password.js"
+  "/": "pages/index.js",
+  "/msk/generate": "pages/msk/generate.js"
 }

@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import Button from "../ui/button/button";
 import { useFormStatus } from "@app/lib/hooks/use-form-status";
 import AnchorLink from "../ui/links/anchor-link";
+import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -131,9 +132,11 @@ export default function GeneratePasswordView() {
   return (
     <div className="w-full h-full space-y-8">
       <div className="flex flex-col items-center space-y-2">
-        <p className="font-bold text-2xl">Generate Password</p>
+        <p className="font-bold text-2xl">
+          {generatePasswordViewConstants.title}
+        </p>
         <p className="text-sm text-gray-500">
-          Please enter your Master Security Key (MSK)
+          {generatePasswordViewConstants.description}
         </p>
       </div>
 
