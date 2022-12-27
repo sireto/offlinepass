@@ -1,12 +1,28 @@
-import '../../styles/globals.css';
-import '../../styles/tailwind.css';
-import type { AppProps } from 'next/app';
-import Layout from '../layouts/_layout';
+import "../../styles/globals.css";
+import "../../styles/tailwind.css";
+import type { AppProps } from "next/app";
+import Layout from "../layouts/_layout";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App({ Component, pageProps }: AppProps) {
-    return (
-        <Layout>
-            <Component {...pageProps} />
-        </Layout>
-    );
+  return (
+    <>
+      <ToastContainer
+        theme="colored"
+        position="bottom-right"
+        autoClose={1000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </>
+  );
 }

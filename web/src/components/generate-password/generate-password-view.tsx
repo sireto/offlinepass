@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { TextField } from "@mui/material";
+import { TextField, TextFieldProps } from "@mui/material";
 import styled from "@emotion/styled";
 import Button from "../ui/button/button";
 import { useFormStatus } from "@app/lib/hooks/use-form-status";
 import AnchorLink from "../ui/links/anchor-link";
+import { hmacSha256 } from "@app/utils/hmac";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import moment from "moment";
+import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
+import { toast } from "react-toastify";
+import { Copy } from "../icons/copy";
+import { toMidDottedStr } from "@app/utils/stringUtils";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -20,23 +29,47 @@ interface GeneratePswState {
 export default function GeneratePasswordView() {
   const [isMskVerified, setIsMskVerified] = useState(false);
   const { isLoading, setIsLoading } = useFormStatus();
+  const [passwordHash, setpasswordHash] = useState("");
+  const [isSubmit,setSubmit] =useState(false);
   const [generatePswState, setGeneratePswState] = useState<GeneratePswState>({
     msk: "",
     host: "",
     usernameEmail: "",
-    date: "",
+    date: moment(Date.now()).format("YYYY"),
     retries: 0,
   });
+  const isEmpty = (value: string | any[]) => value.length === 0;
+  const [_, copyToClipboard] = useCopyToClipboard();
 
-  const handleGeneratePassword = () => {
+  const handleCopyPassword = () => {
+    copyToClipboard(passwordHash);
+    toast.info(`Copied! ${passwordHash} `, {
+      autoClose: 1000,
+    });
+  };
+
+  const handleGeneratePassword = async () => {
+    setSubmit(true);
     if (isMskVerified) {
-      console.log("Password generated");
+      setIsLoading(true);
+      if (
+        generatePswState.host !== "" &&
+        generatePswState.usernameEmail !== ""
+      ) {
+        await hmacSha256(generatePswState).then((passwordhash) => {
+          setpasswordHash(passwordhash);
+          setIsLoading(false);
+          setSubmit(false);
+        });
+      }
+      setIsLoading(false);
     } else if (generatePswState.msk !== "") {
       setIsLoading(true);
       setTimeout(() => {
         setIsMskVerified(true);
         setIsLoading(false);
-      }, 2000);
+        setSubmit(false);
+      }, 1000);
     }
   };
 
@@ -49,6 +82,7 @@ export default function GeneratePasswordView() {
           label="Master Security Key(MSK)"
           variant="outlined"
           fullWidth
+          error={isEmpty(generatePswState.msk) && isSubmit}
           disabled={isMskVerified}
           onChange={(event) =>
             setGeneratePswState({
@@ -69,6 +103,7 @@ export default function GeneratePasswordView() {
           value={generatePswState.host}
           label="Host"
           variant="outlined"
+          error={isEmpty(generatePswState.host) && isSubmit }
           fullWidth
           onChange={(event) =>
             setGeneratePswState({
@@ -85,6 +120,7 @@ export default function GeneratePasswordView() {
           label="Username/Email"
           variant="outlined"
           fullWidth
+          error={isEmpty(generatePswState.usernameEmail) && isSubmit}
           onChange={(event) =>
             setGeneratePswState({
               ...generatePswState,
@@ -93,7 +129,7 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      <MuiStyledTextField>
+      {/* <MuiStyledTextField>
         <TextField
           id="date"
           value={generatePswState.date}
@@ -107,6 +143,28 @@ export default function GeneratePasswordView() {
             })
           }
         />
+      </MuiStyledTextField> */}
+      <MuiStyledTextField>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DesktopDatePicker
+            renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => (
+              <TextField
+                fullWidth
+                onKeyDown={(e) => e.preventDefault()}
+                {...props}
+              />
+            )}
+            label="Date"
+            value={generatePswState.date}
+            onChange={(newValue) =>
+              setGeneratePswState({
+                ...generatePswState,
+                date: newValue!,
+              })
+            }
+            disableHighlightToday
+          />
+        </LocalizationProvider>
       </MuiStyledTextField>
       <MuiStyledTextField>
         <TextField
@@ -127,7 +185,7 @@ export default function GeneratePasswordView() {
       </MuiStyledTextField>
     </>
   );
-
+  console.log(passwordHash, "p");
   return (
     <div className="w-full h-full space-y-8">
       <div className="flex flex-col items-center space-y-2">
@@ -144,6 +202,7 @@ export default function GeneratePasswordView() {
       <Button isLoading={isLoading} fullWidth onClick={handleGeneratePassword}>
         {isMskVerified ? "Generate Password" : "Done"}
       </Button>
+      {passwordHash !== "" && <div className="flex flex-wrap space-x-3 justify-center"> <p className="text-center">{toMidDottedStr(passwordHash)}</p> <Copy onClick={handleCopyPassword} className="h-5 w-5 cursor-pointer"/> </div>}
       {!isMskVerified && (
         <p className="text-sm text-gray-500">
           Don't have MSK?{" "}

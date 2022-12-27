@@ -97,6 +97,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
+      type="button"
       className={cn(
         "flex items-center justify-center h-full",
         fullWidth && "w-full",
@@ -108,7 +109,7 @@ const Button: React.FC<ButtonProps> = ({
       )}
       {...buttonProps}
     >
-      {isLoading ? <CircularProgress color="inherit" /> : children}
+      {isLoading ? <CircularProgress color="inherit" className="p-2" /> : children}
     </button>
   );
 };
