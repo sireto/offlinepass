@@ -15,11 +15,14 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@app/*": [
-        "./src/*"
-      ]
+      "@app/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/components/form-views/container.tss"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,9 +1,9 @@
-import BannerContainer from '@app/containers/BannerContainer';
+import BannerContainer from "@app/containers/BannerContainer";
 
 export default function Home() {
-    return (
-        <div>
-            <BannerContainer />
-        </div>
-    );
+  return (
+    <div className="w-screen">
+      <BannerContainer />
+    </div>
+  );
 }
