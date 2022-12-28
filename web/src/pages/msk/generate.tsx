@@ -1,5 +1,11 @@
+import FormContainer from "@app/components/form-views/container";
+import { FormViews } from "@app/models/enums/formEnums";
 import React from "react";
 
 export default function GenerateMsk() {
-  return <div>generate</div>;
+  return (
+    <div className="flex w-full min-h-screen justify-center py-44 bg-[#F5F9FA]">
+      <FormContainer formView={FormViews.GENERATE_MSK_VIEW} />
+    </div>
+  );
 }

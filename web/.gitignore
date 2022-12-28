@@ -1,0 +1,5 @@
+# Next.js build output
+.next
+.next-dev
+
+.node_modules

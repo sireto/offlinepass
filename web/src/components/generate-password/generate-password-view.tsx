@@ -10,6 +10,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import moment from "moment";
 import { useModal } from "../modal-views/context";
+import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -183,9 +184,11 @@ export default function GeneratePasswordView() {
   return (
     <div className="w-full h-full space-y-8">
       <div className="flex flex-col items-center space-y-2">
-        <p className="font-bold text-2xl">Generate Password</p>
+        <p className="font-bold text-2xl">
+          {generatePasswordViewConstants.title}
+        </p>
         <p className="text-sm text-gray-500">
-          Please enter your Master Security Key (MSK)
+          {generatePasswordViewConstants.description}
         </p>
       </div>
 
@@ -193,7 +196,12 @@ export default function GeneratePasswordView() {
         {mskFormComponent}
         {isMskVerified && generatePasswordFormComponent}
       </div>
-      <Button isLoading={isLoading} fullWidth onClick={handleGeneratePassword}>
+      <Button
+        isLoading={isLoading}
+        fullWidth
+        onClick={handleGeneratePassword}
+        className="text-lg font-medium"
+      >
         {isMskVerified ? "Generate Password" : "Done"}
       </Button>
       {/* {passwordHash !== "" && <div className="flex flex-wrap space-x-3 justify-center"> <p className="text-center">{toMidDottedStr(passwordHash)}</p> <Copy onClick={handleCopyPassword} className="h-5 w-5 cursor-pointer"/> </div>} */}
