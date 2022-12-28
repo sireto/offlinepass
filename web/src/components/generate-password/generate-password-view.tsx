@@ -53,7 +53,7 @@ export default function GeneratePasswordView() {
             ...generatePswState,
             retries: generatePswState.retries + 1,
           });
-          showSuccessModal(passwordhash);
+          showSuccessModal("Password Generated", passwordhash);
         });
       }
       setIsLoading(false);
