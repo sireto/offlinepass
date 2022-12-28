@@ -1,4 +1,4 @@
-import { benifitTitle } from "@app/models/enums/benifits";
+import { BenefitTitles } from "@app/models/enums/benifitEnums";
 // export const BenifitsConstants = [
 //   {
 //     title: "Fully Offline",
@@ -14,21 +14,19 @@ import { benifitTitle } from "@app/models/enums/benifits";
 //   },
 // ];
 
-
-
 export const offlineConstants = {
-  title: benifitTitle.offlineTitle,
+  title: BenefitTitles.OFFLINE_TITLE,
   description:
     "We generate password using hmac. No central servers or internet required.",
 };
 
 export const encryptedConstants = {
-  title: benifitTitle.encryptedTitle,
+  title: BenefitTitles.ENCRYPTED_TITLE,
   description: "ALL passwords are algorithmically generated",
 };
 
 export const recoverableConstant = {
-  title: benifitTitle.recoverableTitle,
+  title: BenefitTitles.RECOVERABLE_TITLE,
   description:
     "Generated password are recoverable. All you need is seed/secret key,host,username/email,date",
 };

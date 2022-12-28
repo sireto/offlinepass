@@ -2,7 +2,7 @@ import {
   encryptedConstants,
   offlineConstants,
   recoverableConstant,
-} from "@app/constants/benifits";
+} from "@app/constants/benifit-constants";
 import React from "react";
 import BenifitsCard from "@app/components/benifitscard";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
@@ -23,11 +23,20 @@ export default function BenifitsContainer() {
           <p className="text-5xl font-sans text-center">
             Protect you everywhere
           </p>
-          <BenifitsCard benifit={offlineConstants} />
+          <BenifitsCard
+            title={offlineConstants.title}
+            description={offlineConstants.description}
+          />
         </div>
         <div className="space-y-16">
-          <BenifitsCard benifit={encryptedConstants} />
-          <BenifitsCard benifit={recoverableConstant} />
+          <BenifitsCard
+            title={encryptedConstants.title}
+            description={encryptedConstants.description}
+          />
+          <BenifitsCard
+            title={recoverableConstant.title}
+            description={recoverableConstant.description}
+          />
         </div>
       </div>
     );
@@ -35,9 +44,18 @@ export default function BenifitsContainer() {
   return (
     <div className="space-y-16 h-full w-full">
       <p className="text-5xl font-sans text-center">Protect you everywhere</p>
-      <BenifitsCard benifit={offlineConstants} />
-      <BenifitsCard benifit={encryptedConstants} />
-      <BenifitsCard benifit={recoverableConstant} />
+      <BenifitsCard
+        title={offlineConstants.title}
+        description={offlineConstants.description}
+      />
+      <BenifitsCard
+        title={encryptedConstants.title}
+        description={encryptedConstants.description}
+      />
+      <BenifitsCard
+        title={recoverableConstant.title}
+        description={recoverableConstant.description}
+      />
     </div>
   );
 }
