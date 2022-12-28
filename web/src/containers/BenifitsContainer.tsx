@@ -12,9 +12,13 @@ export default function BenifitsContainer() {
   const breakpoint = useBreakpoint();
   const isMounted = useIsMounted();
   //  webview
-  if (isMounted && (["xs", "sm", "md", "lg"].indexOf(breakpoint) === -1 || ["xs", "sm", "md", "lg"].indexOf(breakpoint) >1))
+  if (
+    isMounted &&
+    (["xs", "sm", "md", "lg"].indexOf(breakpoint) === -1 ||
+      ["xs", "sm", "md", "lg"].indexOf(breakpoint) > 1)
+  )
     return (
-      <div className="flex space-x-24 h-full w-full items-center justify-center">
+      <div className="flex space-x-24 h-full w-full items-center justify-center xl:px-16">
         <div className="space-y-12">
           <p className="text-5xl font-sans text-center">
             Protect you everywhere
@@ -27,13 +31,13 @@ export default function BenifitsContainer() {
         </div>
       </div>
     );
-    // mobile view
-    return (
-      <div className="space-y-16 h-full w-full">
-        <p className="text-5xl font-sans text-center">Protect you everywhere</p>
-        <BenifitsCard benifit={offlineConstants} />
-        <BenifitsCard benifit={encryptedConstants} />
-        <BenifitsCard benifit={recoverableConstant} />
-      </div>
-    );
+  // mobile view
+  return (
+    <div className="space-y-16 h-full w-full">
+      <p className="text-5xl font-sans text-center">Protect you everywhere</p>
+      <BenifitsCard benifit={offlineConstants} />
+      <BenifitsCard benifit={encryptedConstants} />
+      <BenifitsCard benifit={recoverableConstant} />
+    </div>
+  );
 }
