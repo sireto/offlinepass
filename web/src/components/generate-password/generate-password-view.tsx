@@ -5,16 +5,18 @@ import Button from "@app/components/ui/button/button";
 import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
-import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
-import { toast } from "react-toastify";
-import { Eye } from "@app/components/icons/eye";
-import { EyeSlash } from "@app/components/icons/eyeslash";
-import Dropdown from "@app/components/year_dropdown";
-import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import { showSuccessModal } from "@app/lib/modals/showModals";
+import { useFormStatus } from "@app/lib/hooks/use-form-status";
 import { FormContent } from "@app/models/enums/formEnums";
-import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
-import { Copy } from "../icons/copy";
 import { hideString } from "@app/utils/stringUtils";
+import { Copy } from "../icons/copy";
+import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import { Eye } from "../icons/eye";
+import { EyeSlash } from "../icons/eyeslash";
+import Dropdown from "../year_dropdown";
+import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
+import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
+import { toast } from "react-toastify";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -22,7 +24,7 @@ const MuiStyledTextField = styled.div`
 `;
 
 export default function GeneratePasswordView() {
-  // const [isMskVerified, setIsMskVerified] = useState(true);
+  const [isMskVerified, setIsMskVerified] = useState(false);
   const [passwordHash, setPasswordHash] = useState("");
   const [isMskVisible, setMskVisiblity] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -34,7 +36,6 @@ export default function GeneratePasswordView() {
       date: moment(Date.now()).format("YYYY"),
       retries: 0,
     });
-
   const [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
@@ -242,15 +243,6 @@ export default function GeneratePasswordView() {
           {mskFormComponent}
           {generatePasswordFormComponent}
         </div>
-
-        {/* {!isMskVerified && (
-        <p className="text-sm text-gray-500">
-          Don't have MSK?{" "}
-          <AnchorLink href={"/msk/generate"} className="text-red-400">
-            Generate one
-          </AnchorLink>
-        </p>
-      )} */}
       </div>
     </div>
   );
