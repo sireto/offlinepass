@@ -144,7 +144,12 @@ export default function GeneratePasswordView() {
         {mskFormComponent}
         {isMskVerified && generatePasswordFormComponent}
       </div>
-      <Button isLoading={isLoading} fullWidth onClick={handleGeneratePassword}>
+      <Button
+        isLoading={isLoading}
+        fullWidth
+        onClick={handleGeneratePassword}
+        className="text-lg font-medium"
+      >
         {isMskVerified ? "Generate Password" : "Done"}
       </Button>
       {!isMskVerified && (

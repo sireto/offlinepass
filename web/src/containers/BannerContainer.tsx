@@ -22,9 +22,11 @@ export default function BannerContainer() {
       <Image src={BannerImage} alt={""} height={1000} width={400} />
       <div className="space-y-8">
         {bannerDetailsComponent}
-        <AnchorLink href={"/generate_password"}>
-          <Button className="text-semibold">Get Started</Button>
-        </AnchorLink>
+        <div>
+          <AnchorLink href={"/generate_password"}>
+            <Button className="text-semibold">Get Started</Button>
+          </AnchorLink>
+        </div>
       </div>
     </div>
   );

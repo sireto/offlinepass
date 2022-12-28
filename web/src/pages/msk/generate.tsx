@@ -1,5 +1,5 @@
 import FormContainer from "@app/components/form-views/container";
-import { FormViews } from "@app/models/enums/form-enums";
+import { FormViews } from "@app/models/enums/formEnums";
 import React from "react";
 
 export default function GenerateMsk() {

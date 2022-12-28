@@ -2,11 +2,11 @@ import {
   generateMskViewConstants,
   verifyMskViewConstants,
 } from "@app/constants/form-view-constants";
-import { generateMsk, validateMnemonic } from "@app/utils/msk-utils";
+import { generateMsk, validateMnemonic } from "@app/utils/mskUtils";
 import React, { useEffect, useState } from "react";
 import SeedCard from "../seed-card";
 import Button from "../ui/button/button";
-import { removeElementFromArray } from "@app/utils/helper-utils";
+import { removeElementFromArray } from "@app/utils/helperUtils";
 import SeedBubble from "../seed-bubble";
 
 interface MskState {
@@ -88,17 +88,24 @@ export default function GenerateMskView() {
           {titleDescriptionState.description}
         </p>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {mskState.mnemonicWordList &&
           mskState.mnemonicWordList.map((seed: string, index: number) =>
             getSeedCard(seed, index)
           )}
       </div>
-      <div className="flex flex-wrap space-x-2">
-        {selectedSeeds &&
-          selectedSeeds.map((seed: string) => getSelectedSeedBubble(seed))}
-      </div>
-      <Button fullWidth onClick={handleButtonPressed}>
+
+      {selectedSeeds.length !== 0 && (
+        <div className="flex flex-wrap space-x-2">
+          {selectedSeeds.map((seed: string) => getSelectedSeedBubble(seed))}{" "}
+        </div>
+      )}
+
+      <Button
+        fullWidth
+        onClick={handleButtonPressed}
+        className="text-lg font-medium"
+      >
         {isNextClicked ? "Verify" : "Next"}
       </Button>
     </div>

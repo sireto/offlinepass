@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { motion } from "framer-motion";
 import cn from "classnames";
 
 interface SeedCardProps {
@@ -9,6 +10,11 @@ interface SeedCardProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
+export const seedVariants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+};
+
 export default function SeedCard({
   index,
   seed,
@@ -17,15 +23,18 @@ export default function SeedCard({
   onClick,
 }: SeedCardProps) {
   return (
-    <div
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={seedVariants}
       onClick={disabled ? () => {} : onClick}
       className={cn(
         "rounded pr-8 pl-2 py-2 justify-center items-center bg-gray-400 text-white",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
-        isSelected && "bg-gray-700"
+        isSelected && "bg-gray-600"
       )}
     >
       {`${index}. ${seed}`}
-    </div>
+    </motion.div>
   );
 }
