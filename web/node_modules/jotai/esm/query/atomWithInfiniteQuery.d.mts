@@ -1,0 +1,26 @@
+import type { InfiniteData, InfiniteQueryObserverOptions, QueryKey, RefetchOptions, RefetchQueryFilters } from '@tanstack/query-core';
+import type { WritableAtom } from 'jotai';
+import { CreateQueryOptions, GetQueryClient } from './types.mjs';
+type AtomWithInfiniteQueryAction<TQueryFnData> = {
+    type: 'refetch';
+    payload: Partial<RefetchOptions & RefetchQueryFilters<TQueryFnData>>;
+} | {
+    type: 'fetchNextPage';
+} | {
+    type: 'fetchPreviousPage';
+};
+export interface AtomWithInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey extends QueryKey> extends InfiniteQueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey> {
+    queryKey: TQueryKey;
+}
+export interface AtomWithInfiniteQueryOptionsWithEnabled<TQueryFnData, TError, TData, TQueryData, TQueryKey extends QueryKey> extends Omit<AtomWithInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>, 'enabled'> {
+    enabled: boolean;
+}
+/**
+ * @deprecated use `jotai-tanstack-query` instead
+ */
+export declare function atomWithInfiniteQuery<TQueryFnData, TError, TData = TQueryFnData, TQueryData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(createQuery: CreateQueryOptions<AtomWithInfiniteQueryOptionsWithEnabled<TQueryFnData, TError, TData, TQueryData, TQueryKey>>, getQueryClient?: GetQueryClient): WritableAtom<InfiniteData<TData> | undefined, AtomWithInfiniteQueryAction<TQueryFnData>>;
+/**
+ * @deprecated use `jotai-tanstack-query` instead
+ */
+export declare function atomWithInfiniteQuery<TQueryFnData, TError, TData = TQueryFnData, TQueryData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(createQuery: CreateQueryOptions<AtomWithInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>>, getQueryClient?: GetQueryClient): WritableAtom<InfiniteData<TData>, AtomWithInfiniteQueryAction<TQueryFnData>>;
+export {};

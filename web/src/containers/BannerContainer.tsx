@@ -2,11 +2,8 @@ import Image from "next/image";
 import BannerImage from "@app/assets/images/banner_image.png";
 import { bannerConstants } from "@app/constants/banner-constants";
 import Button from "@app/components/ui/button/button";
-import hmac from "js-crypto-hmac";
-import bs58 from "bs58";
 import AnchorLink from "@app/components/ui/links/anchor-link";
 
-import { encryptedConstants, offlineConstants, recoverableConstant } from "@app/constants/benifits";
 export default function BannerContainer() {
   const bannerDetailsComponent = (
     <div className="space-y-6 md:space-y-14">
@@ -21,8 +18,8 @@ export default function BannerContainer() {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row w-full h-full bg-body justify-center items-center my-14 px-16 2xl:px-24 sm:space-y-14 space-x-10 3xl:space-x-20">
-      <Image src={BannerImage} alt={""} height={700} width={300} />
+    <div className="flex flex-col lg:flex-row w-full h-full py-14 bg-body justify-center items-center my-14 px-8 2xl:px-24 3xl:px-96  space-x-10 3xl:space-x-20">
+      <Image src={BannerImage} alt={""} height={1000} width={400} />
       <div className="space-y-8">
         {bannerDetailsComponent}
         <div>

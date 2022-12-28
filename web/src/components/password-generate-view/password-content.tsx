@@ -21,20 +21,12 @@ export default function PasswordContent({ passwordHash }: IPasswordContent) {
     });
   };
   return (
-    <div className="flex flex-col px-6 py-4  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[400px]">
-      <div
-        className="flex cursor-pointer flex-row-reverse"
-        onClick={() => closeModal()}
-      >
-        <Close className="h-auto w-3 text-gray-600 dark:text-white" />
-      </div>
-      <div className="items-center justify-center flex flex-col my-10">
-      <CheckCircle className="h-40 w-40 text-brand" />
+    <div className="flex flex-col px-6 py-4 justify-center items-center  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[400px]">
+      <CheckCircle className="h-40 w-40 text-green-600" />
       <p className="mt-5">Password Generated</p>
       <div className="flex flex-wrap space-x-3 justify-center mt-3">
         <p className="text-center">{toMidDottedStr(passwordHash)}</p>{" "}
         <Copy onClick={handleCopyPassword} className="h-5 w-5 cursor-pointer" />{" "}
-      </div>
       </div>
     </div>
   );

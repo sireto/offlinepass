@@ -29,7 +29,7 @@ export default function ModalContainer() {
     }, []);
     return (
         <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" className="fixed inset-0  z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12" onClose={closeModal}>
+            <Dialog as="div" className=" fixed inset-0  z-50 h-full w-full overflow-y-auto overflow-x-hidden p-4 text-center sm:p-6 lg:p-8 xl:p-10 3xl:p-12" onClose={closeModal}>
                 <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
                     <Dialog.Overlay className="fixed inset-0 z-40 cursor-pointer bg-gray-700 bg-opacity-60 backdrop-blur" />
                 </Transition.Child>
@@ -40,7 +40,7 @@ export default function ModalContainer() {
                     </Button>
                 </div>
                 <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-105" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-105">
-                    <div className="relative z-50 inline-block w-full text-left align-middle xs:w-auto">{view && renderModalContent(view)}</div>
+                    <div className="relative h-full z-50 inline-block w-full text-left align-middle xs:w-auto">{view && renderModalContent(view)}</div>
                 </Transition.Child>
             </Dialog>
         </Transition>

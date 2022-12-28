@@ -1,0 +1,1 @@
+System.register(["jotai-zustand"],function(o){"use strict";var t;return{setters:[function(e){t=e}],execute:function(){const e=o("atomWithStore",(...n)=>(console.warn("[DEPRECATED] use `jotai-zustand` instead."),t.atomWithStore(...n)))}}});

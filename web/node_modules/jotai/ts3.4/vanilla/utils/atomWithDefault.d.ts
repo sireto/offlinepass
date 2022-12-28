@@ -1,0 +1,10 @@
+import { SetStateAction, WritableAtom } from 'jotai/vanilla';
+import { RESET } from './constants';
+type Read<Value, Args extends unknown[], Result> = WritableAtom<Value, Args, Result>['read'];
+export declare function atomWithDefault<Value>(getDefault: Read<Value, [
+    SetStateAction<Awaited<Value>> | typeof RESET
+], void | Promise<void>>): WritableAtom<Value, [
+    SetStateAction<Awaited<Value>> | typeof RESET
+], void | Promise<void>>;
+export {};
+declare type Awaited<T> = T extends Promise<infer V> ? V : T;
