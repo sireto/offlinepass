@@ -9,8 +9,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import moment from "moment";
-import { useModal } from "../modal-views/context";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
+import { showSuccessModal } from "@app/lib/modals/showModals";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -26,7 +26,6 @@ interface GeneratePswState {
 
 export default function GeneratePasswordView() {
   const [isMskVerified, setIsMskVerified] = useState(false);
-  const { openModal } = useModal();
   const { isLoading, setIsLoading } = useFormStatus();
   const [isSubmit, setSubmit] = useState(false);
   const [generatePswState, setGeneratePswState] = useState<GeneratePswState>({
@@ -54,13 +53,7 @@ export default function GeneratePasswordView() {
             ...generatePswState,
             retries: generatePswState.retries + 1,
           });
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Your work has been saved",
-            text: `${passwordhash}`,
-            showConfirmButton: false,
-          });
+          showSuccessModal(passwordhash);
         });
       }
       setIsLoading(false);
