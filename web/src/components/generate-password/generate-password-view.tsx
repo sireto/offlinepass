@@ -60,7 +60,6 @@ export default function GeneratePasswordView() {
       setPasswordHash(passwordhash);
     });
   };
-
   const textfieldTitle = (label: string, generatePswStateValue: string) => (
     <div className="flex justify-between mb-2 space-x-4 mt-10 items-center">
       <p className="font-medium ">{label}</p>

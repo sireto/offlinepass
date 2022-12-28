@@ -1,9 +1,9 @@
 import Swal from "sweetalert2";
 
-export function showSuccessModal(text = "") {
+export function showSuccessModal(title: string, text = "") {
   return Swal.fire({
     icon: "success",
-    title: "Your work has been saved",
+    title: `${title}`,
     text: `${text}`,
     showConfirmButton: false,
   });
