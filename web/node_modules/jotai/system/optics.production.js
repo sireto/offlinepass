@@ -1,0 +1,1 @@
+System.register(["jotai-optics"],function(s){"use strict";var t;return{setters:[function(o){t=o}],execute:function(){const o=s("focusAtom",(...e)=>(console.warn("[DEPRECATED] use `jotai-optics` instead."),t.focusAtom(...e)))}}});

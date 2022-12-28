@@ -1,0 +1,8 @@
+/**
+ * These APIs are still unstable.
+ * See: https://github.com/pmndrs/jotai/discussions/1514
+ */
+export { atom } from './vanilla/atom.mjs';
+export type { Atom, WritableAtom, PrimitiveAtom } from './vanilla/atom.mjs';
+export { createStore, getDefaultStore } from './vanilla/store.mjs';
+export type { Getter, Setter, ExtractAtomValue, ExtractAtomArgs, ExtractAtomResult, SetStateAction, } from './vanilla/typeUtils.mjs';

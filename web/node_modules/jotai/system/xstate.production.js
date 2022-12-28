@@ -1,0 +1,1 @@
+System.register(["jotai-xstate"],function(e){"use strict";var a;return{setters:[function(t){a=t,e("RESTART",t.RESTART)}],execute:function(){const t=e("atomWithMachine",(...i)=>(console.warn("[DEPRECATED] use `jotai-xstate` instead."),a.atomWithMachine(...i)))}}});
