@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { TextField, TextFieldProps } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
 import styled from "@emotion/styled";
 import Button from "../ui/button/button";
 import { useFormStatus } from "@app/lib/hooks/use-form-status";
@@ -11,6 +11,15 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import moment from "moment";
 import { useModal } from "../modal-views/context";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
+import Swal from "sweetalert2";
+import { toMidDottedStr } from "@app/utils/stringUtils";
+import { Copy } from "../icons/copy";
+import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
+import { toast } from "react-toastify";
+import { Eye } from "../icons/eye";
+import { EyeSlash } from "../icons/eyeslash";
+import { ChevronDown } from "../icons/chevrondown";
+import Dropdown from "../dropdown";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -25,10 +34,10 @@ interface GeneratePswState {
 }
 
 export default function GeneratePasswordView() {
-  const [isMskVerified, setIsMskVerified] = useState(false);
-  const { openModal } = useModal();
-  const { isLoading, setIsLoading } = useFormStatus();
-  const [isSubmit, setSubmit] = useState(false);
+  const [isMskVerified, setIsMskVerified] = useState(true);
+  // const { openModal } = useModal();
+  const [passwordHash, setPasswordHash] = useState("");
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [generatePswState, setGeneratePswState] = useState<GeneratePswState>({
     msk: "",
     host: "",
@@ -37,54 +46,100 @@ export default function GeneratePasswordView() {
     retries: 0,
   });
   const isEmpty = (value: string | any[]) => value.length === 0;
+  const isMskValid = (value: string) => {
+    if (
+      value.match(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,50}$/) &&
+      !isEmpty(value)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const [_, copyToClipboard] = useCopyToClipboard();
+  const handleCopyPassword = () => {
+    copyToClipboard(passwordHash!);
+    toast.success(`Copied! ${passwordHash} `, {
+      autoClose: 1000,
+    });
+  };
+  useEffect(() => {
+    if (
+      !isEmpty(generatePswState.host) &&
+      !isEmpty(generatePswState.usernameEmail) &&
+      isMskValid(generatePswState.msk)
+    ) {
+      handleGeneratePassword();
+    }
+    else {
+      setPasswordHash("");
+    }
+  }, [generatePswState]);
 
   const handleGeneratePassword = async () => {
-    setSubmit(true);
     if (isMskVerified) {
-      setIsLoading(true);
       if (
         generatePswState.host !== "" &&
-        generatePswState.usernameEmail !== ""
+        generatePswState.usernameEmail !== "" &&
+        generatePswState.msk !== ""
       ) {
         await hmacSha256(generatePswState).then((passwordhash) => {
-          setIsLoading(false);
-          setSubmit(false);
-          console.log(generatePswState);
-          setGeneratePswState({
-            ...generatePswState,
-            retries: generatePswState.retries + 1,
-          });
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Your work has been saved",
-            text: `${passwordhash}`,
-            showConfirmButton: false,
-          });
+          setPasswordHash(passwordhash);
+
+          // Swal.fire({
+          //   position: "top-end",
+          //   icon: "success",
+          //   title: "Your work has been saved",
+          //   text: `${passwordhash}`,
+          //   showConfirmButton: false,
+          // });
         });
       }
-      setIsLoading(false);
     } else if (generatePswState.msk !== "") {
-      setIsLoading(true);
       setTimeout(() => {
         setIsMskVerified(true);
-        setIsLoading(false);
-        setSubmit(false);
       }, 1000);
     }
   };
 
   const mskFormComponent = (
     <>
+      <p className=" font-medium mb-2">Security Key</p>
       <MuiStyledTextField>
         <TextField
           id="input-msk"
           value={generatePswState.msk}
-          label="Master Security Key(MSK)"
+          type={isPasswordVisible ? "text" : "password"}
+          helperText={ !isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)?"Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters":""}
           variant="outlined"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="start">
+                {isPasswordVisible ? (
+                  <Eye
+                    onClick={() => {
+                      setPasswordVisible(false);
+                    }}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                ) : (
+                  <EyeSlash
+                    onClick={() => {
+                      setPasswordVisible(true);
+                    }}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                )}
+              </InputAdornment>
+            ),
+          }}
           fullWidth
-          error={isEmpty(generatePswState.msk) && isSubmit}
-          disabled={isMskVerified}
+          error={
+            isEmpty(generatePswState.msk)
+              ? false
+              : !isMskValid(generatePswState.msk)
+          }
+          // disabled={isMskVerified}
           onChange={(event) =>
             setGeneratePswState({
               ...generatePswState,
@@ -98,13 +153,14 @@ export default function GeneratePasswordView() {
 
   const generatePasswordFormComponent = (
     <>
+      <p className=" font-medium mb-2">Host</p>
       <MuiStyledTextField>
         <TextField
           id="host"
           value={generatePswState.host}
-          label="Host"
+          placeholder="eg. Facebook.com"
           variant="outlined"
-          error={isEmpty(generatePswState.host) && isSubmit}
+          // error={isEmpty(generatePswState.host)}
           fullWidth
           onChange={(event) =>
             setGeneratePswState({
@@ -114,14 +170,15 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
+      <p className="  font-medium mb-2">Username/Email</p>
       <MuiStyledTextField>
         <TextField
           id="username/email"
           value={generatePswState.usernameEmail}
-          label="Username/Email"
+          placeholder="eg. abc or abc@example.com"
           variant="outlined"
           fullWidth
-          error={isEmpty(generatePswState.usernameEmail) && isSubmit}
+          // error={isEmpty(generatePswState.usernameEmail)}
           onChange={(event) =>
             setGeneratePswState({
               ...generatePswState,
@@ -130,50 +187,17 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      {/* <MuiStyledTextField>
-        <TextField
-          id="date"
-          value={generatePswState.date}
-          label="Date"
-          variant="outlined"
-          fullWidth
-          onChange={(event) =>
-            setGeneratePswState({
-              ...generatePswState,
-              date: event.currentTarget.value,
-            })
-          }
-        />
-      </MuiStyledTextField> */}
-      <MuiStyledTextField>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DesktopDatePicker
-            renderInput={(props: JSX.IntrinsicAttributes & TextFieldProps) => (
-              <TextField
-                fullWidth
-                onKeyDown={(e) => e.preventDefault()}
-                {...props}
-              />
-            )}
-            label="Date"
-            value={generatePswState.date}
-            inputFormat="YYYY-MM-DD"
-            onChange={(newValue) =>
-              setGeneratePswState({
-                ...generatePswState,
-                date: newValue!,
-              })
-            }
-            disableHighlightToday
-          />
-        </LocalizationProvider>
-      </MuiStyledTextField>
+      <p className="  font-medium mb-2">Year</p>
+      <Dropdown
+        generatePswState={generatePswState}
+        setGeneratePswState={setGeneratePswState}
+      />
+      <p className="  font-medium mb-2">No of password changes</p>
       <MuiStyledTextField>
         <TextField
           id="retries"
           type="number"
           value={generatePswState.retries}
-          label="Retries"
           variant="outlined"
           fullWidth
           onChange={(event) =>
@@ -193,24 +217,37 @@ export default function GeneratePasswordView() {
         <p className="font-bold text-2xl">
           {generatePasswordViewConstants.title}
         </p>
-        <p className="text-sm text-gray-500">
+        {/* <p className="text-sm text-gray-500">
           {generatePasswordViewConstants.description}
-        </p>
+        </p> */}
       </div>
 
       <div>
         {mskFormComponent}
         {isMskVerified && generatePasswordFormComponent}
       </div>
-      <Button
+      {/* <Button
         isLoading={isLoading}
         fullWidth
         onClick={handleGeneratePassword}
         className="text-lg font-medium"
       >
         {isMskVerified ? "Generate Password" : "Done"}
-      </Button>
-      {/* {passwordHash !== "" && <div className="flex flex-wrap space-x-3 justify-center"> <p className="text-center">{toMidDottedStr(passwordHash)}</p> <Copy onClick={handleCopyPassword} className="h-5 w-5 cursor-pointer"/> </div>} */}
+      </Button> */}
+      {passwordHash !== "" && (
+        <div className="flex flex-wrap space-x-3 justify-center items-center">
+          <p className=" font-bold text-xl">Password</p>
+          <p className="text-center font-bold text-2xl px-3 my-2 text-brand py-1 bg-slate-100 rounded-lg">
+            {passwordHash}
+          </p>
+          <Button
+            className="px-3 py-1 text-center text-lg bg-brand"
+            onClick={handleCopyPassword}
+          >
+            Copy
+          </Button>
+        </div>
+      )}
       {!isMskVerified && (
         <p className="text-sm text-gray-500">
           Don't have MSK?{" "}

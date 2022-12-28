@@ -1,4 +1,4 @@
-export interface generatePswStateDtos {
+export interface GeneratePswStateDtos {
     msk: string;
     host: string;
     usernameEmail: string;
