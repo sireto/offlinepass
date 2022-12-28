@@ -54,7 +54,13 @@ export default function GeneratePasswordView() {
             ...generatePswState,
             retries: generatePswState.retries + 1,
           });
-          openModal("PASSWORD_GENERATE", passwordhash);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your work has been saved",
+            text: `${passwordhash}`,
+            showConfirmButton: false,
+          });
         });
       }
       setIsLoading(false);
