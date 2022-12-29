@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: "./web/package-lock.json"
-    - run: cd web && yarn ci
+    - run: cd web && yarn install
     - run: cd web && yarn run build 
     - run: cd web && yarn export  
     - name: Deploy
