@@ -1,6 +1,7 @@
 {
   "name": "offlinepass",
   "version": "0.1.0",
+  "homepage": "https://sireto.github.io/offlinepass",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "predeploy": "npm run build",
+    "export": "next export",
+    "predeploy": "next build",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
