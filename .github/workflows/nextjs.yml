@@ -80,7 +80,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: web/.out
+          path: web/out
 
   # Deployment job
   deploy:
