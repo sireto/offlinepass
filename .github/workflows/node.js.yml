@@ -26,9 +26,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: yarn ci
-    - run: yarn run build 
-    - run: yarn export  
+    
+    - run: cd web && yarn ci
+    - run: cd web && yarn run build 
+    - run: cd web && yarn export  
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4.2.5
       with:
