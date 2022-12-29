@@ -1,6 +1,6 @@
 import { FormViews } from "@app/models/enums/formEnums";
-import GeneratePasswordView from "../generate-password/generate-password-view";
-import GenerateMskView from "../msk/generate-msk-view";
+import GeneratePasswordView from "@app/components/generate-password/generate-password-view";
+import GenerateMskView from "@app/components/msk/generate-msk-view";
 
 interface FormContainerInterface {
   formView: FormViews;

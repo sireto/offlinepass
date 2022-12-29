@@ -34,7 +34,7 @@ export default function BenefitContainer() {
   // mobile view
   return (
     <div className="space-y-16 h-full w-full">
-      <p className="text-5xl font-sans text-center">Protect you everywhere</p>
+      <p className="text-5xl font-sans text-center">Self Service Password Manager</p>
       <BenefitsCard benefit={offlineConstants} />
       <BenefitsCard benefit={openSourceConstants} />
       <BenefitsCard benefit={recoverableConstant} />

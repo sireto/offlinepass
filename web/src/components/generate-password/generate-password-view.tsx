@@ -5,21 +5,17 @@ import Button from "../ui/button/button";
 import { useFormStatus } from "@app/lib/hooks/use-form-status";
 import AnchorLink from "../ui/links/anchor-link";
 import { hmacSha256 } from "@app/utils/hmac";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import moment from "moment";
-import { useModal } from "../modal-views/context";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 import Swal from "sweetalert2";
-import { toMidDottedStr } from "@app/utils/stringUtils";
-import { Copy } from "../icons/copy";
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
 import { toast } from "react-toastify";
 import { Eye } from "../icons/eye";
 import { EyeSlash } from "../icons/eyeslash";
 import { ChevronDown } from "../icons/chevrondown";
 import Dropdown from "../dropdown";
+import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import { FormContent } from "@app/models/enums/formEnums";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -34,8 +30,7 @@ interface GeneratePswState {
 }
 
 export default function GeneratePasswordView() {
-  const [isMskVerified, setIsMskVerified] = useState(true);
-  // const { openModal } = useModal();
+  // const [isMskVerified, setIsMskVerified] = useState(true);
   const [passwordHash, setPasswordHash] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [generatePswState, setGeneratePswState] = useState<GeneratePswState>({
@@ -45,17 +40,7 @@ export default function GeneratePasswordView() {
     date: moment(Date.now()).format("YYYY"),
     retries: 0,
   });
-  const isEmpty = (value: string | any[]) => value.length === 0;
-  const isMskValid = (value: string) => {
-    if (
-      value.match(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,50}$/) &&
-      !isEmpty(value)
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+
   const [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
@@ -70,47 +55,50 @@ export default function GeneratePasswordView() {
       isMskValid(generatePswState.msk)
     ) {
       handleGeneratePassword();
-    }
-    else {
+    } else {
       setPasswordHash("");
     }
   }, [generatePswState]);
 
   const handleGeneratePassword = async () => {
-    if (isMskVerified) {
-      if (
-        generatePswState.host !== "" &&
-        generatePswState.usernameEmail !== "" &&
-        generatePswState.msk !== ""
-      ) {
-        await hmacSha256(generatePswState).then((passwordhash) => {
-          setPasswordHash(passwordhash);
+    // if (isMskVerified) {
+    // if (
+    //   generatePswState.host !== "" &&
+    //   generatePswState.usernameEmail !== "" &&
+    //   generatePswState.msk !== ""
+    // ) {
+    await hmacSha256(generatePswState).then((passwordhash) => {
+      setPasswordHash(passwordhash);
 
-          // Swal.fire({
-          //   position: "top-end",
-          //   icon: "success",
-          //   title: "Your work has been saved",
-          //   text: `${passwordhash}`,
-          //   showConfirmButton: false,
-          // });
-        });
-      }
-    } else if (generatePswState.msk !== "") {
-      setTimeout(() => {
-        setIsMskVerified(true);
-      }, 1000);
-    }
+      // Swal.fire({
+      //   position: "top-end",
+      //   icon: "success",
+      //   title: "Your work has been saved",
+      //   text: `${passwordhash}`,
+      //   showConfirmButton: false,
+      // });
+    });
+    // }
+    // } else if (generatePswState.msk !== "") {
+    //   setTimeout(() => {
+    //     setIsMskVerified(true);
+    //   }, 1000);
+    // }
   };
 
   const mskFormComponent = (
     <>
-      <p className=" font-medium mb-2">Security Key</p>
+      <p className=" font-medium mb-2">{FormContent.SECURITY_KEY}</p>
       <MuiStyledTextField>
         <TextField
           id="input-msk"
           value={generatePswState.msk}
           type={isPasswordVisible ? "text" : "password"}
-          helperText={ !isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)?"Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters":""}
+          helperText={
+            !isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)
+              ? "Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters"
+              : ""
+          }
           variant="outlined"
           InputProps={{
             endAdornment: (
@@ -153,7 +141,7 @@ export default function GeneratePasswordView() {
 
   const generatePasswordFormComponent = (
     <>
-      <p className=" font-medium mb-2">Host</p>
+      <p className=" font-medium mb-2">{FormContent.HOST}</p>
       <MuiStyledTextField>
         <TextField
           id="host"
@@ -170,7 +158,7 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      <p className="  font-medium mb-2">Username/Email</p>
+      <p className="  font-medium mb-2">{FormContent.USERNAME_EMAIL}</p>
       <MuiStyledTextField>
         <TextField
           id="username/email"
@@ -187,12 +175,12 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      <p className="  font-medium mb-2">Year</p>
+      <p className="  font-medium mb-2">{FormContent.YEAR}</p>
       <Dropdown
         generatePswState={generatePswState}
         setGeneratePswState={setGeneratePswState}
       />
-      <p className="  font-medium mb-2">No of password changes</p>
+      <p className="  font-medium mb-2">{FormContent.RETRIES}</p>
       <MuiStyledTextField>
         <TextField
           id="retries"
@@ -224,7 +212,7 @@ export default function GeneratePasswordView() {
 
       <div>
         {mskFormComponent}
-        {isMskVerified && generatePasswordFormComponent}
+        {generatePasswordFormComponent}
       </div>
       {/* <Button
         isLoading={isLoading}
@@ -248,14 +236,14 @@ export default function GeneratePasswordView() {
           </Button>
         </div>
       )}
-      {!isMskVerified && (
+      {/* {!isMskVerified && (
         <p className="text-sm text-gray-500">
           Don't have MSK?{" "}
           <AnchorLink href={"/msk/generate"} className="text-red-400">
             Generate one
           </AnchorLink>
         </p>
-      )}
+      )} */}
     </div>
   );
 }

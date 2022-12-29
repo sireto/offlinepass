@@ -38,3 +38,15 @@ export function isNull(data: unknown): boolean {
 export function isNetherUndefinedNorNull(data: unknown): boolean {
     return !isUndefined(data) && !isNull(data);
 }
+
+export const isEmpty = (value: string | any[]) => value.length === 0;
+export  const isMskValid = (value: string) => {
+    if (
+      value.match(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,50}$/) &&
+      !isEmpty(value)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
