@@ -1,0 +1,1 @@
+System.register(["jotai-redux"],function(o){"use strict";var t;return{setters:[function(e){t=e}],execute:function(){const e=o("atomWithStore",(...r)=>(console.warn("[DEPRECATED] use `jotai-redux` instead."),t.atomWithStore(...r)))}}});

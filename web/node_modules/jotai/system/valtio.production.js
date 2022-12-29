@@ -1,0 +1,1 @@
+System.register(["jotai-valtio"],function(e){"use strict";var t;return{setters:[function(o){t=o}],execute:function(){const o=e("atomWithProxy",(...i)=>(console.warn("[DEPRECATED] use `jotai-valtio` instead."),t.atomWithProxy(...i)))}}});
