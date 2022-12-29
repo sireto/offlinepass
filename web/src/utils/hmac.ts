@@ -2,9 +2,10 @@ import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
 import hmac from "js-crypto-hmac";
 const bs58 = require("bs58");
 export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
-  const msg = `${getHostName(generatePswState.host)}|${
-    generatePswState.usernameEmail
+  const msg = `${getHostName(generatePswState.host).toLowerCase()}|${
+    generatePswState.usernameEmail.toLowerCase()
   }|${generatePswState.date}|${checkRetries(generatePswState.retries)}`;
+  debugger;
   const hash = "SHA-256";
   const keyUnit8Array = new TextEncoder().encode(generatePswState.msk);
   const msgUnit8Array = new TextEncoder().encode(msg);
@@ -33,9 +34,5 @@ export const getHostName = (host: string) => {
   const removeProtocolHttps = host.replace("https://", "");
   const removeProtocolHttp = removeProtocolHttps.replace("http://", "");
   const removeWWW = removeProtocolHttp.replace("www.", "");
-  const hostArray = removeWWW.split(".");
-  if (hostArray.length !== 1) {
-    hostArray.pop();
-  }
-  return hostArray.toString().replace(/,/g, "");
+  return removeWWW.toString().replace(/,/g, "");
 };
