@@ -30,7 +30,7 @@ jobs:
     - run: yarn run build 
     - run: yarn export  
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.2.5
+      uses: JamesIves/github-pages-deploy-action@4
       with:
           branch: gh-pages
           folder: out
