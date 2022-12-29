@@ -2,44 +2,34 @@ import React, { useEffect, useState } from "react";
 import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
 import styled from "@emotion/styled";
 import Button from "../ui/button/button";
-import { useFormStatus } from "@app/lib/hooks/use-form-status";
-import AnchorLink from "../ui/links/anchor-link";
 import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
-import Swal from "sweetalert2";
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
 import { toast } from "react-toastify";
-import { Eye } from "../icons/eye";
-import { EyeSlash } from "../icons/eyeslash";
-import { ChevronDown } from "../icons/chevrondown";
-import Dropdown from "../dropdown";
+import { Eye } from "@app/components/icons/eye";
+import { EyeSlash } from "@app/components/icons/eyeslash";
+import Dropdown from "@app/components/year_dropdown";
 import { isEmpty, isMskValid } from "@app/utils/validationUtils";
 import { FormContent } from "@app/models/enums/formEnums";
+import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
 `;
 
-interface GeneratePswState {
-  msk: string;
-  host: string;
-  usernameEmail: string;
-  date: string;
-  retries: number;
-}
-
 export default function GeneratePasswordView() {
   // const [isMskVerified, setIsMskVerified] = useState(true);
   const [passwordHash, setPasswordHash] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
-  const [generatePswState, setGeneratePswState] = useState<GeneratePswState>({
-    msk: "",
-    host: "",
-    usernameEmail: "",
-    date: moment(Date.now()).format("YYYY"),
-    retries: 0,
-  });
+  const [generatePswState, setGeneratePswState] =
+    useState<GeneratePswStateDtos>({
+      msk: "",
+      host: "",
+      usernameEmail: "",
+      date: moment(Date.now()).format("YYYY"),
+      retries: 0,
+    });
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyPassword = () => {
@@ -61,34 +51,14 @@ export default function GeneratePasswordView() {
   }, [generatePswState]);
 
   const handleGeneratePassword = async () => {
-    // if (isMskVerified) {
-    // if (
-    //   generatePswState.host !== "" &&
-    //   generatePswState.usernameEmail !== "" &&
-    //   generatePswState.msk !== ""
-    // ) {
     await hmacSha256(generatePswState).then((passwordhash) => {
       setPasswordHash(passwordhash);
-
-      // Swal.fire({
-      //   position: "top-end",
-      //   icon: "success",
-      //   title: "Your work has been saved",
-      //   text: `${passwordhash}`,
-      //   showConfirmButton: false,
-      // });
     });
-    // }
-    // } else if (generatePswState.msk !== "") {
-    //   setTimeout(() => {
-    //     setIsMskVerified(true);
-    //   }, 1000);
-    // }
   };
 
   const mskFormComponent = (
     <>
-      <p className=" font-medium mb-2">{FormContent.SECURITY_KEY}</p>
+      <p className="font-medium mb-2">{FormContent.SECURITY_KEY}</p>
       <MuiStyledTextField>
         <TextField
           id="input-msk"
@@ -127,7 +97,6 @@ export default function GeneratePasswordView() {
               ? false
               : !isMskValid(generatePswState.msk)
           }
-          // disabled={isMskVerified}
           onChange={(event) =>
             setGeneratePswState({
               ...generatePswState,
@@ -141,14 +110,13 @@ export default function GeneratePasswordView() {
 
   const generatePasswordFormComponent = (
     <>
-      <p className=" font-medium mb-2">{FormContent.HOST}</p>
+      <p className="font-medium mb-2">{FormContent.HOST}</p>
       <MuiStyledTextField>
         <TextField
           id="host"
           value={generatePswState.host}
           placeholder="eg. Facebook.com"
           variant="outlined"
-          // error={isEmpty(generatePswState.host)}
           fullWidth
           onChange={(event) =>
             setGeneratePswState({
@@ -158,7 +126,7 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      <p className="  font-medium mb-2">{FormContent.USERNAME_EMAIL}</p>
+      <p className="font-medium mb-2">{FormContent.USERNAME_EMAIL}</p>
       <MuiStyledTextField>
         <TextField
           id="username/email"
@@ -166,7 +134,6 @@ export default function GeneratePasswordView() {
           placeholder="eg. abc or abc@example.com"
           variant="outlined"
           fullWidth
-          // error={isEmpty(generatePswState.usernameEmail)}
           onChange={(event) =>
             setGeneratePswState({
               ...generatePswState,
@@ -175,12 +142,12 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      <p className="  font-medium mb-2">{FormContent.YEAR}</p>
+      <p className="font-medium mb-2">{FormContent.YEAR}</p>
       <Dropdown
         generatePswState={generatePswState}
         setGeneratePswState={setGeneratePswState}
       />
-      <p className="  font-medium mb-2">{FormContent.RETRIES}</p>
+      <p className="font-medium mb-2">{FormContent.RETRIES}</p>
       <MuiStyledTextField>
         <TextField
           id="retries"
@@ -214,14 +181,6 @@ export default function GeneratePasswordView() {
         {mskFormComponent}
         {generatePasswordFormComponent}
       </div>
-      {/* <Button
-        isLoading={isLoading}
-        fullWidth
-        onClick={handleGeneratePassword}
-        className="text-lg font-medium"
-      >
-        {isMskVerified ? "Generate Password" : "Done"}
-      </Button> */}
       {passwordHash !== "" && (
         <div className="flex flex-wrap space-x-3 justify-center items-center">
           <p className=" font-bold text-xl">Password</p>

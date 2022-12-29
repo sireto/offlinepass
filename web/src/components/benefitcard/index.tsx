@@ -1,7 +1,6 @@
 import { BenifitDto } from "@app/models/dtos/benifitsdto";
 import { BenifitTitle } from "@app/models/enums/benefits";
 import React from "react";
-import { Lock } from "@app/components/icons/lock";
 import { Recover } from "@app/components/icons/recover";
 import Offline from '@app/assets/images/no_wifi.png'
 import Image from "next/image";

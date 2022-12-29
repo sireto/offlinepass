@@ -1,8 +1,6 @@
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
-import { Menu, Transition } from "@headlessui/react";
-import { MenuItem } from "@mui/material";
-import React, { Fragment, useState } from "react";
-import { ChevronDown } from "../icons/chevrondown";
+import React, { useState } from "react";
+import { ChevronDown } from "@app/components/icons/chevrondown";
 
 interface IDropdown {
   generatePswState: GeneratePswStateDtos;
@@ -14,14 +12,12 @@ export default function Dropdown({
 }: IDropdown) {
   const years = ["2022", "2023", "2024"];
   const [DropDownState, setDropDownState] = useState(false);
-  
+
   return (
-    <div
-      className="relative"
-    >
+    <div className="relative">
       <button
         onClick={() => {
-          setDropDownState(prevCheck => !prevCheck);
+          setDropDownState((prevCheck) => !prevCheck);
         }}
         className="flex h-5 w-full cursor-pointer border mb-3 border-slate-400 shrink-0 items-center justify-center rounded-md py-7 text-gray-900 "
       >
@@ -39,7 +35,7 @@ export default function Dropdown({
                   <button
                     onClick={() => {
                       setGeneratePswState({ ...generatePswState, date: year });
-                      setDropDownState(prevCheck => !prevCheck);
+                      setDropDownState((prevCheck) => !prevCheck);
                     }}
                     className="py-2 px-3 text-start"
                     key={year}
