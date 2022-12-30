@@ -2,9 +2,8 @@ import { BenifitDto } from "@app/models/dtos/benifitsdto";
 import { BenifitTitle } from "@app/models/enums/benefits";
 import React from "react";
 import { Recover } from "@app/components/icons/recover";
-import Offline from '@app/assets/images/no_wifi.png'
-import Image from "next/image";
 import { Global } from "../icons/global";
+import { Nowifi } from "../icons/nowifi";
 
 interface IBenefitCard {
   benefit: BenifitDto;
@@ -15,7 +14,7 @@ export default function BenefitCard({ benefit }: IBenefitCard) {
   function IconSelector() {
     let icon;
     if (benefit.title === BenifitTitle.OFFLINE_TITLE) {
-      icon = <Image alt="" src={Offline} height={80} width={80}/>
+      icon = <Nowifi className={iconClassName}/>
     } else if (benefit.title === BenifitTitle.OPEN_SOURCE_TITLE) {
       icon = <Global className={iconClassName} />;
     } else {
