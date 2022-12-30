@@ -1,7 +1,7 @@
 import "../../styles/globals.css";
 import "../../styles/tailwind.css";
 import type { AppProps } from "next/app";
-import Layout from "../layouts/_layout";
+import Layout from "@app/layouts/_layout";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import ModalContainer from "@app/components/modal-views/container";

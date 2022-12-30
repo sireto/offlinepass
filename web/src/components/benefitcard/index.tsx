@@ -2,8 +2,8 @@ import { BenifitDto } from "@app/models/dtos/benifitsdto";
 import { BenifitTitle } from "@app/models/enums/benefits";
 import React from "react";
 import { Recover } from "@app/components/icons/recover";
-import { Global } from "../icons/global";
-import { Nowifi } from "../icons/nowifi";
+import { Global } from "@app/components/icons/global";
+import { Nowifi } from "@app/components/icons/nowifi";
 
 interface IBenefitCard {
   benefit: BenifitDto;

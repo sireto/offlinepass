@@ -4,7 +4,6 @@ import { bannerConstants } from "@app/constants/banner-constants";
 import Button from "@app/components/ui/button/button";
 import AnchorLink from "@app/components/ui/links/anchor-link";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
-import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 
 export default function BannerContainer() {
   const breakpoint = useBreakpoint();
