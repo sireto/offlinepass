@@ -13,6 +13,9 @@ import Dropdown from "@app/components/year_dropdown";
 import { isEmpty, isMskValid } from "@app/utils/validationUtils";
 import { FormContent } from "@app/models/enums/formEnums";
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPasswordProvider } from "@app/store/password/selectors";
+import { setPasswordProvider } from "@app/store/password/passwordSlice";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 12px;
@@ -38,6 +41,9 @@ export default function GeneratePasswordView() {
       autoClose: 1000,
     });
   };
+  const dispatch = useDispatch();
+  const passwordProvider = useSelector(selectPasswordProvider);
+
   useEffect(() => {
     if (
       !isEmpty(generatePswState.host) &&
@@ -51,8 +57,17 @@ export default function GeneratePasswordView() {
   }, [generatePswState]);
 
   const handleGeneratePassword = async () => {
-    await hmacSha256(generatePswState).then((passwordhash) => {
+    hmacSha256(generatePswState).then((passwordhash) => {
       setPasswordHash(passwordhash);
+      dispatch(
+        setPasswordProvider({
+          msk: generatePswState.msk,
+          host: passwordProvider.host,
+          usernameEmail: passwordProvider.usernameEmail,
+          year: passwordProvider.year,
+          retries: passwordProvider.retries,
+        })
+      );
     });
   };
 
