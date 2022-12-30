@@ -4,10 +4,10 @@ import {
 } from "@app/constants/form-view-constants";
 import { generateMsk, validateMnemonic } from "@app/utils/mskUtils";
 import React, { useEffect, useState } from "react";
-import SeedCard from "../seed-card";
-import Button from "../ui/button/button";
+import SeedCard from "@app/components/seed-card";
+import Button from "@app/components/ui/button/button";
 import { removeElementFromArray } from "@app/utils/helperUtils";
-import SeedBubble from "../seed-bubble";
+import SeedBubble from "@app/components/seed-bubble";
 import { toast } from "react-toastify";
 
 interface MskState {

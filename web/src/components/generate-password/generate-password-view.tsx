@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
 import styled from "@emotion/styled";
-import Button from "../ui/button/button";
+import Button from "@app/components/ui/button/button";
 import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";

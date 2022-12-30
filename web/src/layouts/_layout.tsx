@@ -1,8 +1,8 @@
 import React from "react";
-import Logo from "../components/ui/logo";
+import Logo from "@app/components/ui/logo";
 
-import { useIsMounted } from "../lib/hooks/use-is-mounted";
-import { useWindowScroll } from "../lib/hooks/use-window-scroll";
+import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
+import { useWindowScroll } from "@app/lib/hooks/use-window-scroll";
 
 export function Header() {
   const windowScroll = useWindowScroll();

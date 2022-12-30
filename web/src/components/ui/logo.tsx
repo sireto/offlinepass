@@ -1,7 +1,7 @@
-import BrandLogo from '@app/assets/images/brand_logo.png';
+import BrandLogo from '@app/assets/images/brandlogo.png';
 
 import Image from 'next/image';
-import AnchorLink from './links/anchor-link';
+import AnchorLink from '@app/components/ui/links/anchor-link';
 
 export default function Logo() {
     return (
