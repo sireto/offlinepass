@@ -24,7 +24,7 @@ export const offlineConstants = {
 
 export const openSourceConstants = {
   title: BenifitTitle.OPEN_SOURCE_TITLE,
-  description: "You can modify and share because its design is publicly accessible.",
+  description: "You can modify and share because its design is publicly accessible. \n Source Code : [https://github.com/sireto/offlinepass](https://github.com/sireto/offlinepass)",
 };
 
 export const recoverableConstant = {

@@ -11,5 +11,5 @@ export const verifyMskViewConstants = {
 
 export const generatePasswordViewConstants = {
   title: "Generate Password",
-  description: " Please enter your Master Security Key (MSK)",
+  description: "Enter secret key,host,username/email,date,No of password changes",
 };

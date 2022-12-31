@@ -4,7 +4,7 @@ import {
   recoverableConstant,
 } from "@app/constants/benefits-constants";
 import React from "react";
-import BenefitsCard from "@app/components/benefitcard";
+import BenefitsCard from "@app/components/benefit-card";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 
@@ -15,13 +15,13 @@ export default function BenefitContainer() {
   if (
     isMounted &&
     (["xs", "sm", "md", "lg"].indexOf(breakpoint) === -1 ||
-      ["xs", "sm", "md", "lg"].indexOf(breakpoint) > 1)
+      ["xs", "sm", "md", "lg"].indexOf(breakpoint) === 3)
   )
     return (
       <div className="flex space-x-24 h-full w-full mt-20 items-center justify-center xl:px-16">
         <div className="space-y-12">
           <p className="text-5xl font-sans text-center">
-           Self Service Password Manager
+            Self Service Password Manager
           </p>
           <BenefitsCard benefit={offlineConstants} />
         </div>
@@ -33,8 +33,10 @@ export default function BenefitContainer() {
     );
   // mobile view
   return (
-    <div className="space-y-16 h-full w-full mt-5">
-      <p className="text-5xl font-sans text-center">Self Service Password Manager</p>
+    <div className="space-y-16 bg-lightBackground h-full w-full px-8 pt-16">
+      <p className="text-5xl font-sans text-center">
+        Self Service Password Manager
+      </p>
       <BenefitsCard benefit={offlineConstants} />
       <BenefitsCard benefit={openSourceConstants} />
       <BenefitsCard benefit={recoverableConstant} />

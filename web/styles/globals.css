@@ -67,3 +67,10 @@ a {
         color-scheme: dark;
     }
 }
+@font-face {
+    font-family:'Chau_Philomene_One';
+    src: url('../src/assets/fonts/Chau_Philomene_One/ChauPhilomeneOne-Regular.ttf');
+    src: url('../src/assets/fonts/Chau_Philomene_One/ChauPhilomeneOne-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}

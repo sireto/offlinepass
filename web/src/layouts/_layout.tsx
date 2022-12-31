@@ -12,8 +12,8 @@ export function Header() {
     <nav
       className={`fixed top-0 z-30 flex w-full items-center justify-between px-4 transition-all duration-300 ltr:right-0 rtl:left-0 sm:px-6 lg:px-8 xl:px-10 3xl:px-12 ${
         isMounted && windowScroll.y > 10
-          ? "h-24 bg-gradient-to-b from-white to-white/80 shadow-card backdrop-blur dark:from-dark dark:to-dark/80 sm:h-24"
-          : "h-24 border-b-[0.5px] border-neutral-100 dark:border-neutral-700 bg-white dark:bg-dark sm:h-24"
+          ? "h-20 bg-gradient-to-b from-white to-white/80 shadow-card backdrop-blur dark:from-dark dark:to-dark/80 sm:h-20"
+          : "h-20 border-b-[0.5px] border-neutral-100 dark:border-neutral-700 bg-white dark:bg-dark sm:h-20"
       }`}
     >
       <main>
@@ -27,7 +27,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-dark">
       <Header />
-      <main className={`mb-0 min-h-screen pt-24 sm:pt-24 `}>{children}</main>
+      <main className={`mb-0 min-h-screen pt-20 sm:pt-20`}>{children}</main>
     </div>
   );
 }

@@ -18,7 +18,7 @@ function renderFormContent(view: FormViews) {
 
 export default function FormContainer({ formView }: FormContainerInterface) {
   return (
-    <div className="w-full h-full mx-4 sm:mx-8 md:mx-32 lg:mx-64 xl:mx-80 2xl:mx-80 3xl:w-1/2 px-4 sm:px-12 py-10 bg-white rounded-lg shadow-xl">
+    <div className=" w-full h-full   bg-white">
       <div>{renderFormContent(formView)}</div>
     </div>
   );
