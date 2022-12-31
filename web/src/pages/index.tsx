@@ -17,7 +17,7 @@ export default function Home() {
         // <div className="flex flex-col pb-20 min-h-screen bg-lightBackground ">
         // {/* <BannerContainer /> */}
         <div className="flex w-full">
-          <CarouselView />
+          <CarouselView className="w-3/4" />
           <FormContainer formView={FormViews.GENERATE_PASSWORD_VIEW} />
         </div>
         // {/* <BenefitContainer />
@@ -27,7 +27,7 @@ export default function Home() {
   //mobileview
     return (
       <div className="flex flex-col w-full pb-20">
-        <CarouselView />
+        <CarouselView className="w-full" />
         <FormContainer formView={FormViews.GENERATE_PASSWORD_VIEW} />
         <BenefitContainer />
       </div>

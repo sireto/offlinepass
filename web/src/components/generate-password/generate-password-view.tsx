@@ -63,14 +63,14 @@ export default function GeneratePasswordView() {
   const textfieldTitle = (label: string, generatePswStateValue: string) => (
     <div className="flex justify-between mb-2 space-x-4 mt-10 items-center">
       <p className="font-medium ">{label}</p>
-      {!isEmpty(generatePswStateValue) && (
+      {/* {!isEmpty(generatePswStateValue) && (
         <div className="flex items-center space-x-4">
           <p className=" text-red-400">Do you want to save?</p>
           <button className="px-5 py-2 font-semibold rounded-lg bg-red-400 text-white">
             Yes
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 

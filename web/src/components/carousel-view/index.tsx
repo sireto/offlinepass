@@ -3,7 +3,12 @@ import Image from "next/image";
 import remarkGfm from "remark-gfm";
 import { caroselConstants } from "@app/constants/carousel-constant";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-export default function CarouselView() {
+
+interface IcarouselView {
+  className:string;
+}
+
+export default function CarouselView({className}:IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
   const carouselItem = () => {
     return (
@@ -38,7 +43,7 @@ export default function CarouselView() {
   }, [carouselSlideIndex]);
 
   return (
-    <div className="flex relative flex-col pb-60 px-10 w-full items-center justify-center space-y-10 bg-lightBackground">
+    <div className={`flex relative flex-col pb-60 px-10 items-center pt-20 justify-center space-y-10 bg-lightBackground ${className}`} >
       {carouselItem()}
       <div className="absolute flex space-x-3 pt-96">
         <button
