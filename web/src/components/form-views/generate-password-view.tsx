@@ -25,6 +25,7 @@ const MuiStyledTextField = styled.div`
 export default function GeneratePasswordView() {
   const { passwordHash, setPasswordHash } = usePassword();
   const [isMskVisible, setMskVisiblity] = useState(false);
+  const dispatch = useDispatch();
   const [generatePswState, setGeneratePswState] =
     useState<GeneratePswStateDtos>({
       msk: "",
@@ -54,12 +55,16 @@ export default function GeneratePasswordView() {
 
   const onValuesSave = () => {};
 
-  const textfieldTitle = (label: string, generatePswStateValue: string) => (
+  const textfieldTitle = (
+    label: string,
+    generatePswStateValue: string,
+    showStoreOption: boolean = true
+  ) => (
     <div className="flex justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <p className="font-medium ">{label}</p>
-      {!isEmpty(generatePswStateValue) && (
+      {showStoreOption && !isEmpty(generatePswStateValue) && (
         <div className="flex items-center space-x-4 text-xs">
-          <p className=" text-red-400">Do you want to save?</p>
+          <p className=" text-red-400 font-normal">Do you want to save?</p>
           <button className="px-3 py-[5px] font-semibold rounded-lg bg-red-400  text-white">
             Yes
           </button>
