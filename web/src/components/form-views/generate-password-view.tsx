@@ -57,14 +57,16 @@ export default function GeneratePasswordView() {
   const textfieldTitle = (label: string, generatePswStateValue: string) => (
     <div className="flex justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <p className="font-medium ">{label}</p>
-      {!isEmpty(generatePswStateValue) && (
-        <div className="flex items-center space-x-4 text-xs">
-          <p className=" text-red-400">Do you want to save?</p>
-          <button className="px-3 py-[5px] font-semibold rounded-lg bg-red-400  text-white">
-            Yes
-          </button>
-        </div>
-      )}
+      {!isEmpty(generatePswStateValue) &&
+        generatePswStateValue !== generatePswState.date &&
+        generatePswStateValue !== generatePswState.retries.toString() && (
+          <div className="flex items-center space-x-4 text-xs">
+            <p className=" text-red-400">Do you want to save?</p>
+            <button className="px-3 py-[5px] font-semibold rounded-lg bg-red-400  text-white">
+              Yes
+            </button>
+          </div>
+        )}
     </div>
   );
 
@@ -157,7 +159,7 @@ export default function GeneratePasswordView() {
       </MuiStyledTextField>
       <div className="flex flex-col md:flex-row md:space-x-10 justify-between">
         <div className="md:w-1/2">
-          {textfieldTitle(FormContent.YEAR, generatePswState.usernameEmail)}
+          {textfieldTitle(FormContent.YEAR, generatePswState.date)}
 
           <MuiStyledTextField>
             <TextField
@@ -186,7 +188,10 @@ export default function GeneratePasswordView() {
         </div>
 
         <div className="md:w-1/2">
-          {textfieldTitle(FormContent.RETRIES, generatePswState.usernameEmail)}
+          {textfieldTitle(
+            FormContent.RETRIES,
+            generatePswState.retries.toString()
+          )}
 
           <MuiStyledTextField>
             <TextField
