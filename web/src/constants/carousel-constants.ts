@@ -1,6 +1,7 @@
 import GeneratePasswordLogo from "@app/assets/images/generatepasswordlogo.png";
 import Github from "@app/assets/images/github.png";
-export const caroselConstants = [
+
+export const carouselConstants = [
   {
     title:
       "Generate all your passwords deterministically using your Master Key",
@@ -16,7 +17,8 @@ export const caroselConstants = [
   },
   {
     title: "Source Code",
-    description: "[https://github.com/sireto/offlinepass](https://github.com/sireto/offlinepass)",
+    description:
+      "[https://github.com/sireto/offlinepass](https://github.com/sireto/offlinepass)",
     src: Github,
   },
 ];

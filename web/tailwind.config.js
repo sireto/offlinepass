@@ -20,9 +20,14 @@ module.exports = {
       colors: {
         brand: "#003E6B",
         body: "#ffffff",
+
         lightBackground: "#F6F8FB",
+        lightGray: "#808080",
+
         textfield_stroke: "#D9E5F6",
         textfield_label: "#4E4E4E",
+
+        success: "#CDFFD8",
       },
     },
   },
