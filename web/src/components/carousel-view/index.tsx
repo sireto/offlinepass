@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import Image from "next/image";
 import remarkGfm from "remark-gfm";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import CarouselIndicator from "../ui/carousel-indicator";
 
 interface IcarouselView {
   className:string;
@@ -10,7 +11,7 @@ interface IcarouselView {
 
 export default function CarouselView({className}:IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
-  const carouselItem = () => {
+  const getCarouselItem = () => {
     return (
       <>
         <Image
@@ -30,6 +31,19 @@ export default function CarouselView({className}:IcarouselView) {
       </>
     );
   };
+
+  // const getCarouselIndicator = (onClick: MouseEventHandler | undefined, className) => {
+  //   return (
+  //     <button
+  //       onClick={onClick}
+  //       type="button"
+  //       className={`w-3 h-3 rounded-full mt-60 ${
+  //         carouselSlideIndex === 0 ? "bg-brand" : "bg-slate-300"
+  //       }`}
+  //     ></button>
+  //   );
+  // };
+
   useEffect(() => {
     setTimeout(() => {
       if (carouselSlideIndex >= carouselConstants.length - 1) {
@@ -42,36 +56,31 @@ export default function CarouselView({className}:IcarouselView) {
   }, [carouselSlideIndex]);
 
   return (
-    <div className={`flex relative flex-col pb-60 px-10 items-center pt-20 justify-center space-y-10 bg-lightBackground ${className}`} >
-      {carouselItem()}
-      <div className="absolute flex space-x-3 pt-96">
-        <button
+    <div
+      className={`flex relative flex-col  px-28 items-center  justify-center space-y-10 bg-lightBackground ${className}`}
+    >
+      {getCarouselItem()}
+
+      {/* carousel indicators */}
+      <div className="absolute flex space-x-3 bottom-12">
+        <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(0);
           }}
-          type="button"
-          className={`w-3 h-3 rounded-full mt-60 ${
-            carouselSlideIndex === 0 ? "bg-brand" : "bg-slate-300"
-          }`}
-        ></button>
-        <button
-          type="button"
+          color={carouselSlideIndex === 0 ? "primary" : "slate"}
+        />
+        <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
-          className={`w-3 h-3 rounded-full  mt-60 ${
-            carouselSlideIndex === 1 ? "bg-brand" : "bg-slate-300"
-          }`}
-        ></button>
-        <button
-          type="button"
+          color={carouselSlideIndex === 1 ? "primary" : "slate"}
+        />
+        <CarouselIndicator
           onClick={() => {
-            setCarouselSlideIndex(2);
+            setCarouselSlideIndex(1);
           }}
-          className={`w-3 h-3 rounded-full  mt-60 ${
-            carouselSlideIndex === 2 ? "bg-brand" : "bg-slate-300"
-          }`}
-        ></button>
+          color={carouselSlideIndex === 2 ? "primary" : "slate"}
+        />
       </div>
     </div>
   );

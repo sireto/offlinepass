@@ -14,7 +14,7 @@ export default function Logo() {
         <p className="font-medium text-3xl ">
           Offline<span className="text-brand">Pass</span>
         </p>
-        <p className="text-xs">Self Service Password Manager</p>
+        <p className="text-xs mt-1">Self Service Password Manager</p>
       </div>
     </AnchorLink>
   );
