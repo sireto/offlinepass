@@ -6,16 +6,12 @@ export interface IPasswordState {
   msk: string;
   host: string[];
   usernameEmail: string[];
-  year: string;
-  retries: number;
 }
 
 const initialState: IPasswordState = {
   msk: "",
   host: [],
   usernameEmail: [],
-  year: "",
-  retries: 0,
 };
 
 const passwordSlice = createSlice({
