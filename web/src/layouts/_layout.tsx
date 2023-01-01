@@ -25,9 +25,9 @@ export function Header() {
 
 export default function Layout({ children }: React.PropsWithChildren) {
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-dark">
+    <div className="flex flex-col font-inter min-h-screen bg-white dark:bg-dark">
       <Header />
-      <main className={`mb-0 min-h-screen pt-24 sm:pt-24 `}>{children}</main>
+      <main className={`h-screen w-screen pt-20 sm:pt-20`}>{children}</main>
     </div>
   );
 }
