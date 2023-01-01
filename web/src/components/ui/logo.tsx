@@ -2,6 +2,7 @@ import BrandLogo from "@app/assets/images/brandlogo.png";
 
 import Image from "next/image";
 import AnchorLink from "@app/components/ui/links/anchor-link";
+import { customLoader } from "@app/components/customloader";
 
 export default function Logo() {
   return (
@@ -9,7 +10,7 @@ export default function Logo() {
       href={"/"}
       className="flex items-center font-Chau_Philomene_One space-x-4"
     >
-      <Image src={BrandLogo} alt={""} height={40} width={40} />
+      <Image src={BrandLogo} loader={customLoader} alt={""} height={40} width={40} />
       <div>
         <p className="font-medium text-3xl ">
           Offline<span className="text-brand">Pass</span>
