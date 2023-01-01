@@ -9,11 +9,11 @@ import { isEmpty, isMskValid } from "@app/utils/validationUtils";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
-import Toast from "@app/components/ui/toast/toast";
 import { hideString } from "@app/utils/stringUtils";
 import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { Copy } from "../icons/copy";
+import { usePassword } from "@app/lib/hooks/use-password";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -23,10 +23,8 @@ const MuiStyledTextField = styled.div`
 `;
 
 export default function GeneratePasswordView() {
-  const [passwordHash, setPasswordHash] = useState("");
+  const { passwordHash, setPasswordHash } = usePassword();
   const [isMskVisible, setMskVisiblity] = useState(false);
-  const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const breakpoint = useBreakpoint();
   const [generatePswState, setGeneratePswState] =
     useState<GeneratePswStateDtos>({
       msk: "",
@@ -35,13 +33,6 @@ export default function GeneratePasswordView() {
       date: moment(Date.now()).format("YYYY"),
       retries: 0,
     });
-  const [_, copyToClipboard] = useCopyToClipboard();
-  const handleCopyPassword = () => {
-    copyToClipboard(passwordHash!);
-    toast.success(`Copied!`, {
-      autoClose: 1000,
-    });
-  };
 
   useEffect(() => {
     if (
@@ -216,9 +207,9 @@ export default function GeneratePasswordView() {
       </div>
     </>
   );
-  console.log(passwordHash, "pp");
+
   return (
-    <div className="w-full h-full bg-white sm:px-2 md:px-10 2xl:px-24">
+    <div className="w-full h-full bg-white sm:px-2 md:px-10 lg:px-6 xl:px-24 2xl:px-32 3xl:px-44">
       <div className="py-16 space-y-8">
         <div className="flex flex-col space-y-2 ">
           <p className="font-bold text-xl md:text-3xl">
@@ -230,11 +221,7 @@ export default function GeneratePasswordView() {
         </div>
 
         <div className="pt-4 md:pt-8">{generatePasswordFormComponent}</div>
-
       </div>
-
-      <div className="pt-8">{generatePasswordFormComponent}</div>
-      {/* </div> */}
     </div>
   );
 }
