@@ -14,6 +14,7 @@ import { hideString } from "@app/utils/stringUtils";
 import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { Copy } from "../icons/copy";
+import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -26,7 +27,7 @@ export default function GeneratePasswordView() {
   const [passwordHash, setPasswordHash] = useState("");
   const [isMskVisible, setMskVisiblity] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const breakpoint = useBreakpoint();
+  // const breakpoint = useBreakpoint();
   const [generatePswState, setGeneratePswState] =
     useState<GeneratePswStateDtos>({
       msk: "",
@@ -216,7 +217,6 @@ export default function GeneratePasswordView() {
       </div>
     </>
   );
-  console.log(passwordHash, "pp");
   return (
     <div className="w-full h-full bg-white sm:px-2 md:px-10 2xl:px-24">
       <div className="py-16 space-y-8">
@@ -233,7 +233,7 @@ export default function GeneratePasswordView() {
 
       </div>
 
-      <div className="pt-8">{generatePasswordFormComponent}</div>
+      {/* <div className="pt-8">{generatePasswordFormComponent}</div> */}
       {/* </div> */}
     </div>
   );
