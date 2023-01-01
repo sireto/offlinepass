@@ -27,46 +27,46 @@ const PasswordToast = () => {
   };
 
   // console.log(animalIdenticon("camelmasa").toSvg(64));
-  return (
-    passwordHash && (
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={toastVariants}
-        className={`flex z-20 fixed top-24  right-0 w-screen lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
-      >
-        <div className="flex items-center px-6 bg-success w-full h-full xl:space-x-3 ">
-          <p className="hidden sm:block font-medium text-[#555555] ">
-            Your password has been generated:
-          </p>
-          <p className="text-center font-bold px-3 my-2 text-[#353535] py-1  rounded-lg">
-            {passwordHash.substring(0, 2) +
-              hideString(passwordHash.substring(2), isPasswordVisible)}
-          </p>
-          {isPasswordVisible ? (
-            <Eye
-              onClick={() => {
-                setPasswordVisibility(false);
-              }}
-              className="h-6 w-6 cursor-pointer"
-            />
-          ) : (
-            <EyeSlash
-              onClick={() => {
-                setPasswordVisibility(true);
-              }}
-              className="h-6 w-6 cursor-pointer"
-            />
-          )}
-        </div>
-        <button onClick={handleCopyPassword} className="px-3 py-3 bg-white">
-          <Copy className="h-6 w-6" />
-        </button>
-        <div className="absolute top-16 left-4 ">
-          <Identicon string={passwordHash} size={25} />
-        </div>
-      </motion.div>
-    )
+  return passwordHash === "" ? (
+    <></>
+  ) : (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={toastVariants}
+      className={`flex z-20 fixed top-24  right-0 w-screen lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
+    >
+      <div className="flex items-center px-6 bg-success w-full h-full xl:space-x-3 ">
+        <p className="hidden sm:block font-medium text-[#555555] ">
+          Your password has been generated:
+        </p>
+        <p className="text-center font-bold px-3 my-2 text-[#353535] py-1  rounded-lg">
+          {passwordHash.substring(0, 2) +
+            hideString(passwordHash.substring(2), isPasswordVisible)}
+        </p>
+        {isPasswordVisible ? (
+          <Eye
+            onClick={() => {
+              setPasswordVisibility(false);
+            }}
+            className="h-6 w-6 cursor-pointer"
+          />
+        ) : (
+          <EyeSlash
+            onClick={() => {
+              setPasswordVisibility(true);
+            }}
+            className="h-6 w-6 cursor-pointer"
+          />
+        )}
+      </div>
+      <button onClick={handleCopyPassword} className="px-3 py-3 bg-white">
+        <Copy className="h-6 w-6" />
+      </button>
+      <div className="absolute top-16 left-4 ">
+        <Identicon string={passwordHash} size={25} />
+      </div>
+    </motion.div>
   );
 };
 
