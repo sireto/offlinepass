@@ -49,6 +49,9 @@ export default function CarouselView({className}:IcarouselView) {
     }, 5000);
   }, [carouselSlideIndex]);
 
+  const size =
+    ["md", "lg", "xl", "2xl", "3xl"].indexOf(breakpoint) > 0 ? "small" : "mini";
+
   return (
     <div
       className={`flex relative flex-col  px-8 md:px-14 2xl:px-28  py-16 md:py-20 lg:py-0 items-center  justify-center space-y-4 lg:space-y-10 bg-lightBackground ${className}`}
