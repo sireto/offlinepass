@@ -52,17 +52,19 @@ export default function GeneratePasswordView() {
     });
   };
 
+  const onValuesSave = () => {};
+
   const textfieldTitle = (label: string, generatePswStateValue: string) => (
     <div className="flex justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <p className="font-medium ">{label}</p>
-      {/* {!isEmpty(generatePswStateValue) && (
-        <div className="flex items-center space-x-4">
+      {!isEmpty(generatePswStateValue) && (
+        <div className="flex items-center space-x-4 text-xs">
           <p className=" text-red-400">Do you want to save?</p>
-          <button className="px-5 py-2 font-semibold rounded-lg bg-red-400 text-white">
+          <button className="px-3 py-[5px] font-semibold rounded-lg bg-red-400  text-white">
             Yes
           </button>
         </div>
-      )} */}
+      )}
     </div>
   );
 

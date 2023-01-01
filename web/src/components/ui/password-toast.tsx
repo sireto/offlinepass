@@ -33,10 +33,10 @@ const PasswordToast = () => {
         initial="hidden"
         animate="visible"
         variants={toastVariants}
-        className={`flex z-20 absolute top-24 right-0 w-screen lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
+        className={`flex z-20 fixed top-24  right-0 w-screen lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
       >
-        <div className="flex items-center px-6 bg-success w-full xl:space-x-3 ">
-          <p className="font-medium text-[#555555] ">
+        <div className="flex items-center px-6 bg-success w-full h-full xl:space-x-3 ">
+          <p className="hidden sm:block font-medium text-[#555555] ">
             Your password has been generated:
           </p>
           <p className="text-center font-bold px-3 my-2 text-[#353535] py-1  rounded-lg">
