@@ -6,10 +6,10 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import CarouselIndicator from "../ui/carousel-indicator";
 
 interface IcarouselView {
-  className: string;
+  className:string;
 }
 
-export default function CarouselView({ className }: IcarouselView) {
+export default function CarouselView({className}:IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
   const getCarouselItem = () => {
     return (

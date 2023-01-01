@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  InputAdornment,
-  MenuItem,
-  TextField,
-  TextFieldProps,
-} from "@mui/material";
+import { InputAdornment, MenuItem, TextField } from "@mui/material";
 import styled from "@emotion/styled";
-import Button from "@app/components/ui/button/button";
 import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
-import { showSuccessModal } from "@app/lib/modals/showModals";
-import { useFormStatus } from "@app/lib/hooks/use-form-status";
 import { FormContent } from "@app/models/enums/formEnums";
-import { hideString } from "@app/utils/stringUtils";
-import { Copy } from "../icons/copy";
 import { isEmpty, isMskValid } from "@app/utils/validationUtils";
-import { Eye } from "../icons/eye";
-import { EyeSlash } from "../icons/eyeslash";
-import Dropdown from "../year_dropdown";
+import { Eye } from "@app/components/icons/eye";
+import { EyeSlash } from "@app/components/icons/eyeslash";
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
+import Toast from "@app/components/ui/toast/toast";
+import { hideString } from "@app/utils/stringUtils";
 import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
 import { toast } from "react-toastify";
+import { Copy } from "../icons/copy";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -49,6 +41,7 @@ export default function GeneratePasswordView() {
       autoClose: 1000,
     });
   };
+
   useEffect(() => {
     if (
       !isEmpty(generatePswState.host) &&
@@ -67,7 +60,10 @@ export default function GeneratePasswordView() {
     });
   };
 
-  const textfieldTitle = (label: string, generatePswStateValue: string) => (
+  const textfieldTitle = (
+    label: string,
+    generatePswStateValue: string | number
+  ) => (
     <div className="flex justify-between mb-2 space-x-4 items-center text-sm text-textfield_label font-medium">
       <p className="font-medium ">{label}</p>
       {/* {!isEmpty(generatePswStateValue) && (
@@ -78,38 +74,6 @@ export default function GeneratePasswordView() {
           </button>
         </div>
       )} */}
-    </div>
-  );
-
-  const generatedPassword = (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center px-10 bg-red-100 w-full space-x-3">
-        <p className=" font-bold text-green-400">
-          Your password has been generated:{" "}
-        </p>
-        <p className="text-center font-bold px-3 my-2 text-red-800 py-1 bg-slate-100 rounded-lg">
-          {passwordHash.substring(0, 2) +
-            hideString(passwordHash.substring(2), isPasswordVisible)}
-        </p>
-        {isPasswordVisible ? (
-          <Eye
-            onClick={() => {
-              setPasswordVisibility(false);
-            }}
-            className="h-6 w-6 cursor-pointer"
-          />
-        ) : (
-          <EyeSlash
-            onClick={() => {
-              setPasswordVisibility(true);
-            }}
-            className="h-6 w-6 cursor-pointer"
-          />
-        )}
-      </div>
-      <button onClick={handleCopyPassword} className="px-3 py-3 bg-white">
-        <Copy className="h-6 w-6" />
-      </button>
     </div>
   );
 
@@ -202,25 +166,25 @@ export default function GeneratePasswordView() {
       </MuiStyledTextField>
       <div className="flex space-x-10 justify-between">
         <div className="w-1/2">
-          {textfieldTitle(FormContent.YEAR, generatePswState.usernameEmail)}
+          {textfieldTitle(FormContent.YEAR, generatePswState.date)}
           <MuiStyledTextField>
             <TextField
-              id="retries"
+              id="date"
               className="inputRounded"
               type="number"
               select
-              value={generatePswState.retries}
+              value={generatePswState.date}
               variant="outlined"
               fullWidth
               onChange={(event) =>
                 setGeneratePswState({
                   ...generatePswState,
-                  retries: parseInt(event.currentTarget.value),
+                  date: event.target.value,
                 })
               }
               inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             >
-              {[2022, 2023].map((option) => (
+              {[2022, 2023, 2024].map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>
@@ -230,7 +194,7 @@ export default function GeneratePasswordView() {
         </div>
 
         <div className="w-1/2">
-          {textfieldTitle(FormContent.RETRIES, generatePswState.usernameEmail)}
+          {textfieldTitle(FormContent.RETRIES, generatePswState.retries)}
           <MuiStyledTextField>
             <TextField
               id="retries"
@@ -252,21 +216,60 @@ export default function GeneratePasswordView() {
       </div>
     </>
   );
+  console.log(passwordHash, "pp");
   return (
-    <div className="w-full h-full px-24 font-sans">
-      {passwordHash !== "" && generatedPassword}
-      <div className="px-24 py-16 space-y-8">
-        <div className="flex flex-col space-y-2 ">
-          <p className="font-bold text-3xl">
-            {generatePasswordViewConstants.title}
-          </p>
-          <p className="text-sm text-lightGray font-normal">
-            {generatePasswordViewConstants.description}
-          </p>
-        </div>
-
-        <div className="pt-8">{generatePasswordFormComponent}</div>
+    <div className="w-full h-full px-24 font-sans space-y-8 py-16">
+      {/* <div className="px-24 py-16 space-y-8"> */}
+      <div className="flex flex-col space-y-2 ">
+        {passwordHash !== "" && (
+          <Toast
+            className="space-x-10"
+            icon={
+              <button
+                onClick={handleCopyPassword}
+                className="px-3 py-3 bg-white"
+              >
+                <Copy className="h-6 w-6" />
+              </button>
+            }
+            message={
+              <div className="flex items-center px-10 bg-red-100 w-full space-x-3">
+                <p className=" font-bold text-green-400">
+                  Your password has been generated:
+                </p>
+                <p className="text-center font-bold px-3 my-2 text-red-800 py-1 bg-slate-100 rounded-lg">
+                  {passwordHash.substring(0, 2) +
+                    hideString(passwordHash.substring(2), isPasswordVisible)}
+                </p>
+                {isPasswordVisible ? (
+                  <Eye
+                    onClick={() => {
+                      setPasswordVisibility(false);
+                    }}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                ) : (
+                  <EyeSlash
+                    onClick={() => {
+                      setPasswordVisibility(true);
+                    }}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                )}
+              </div>
+            }
+          />
+        )}
+        <p className="font-bold text-3xl">
+          {generatePasswordViewConstants.title}
+        </p>
+        <p className="text-sm text-lightGray font-normal">
+          {generatePasswordViewConstants.description}
+        </p>
       </div>
+
+      <div className="pt-8">{generatePasswordFormComponent}</div>
+      {/* </div> */}
     </div>
   );
 }
