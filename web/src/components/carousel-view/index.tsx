@@ -49,7 +49,7 @@ export default function CarouselView({ className }: IcarouselView) {
   }, [carouselSlideIndex]);
 
   const size =
-    ["md", "lg", "xl", "2xl", "3xl"].indexOf(breakpoint) < 0 ? "mini" : "small";
+    ["md", "lg", "xl", "2xl", "3xl"].indexOf(breakpoint) > 0 ? "small" : "mini";
 
   return (
     <div

@@ -12,7 +12,7 @@ export default function Logo() {
     >
       <Image src={BrandLogo} loader={customLoader} alt={""} height={40} width={40} />
       <div>
-        <p className="font-medium text-3xl ">
+        <p className="font-medium text-2xl sm:text-3xl">
           Offline<span className="text-brand">Pass</span>
         </p>
         <p className="text-xs mt-1">Self Service Password Manager</p>
