@@ -61,21 +61,21 @@ export default function CarouselView({className}:IcarouselView) {
           onClick={() => {
             setCarouselSlideIndex(0);
           }}
-          size={isMounted && ["xs", "sm"].indexOf(breakpoint) > 0 ? "mini" : "small"}
+          size={isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"}
           color={carouselSlideIndex === 0 ? "primary" : "slate"}
         />
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
-          size={isMounted && ["xs", "sm"].indexOf(breakpoint) > 0 ? "mini" : "small"}
+          size={isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"}
           color={carouselSlideIndex === 1 ? "primary" : "slate"}
         />
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
-          size={isMounted && ["xs", "sm"].indexOf(breakpoint) > 0 ? "mini" : "small"}
+          size={isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"}
           color={carouselSlideIndex === 2 ? "primary" : "slate"}
         />
       </div>
