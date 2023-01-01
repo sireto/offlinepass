@@ -22,6 +22,7 @@ import Dropdown from "../year_dropdown";
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
 import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
 import { toast } from "react-toastify";
+import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -34,6 +35,7 @@ export default function GeneratePasswordView() {
   const [passwordHash, setPasswordHash] = useState("");
   const [isMskVisible, setMskVisiblity] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const breakpoint = useBreakpoint();
   const [generatePswState, setGeneratePswState] =
     useState<GeneratePswStateDtos>({
       msk: "",
@@ -68,7 +70,7 @@ export default function GeneratePasswordView() {
   };
 
   const textfieldTitle = (label: string, generatePswStateValue: string) => (
-    <div className="flex justify-between mb-2 space-x-4 items-center text-sm text-textfield_label font-medium">
+    <div className="flex justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <p className="font-medium ">{label}</p>
       {/* {!isEmpty(generatePswStateValue) && (
         <div className="flex items-center space-x-4">
@@ -200,8 +202,8 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      <div className="flex space-x-10 justify-between">
-        <div className="w-1/2">
+      <div className="flex flex-col md:flex-row md:space-x-10 justify-between">
+        <div className="md:w-1/2">
           {textfieldTitle(FormContent.YEAR, generatePswState.usernameEmail)}
           <MuiStyledTextField>
             <TextField
@@ -229,7 +231,7 @@ export default function GeneratePasswordView() {
           </MuiStyledTextField>
         </div>
 
-        <div className="w-1/2">
+        <div className="md:w-1/2">
           {textfieldTitle(FormContent.RETRIES, generatePswState.usernameEmail)}
           <MuiStyledTextField>
             <TextField
@@ -253,19 +255,18 @@ export default function GeneratePasswordView() {
     </>
   );
   return (
-    <div className="w-full h-full px-24 font-sans">
-      {passwordHash !== "" && generatedPassword}
-      <div className="px-24 py-16 space-y-8">
+    <div className="w-full h-full bg-white sm:px-2 md:px-10 2xl:px-24">
+      <div className="py-16 space-y-8">
         <div className="flex flex-col space-y-2 ">
-          <p className="font-bold text-3xl">
+          <p className="font-bold text-xl md:text-3xl">
             {generatePasswordViewConstants.title}
           </p>
-          <p className="text-sm text-lightGray font-normal">
+          <p className="text-xs md:text-sm text-lightGray font-normal">
             {generatePasswordViewConstants.description}
           </p>
         </div>
 
-        <div className="pt-8">{generatePasswordFormComponent}</div>
+        <div className="pt-4 md:pt-8">{generatePasswordFormComponent}</div>
       </div>
     </div>
   );

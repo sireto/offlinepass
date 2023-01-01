@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import CarouselIndicator from "../ui/carousel-indicator";
+import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
 
 interface IcarouselView {
   className: string;
@@ -11,6 +12,7 @@ interface IcarouselView {
 
 export default function CarouselView({ className }: IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
+  const breakpoint = useBreakpoint();
   const getCarouselItem = () => {
     return (
       <>
@@ -20,29 +22,17 @@ export default function CarouselView({ className }: IcarouselView) {
           width={450}
           alt="Cartooon logo"
         />
-        <p className="text-2xl text-center font-bold text-[#303030]">
+        <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">
           {carouselConstants[carouselSlideIndex].title}
         </p>
         <ReactMarkdown
           children={carouselConstants[carouselSlideIndex].description}
           remarkPlugins={[remarkGfm]}
-          className="text-lg text-center font-medium text-lightGray"
+          className="text-sm md:text-lg text-center font-medium text-lightGray"
         />
       </>
     );
   };
-
-  // const getCarouselIndicator = (onClick: MouseEventHandler | undefined, className) => {
-  //   return (
-  //     <button
-  //       onClick={onClick}
-  //       type="button"
-  //       className={`w-3 h-3 rounded-full mt-60 ${
-  //         carouselSlideIndex === 0 ? "bg-brand" : "bg-slate-300"
-  //       }`}
-  //     ></button>
-  //   );
-  // };
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,28 +47,31 @@ export default function CarouselView({ className }: IcarouselView) {
 
   return (
     <div
-      className={`flex relative flex-col  px-28 items-center  justify-center space-y-10 bg-lightBackground ${className}`}
+      className={`flex relative flex-col  px-8 md:px-14 2xl:px-28  py-12 md:py-20 lg:py-0 items-center  justify-center space-y-4 lg:space-y-10 bg-lightBackground ${className}`}
     >
       {getCarouselItem()}
 
       {/* carousel indicators */}
-      <div className="absolute flex space-x-3 bottom-12">
+      <div className="absolute flex space-x-3 bottom-6 lg:bottom-12">
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(0);
           }}
+          size={["xs", "sm"].indexOf(breakpoint) > 0 ? "mini" : "small"}
           color={carouselSlideIndex === 0 ? "primary" : "slate"}
         />
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
+          size={["xs", "sm"].indexOf(breakpoint) > 0 ? "mini" : "small"}
           color={carouselSlideIndex === 1 ? "primary" : "slate"}
         />
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
+          size={["xs", "sm"].indexOf(breakpoint) > 0 ? "mini" : "small"}
           color={carouselSlideIndex === 2 ? "primary" : "slate"}
         />
       </div>

@@ -15,9 +15,9 @@ const shapes: Record<ShapeNames, string[]> = {
 
 const sizes: Record<SizeNames, string[]> = {
   large: ["h-12 w-12", "h-12 w-32"],
-  medium: ["h-8 w-8", "h-8 w-24"],
-  small: ["h-6 w-6", "h-6 w-16"],
-  mini: ["h-3 w-3", "h-3 w-8"],
+  medium: ["h-6 w-6", "h-6 w-24"],
+  small: ["h-3 w-3", "h-3 w-8"],
+  mini: ["h-2 w-2", "h-1 w-8"],
 };
 
 const colors: Record<ColorNames, string[]> = {
@@ -36,7 +36,7 @@ export interface CaraouselProps
 const CarouselIndicator: React.FC<CaraouselProps> = ({
   onClick,
   shape = "circle",
-  size = "mini",
+  size = "small",
   color = "slate",
   className,
 }) => {
