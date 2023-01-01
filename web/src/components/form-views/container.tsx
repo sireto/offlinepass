@@ -18,7 +18,7 @@ function renderFormContent(view: FormViews) {
 
 export default function FormContainer({ formView }: FormContainerInterface) {
   return (
-    <div className="flex flex-col justify-center w-full h-full">
+    <div className="flex flex-col  justify-center w-full h-full px-8  bg-white">
       <div>{renderFormContent(formView)}</div>
     </div>
   );
