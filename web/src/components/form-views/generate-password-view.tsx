@@ -1,28 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
+import {
+  InputAdornment,
+  MenuItem,
+  TextField,
+  TextFieldProps,
+} from "@mui/material";
 import styled from "@emotion/styled";
 import Button from "@app/components/ui/button/button";
 import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
-import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
-import { toast } from "react-toastify";
-import { Eye } from "@app/components/icons/eye";
-import { EyeSlash } from "@app/components/icons/eyeslash";
-import Dropdown from "@app/components/year_dropdown";
-import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import { showSuccessModal } from "@app/lib/modals/showModals";
+import { useFormStatus } from "@app/lib/hooks/use-form-status";
 import { FormContent } from "@app/models/enums/formEnums";
-import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
-import { Copy } from "../icons/copy";
 import { hideString } from "@app/utils/stringUtils";
+import { Copy } from "../icons/copy";
+import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import { Eye } from "../icons/eye";
+import { EyeSlash } from "../icons/eyeslash";
+import Dropdown from "../year_dropdown";
+import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
+import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
+import { toast } from "react-toastify";
 
 const MuiStyledTextField = styled.div`
-  margin-bottom: 12px;
+  height: 55px;
+  border-radius: 12px;
+  margin-bottom: 22px;
   background-color: #f6f8fb;
 `;
 
 export default function GeneratePasswordView() {
-  // const [isMskVerified, setIsMskVerified] = useState(true);
   const [passwordHash, setPasswordHash] = useState("");
   const [isMskVisible, setMskVisiblity] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -34,7 +42,6 @@ export default function GeneratePasswordView() {
       date: moment(Date.now()).format("YYYY"),
       retries: 0,
     });
-
   const [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
@@ -61,7 +68,7 @@ export default function GeneratePasswordView() {
   };
 
   const textfieldTitle = (label: string, generatePswStateValue: string) => (
-    <div className="flex justify-between mb-2 space-x-4 mt-10 items-center">
+    <div className="flex justify-between mb-2 space-x-4 items-center text-sm text-textfield_label font-medium">
       <p className="font-medium ">{label}</p>
       {/* {!isEmpty(generatePswStateValue) && (
         <div className="flex items-center space-x-4">
@@ -77,7 +84,7 @@ export default function GeneratePasswordView() {
   const generatedPassword = (
     <div className="flex justify-between items-center">
       <div className="flex items-center px-10 bg-red-100 w-full space-x-3">
-        <p className=" font-bold text-red-600">
+        <p className=" font-bold text-green-400">
           Your password has been generated:{" "}
         </p>
         <p className="text-center font-bold px-3 my-2 text-red-800 py-1 bg-slate-100 rounded-lg">
@@ -106,13 +113,14 @@ export default function GeneratePasswordView() {
     </div>
   );
 
-  const mskFormComponent = (
+  const generatePasswordFormComponent = (
     <>
       {textfieldTitle(FormContent.SECURITY_KEY, generatePswState.msk)}
       <MuiStyledTextField>
         <TextField
           id="input-msk"
           value={generatePswState.msk}
+          className="inputRounded"
           type={isMskVisible ? "text" : "password"}
           helperText={
             !isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)
@@ -155,15 +163,11 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-    </>
-  );
-
-  const generatePasswordFormComponent = (
-    <>
       {textfieldTitle(FormContent.HOST, generatePswState.host)}
       <MuiStyledTextField>
         <TextField
           id="host"
+          className="inputRounded"
           value={generatePswState.host}
           placeholder="eg. facebook.com"
           variant="outlined"
@@ -183,6 +187,7 @@ export default function GeneratePasswordView() {
       <MuiStyledTextField>
         <TextField
           id="username/email"
+          className="inputRounded"
           value={generatePswState.usernameEmail}
           placeholder="eg. abc or abc@example.com"
           variant="outlined"
@@ -197,17 +202,39 @@ export default function GeneratePasswordView() {
       </MuiStyledTextField>
       <div className="flex space-x-10 justify-between">
         <div className="w-1/2">
-          <p className="font-medium mb-2">{FormContent.YEAR}</p>
-          <Dropdown
-            generatePswState={generatePswState}
-            setGeneratePswState={setGeneratePswState}
-          />
-        </div>
-        <div className="w-1/2">
-          <p className="font-medium mb-2">{FormContent.RETRIES}</p>
+          {textfieldTitle(FormContent.YEAR, generatePswState.usernameEmail)}
           <MuiStyledTextField>
             <TextField
               id="retries"
+              className="inputRounded"
+              type="number"
+              select
+              value={generatePswState.retries}
+              variant="outlined"
+              fullWidth
+              onChange={(event) =>
+                setGeneratePswState({
+                  ...generatePswState,
+                  retries: parseInt(event.currentTarget.value),
+                })
+              }
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+            >
+              {[2022, 2023].map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </MuiStyledTextField>
+        </div>
+
+        <div className="w-1/2">
+          {textfieldTitle(FormContent.RETRIES, generatePswState.usernameEmail)}
+          <MuiStyledTextField>
+            <TextField
+              id="retries"
+              className="inputRounded"
               type="number"
               value={generatePswState.retries}
               variant="outlined"
@@ -226,31 +253,19 @@ export default function GeneratePasswordView() {
     </>
   );
   return (
-    <div className="w-full  h-full ">
+    <div className="w-full h-full px-24 font-sans">
       {passwordHash !== "" && generatedPassword}
       <div className="px-24 py-16 space-y-8">
         <div className="flex flex-col space-y-2 ">
-          <p className="font-bold text-2xl">
+          <p className="font-bold text-3xl">
             {generatePasswordViewConstants.title}
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-lightGray font-normal">
             {generatePasswordViewConstants.description}
           </p>
         </div>
 
-        <div>
-          {mskFormComponent}
-          {generatePasswordFormComponent}
-        </div>
-
-        {/* {!isMskVerified && (
-        <p className="text-sm text-gray-500">
-          Don't have MSK?{" "}
-          <AnchorLink href={"/msk/generate"} className="text-red-400">
-            Generate one
-          </AnchorLink>
-        </p>
-      )} */}
+        <div className="pt-8">{generatePasswordFormComponent}</div>
       </div>
     </div>
   );

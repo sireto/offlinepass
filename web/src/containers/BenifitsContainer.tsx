@@ -2,9 +2,9 @@ import {
   openSourceConstants,
   offlineConstants,
   recoverableConstant,
-} from "@app/constants/benefits-constants";
+} from "@app/constants/benifits-constants";
 import React from "react";
-import BenefitsCard from "@app/components/benefit-card";
+import BenefitsCard from "@app/components/benefits-card";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 

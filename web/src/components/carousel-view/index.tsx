@@ -1,49 +1,50 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import remarkGfm from "remark-gfm";
-import { caroselConstants } from "@app/constants/carousel-constant";
+import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 interface IcarouselView {
-  className:string;
+  className: string;
 }
 
-export default function CarouselView({className}:IcarouselView) {
+export default function CarouselView({ className }: IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
   const carouselItem = () => {
     return (
       <>
         <Image
-          src={caroselConstants[carouselSlideIndex].src}
-          height={500}
+          src={carouselConstants[carouselSlideIndex].src}
+          height={450}
           width={450}
           alt="Cartooon logo"
         />
-        <p className="text-2xl text-center font-bold">
-          {caroselConstants[carouselSlideIndex].title}
+        <p className="text-2xl text-center font-bold text-[#303030]">
+          {carouselConstants[carouselSlideIndex].title}
         </p>
         <ReactMarkdown
-          children={caroselConstants[carouselSlideIndex].description}
+          children={carouselConstants[carouselSlideIndex].description}
           remarkPlugins={[remarkGfm]}
-          className="text-lg text-center font-medium text-gray-500"
+          className="text-lg text-center font-medium text-lightGray"
         />
       </>
     );
   };
   useEffect(() => {
     setTimeout(() => {
-      if (carouselSlideIndex === 2) {
+      if (carouselSlideIndex >= carouselConstants.length - 1) {
+        // reset
         setCarouselSlideIndex(0);
-      } else if (carouselSlideIndex === 0) {
-        setCarouselSlideIndex(1);
       } else {
-        setCarouselSlideIndex(2);
+        setCarouselSlideIndex(carouselSlideIndex + 1);
       }
     }, 5000);
   }, [carouselSlideIndex]);
 
   return (
-    <div className={`flex relative flex-col pb-60 px-10 items-center pt-20 justify-center space-y-10 bg-lightBackground ${className}`} >
+    <div
+      className={`flex relative flex-col  px-28 items-center  justify-center space-y-10 bg-lightBackground ${className}`}
+    >
       {carouselItem()}
       <div className="absolute flex space-x-3 pt-96">
         <button
