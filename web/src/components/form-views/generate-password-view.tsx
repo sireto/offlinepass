@@ -73,53 +73,52 @@ export default function GeneratePasswordView() {
   const generatePasswordFormComponent = (
     <>
       {textfieldTitle(FormContent.SECURITY_KEY, generatePswState.msk)}
-      <MuiStyledTextField>
-        <TextField
-          id="input-msk"
-          value={generatePswState.msk}
-          className="inputRounded"
-          type={isMskVisible ? "text" : "password"}
-          helperText={
-            !isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)
-              ? "Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters"
-              : ""
-          }
-          variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="start">
-                {isMskVisible ? (
-                  <Eye
-                    onClick={() => {
-                      setMskVisiblity(false);
-                    }}
-                    className="h-6 w-6 cursor-pointer"
-                  />
-                ) : (
-                  <EyeSlash
-                    onClick={() => {
-                      setMskVisiblity(true);
-                    }}
-                    className="h-6 w-6 cursor-pointer"
-                  />
-                )}
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-          error={
-            isEmpty(generatePswState.msk)
-              ? false
-              : !isMskValid(generatePswState.msk)
-          }
-          onChange={(event) =>
-            setGeneratePswState({
-              ...generatePswState,
-              msk: event.currentTarget.value,
-            })
-          }
-        />
-      </MuiStyledTextField>
+      <div>
+        <MuiStyledTextField>
+          <TextField
+            id="input-msk"
+            value={generatePswState.msk}
+            className="inputRounded"
+            type={isMskVisible ? "text" : "password"}
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  {isMskVisible ? (
+                    <Eye
+                      onClick={() => {
+                        setMskVisiblity(false);
+                      }}
+                      className="h-6 w-6 cursor-pointer"
+                    />
+                  ) : (
+                    <EyeSlash
+                      onClick={() => {
+                        setMskVisiblity(true);
+                      }}
+                      className="h-6 w-6 cursor-pointer"
+                    />
+                  )}
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            error={
+              isEmpty(generatePswState.msk)
+                ? false
+                : !isMskValid(generatePswState.msk)
+            }
+            onChange={(event) =>
+              setGeneratePswState({
+                ...generatePswState,
+                msk: event.currentTarget.value,
+              })
+            }
+          />
+        </MuiStyledTextField>
+        {!isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)
+          && <p className="text-xs text-red-700 -mt-4 mb-2">Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters</p>}
+      </div>
       {textfieldTitle(FormContent.HOST, generatePswState.host)}
       <MuiStyledTextField>
         <TextField
