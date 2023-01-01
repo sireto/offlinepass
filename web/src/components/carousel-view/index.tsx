@@ -5,6 +5,7 @@ import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import CarouselIndicator from "../ui/carousel-indicator";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
+import { customLoader } from "@app/components/customloader";
 
 interface IcarouselView {
   className: string;
@@ -13,6 +14,7 @@ interface IcarouselView {
 export default function CarouselView({ className }: IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
   const breakpoint = useBreakpoint();
+
   const getCarouselItem = () => {
     return (
       <>
@@ -20,6 +22,7 @@ export default function CarouselView({ className }: IcarouselView) {
           src={carouselConstants[carouselSlideIndex].src}
           height={450}
           width={450}
+          loader= {customLoader}
           alt="Cartooon logo"
         />
         <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">
