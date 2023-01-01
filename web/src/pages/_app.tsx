@@ -8,7 +8,9 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Head from "next/head";
 import store, { persistor } from "@app/store/store";
+import { disableLogInProduction } from "@app/utils/disableConsoleUtils";
 
+disableLogInProduction();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>

@@ -28,7 +28,9 @@ export default function Layout({ children }: React.PropsWithChildren) {
   return (
     <div className="flex flex-col font-inter min-h-screen bg-white dark:bg-dark">
       <Header />
-      <main className={`lg:h-screen w-screen pt-20 sm:pt-20`}>{children}</main>
+      <main className={`lg:h-screen w-screen pt-20 sm:pt-20 cursor-default`}>
+        {children}
+      </main>
     </div>
   );
 }
