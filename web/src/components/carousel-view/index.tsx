@@ -5,10 +5,10 @@ import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 interface IcarouselView {
-  className: string;
+  className:string;
 }
 
-export default function CarouselView({ className }: IcarouselView) {
+export default function CarouselView({className}:IcarouselView) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
   const carouselItem = () => {
     return (
@@ -42,9 +42,7 @@ export default function CarouselView({ className }: IcarouselView) {
   }, [carouselSlideIndex]);
 
   return (
-    <div
-      className={`flex relative flex-col  px-28 items-center  justify-center space-y-10 bg-lightBackground ${className}`}
-    >
+    <div className={`flex relative flex-col pb-60 px-10 items-center pt-20 justify-center space-y-10 bg-lightBackground ${className}`} >
       {carouselItem()}
       <div className="absolute flex space-x-3 pt-96">
         <button
