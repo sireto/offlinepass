@@ -129,17 +129,19 @@ export default function GeneratePasswordView() {
         generatePswState.msk,
         passwordProvider.msk !== generatePswState.msk
       )}
-      <MuiStyledTextField>
+      
+      {textfieldTitle(
+        FormContent.HOST,
+        generatePswState.host,
+        !passwordProvider.host.includes(generatePswState.host.toLowerCase())
+      )}
+      <div>
+        <MuiStyledTextField>
         <TextField
           id="input-msk"
           value={generatePswState.msk}
           className="inputRounded"
           type={isMskVisible ? "text" : "password"}
-          helperText={
-            !isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)
-              ? "Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters"
-              : ""
-          }
           variant="outlined"
           InputProps={{
             endAdornment: (
@@ -176,11 +178,9 @@ export default function GeneratePasswordView() {
           }
         />
       </MuiStyledTextField>
-      {textfieldTitle(
-        FormContent.HOST,
-        generatePswState.host,
-        !passwordProvider.host.includes(generatePswState.host.toLowerCase())
-      )}
+        {!isEmpty(generatePswState.msk) && !isMskValid(generatePswState.msk)
+          && <p className="text-xs text-red-700 -mt-4 mb-2">Security key must contain lowercase letter,uppercase letter,number,special character and at least 8 characters</p>}
+      </div>
       <MuiStyledTextField>
         <Autocomplete
           id="host"
@@ -245,7 +245,6 @@ export default function GeneratePasswordView() {
       <div className="flex flex-col md:flex-row md:space-x-10 justify-between">
         <div className="md:w-1/2">
           {textfieldTitle(FormContent.YEAR, generatePswState.date, false)}
-
           <MuiStyledTextField>
             <TextField
               id="date"

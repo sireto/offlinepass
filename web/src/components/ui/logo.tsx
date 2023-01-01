@@ -10,7 +10,7 @@ export default function Logo() {
       href={"/"}
       className="flex items-center font-Chau_Philomene_One space-x-4"
     >
-      <Image src={BrandLogo} loader={customLoader} alt={""} height={40} width={40} />
+      <Image src={BrandLogo} loader={customLoader} alt={""} height={40} width={60} />
       <div>
         <p className="font-medium text-2xl sm:text-3xl">
           Offline<span className="text-brand">Pass</span>
