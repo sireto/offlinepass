@@ -34,7 +34,7 @@ const PasswordToast = () => {
       initial="hidden"
       animate="visible"
       variants={toastVariants}
-      className={`flex z-20 fixed top-24  right-0 w-screen lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
+      className={`flex z-20 fixed top-20 sm:top-24  right-0 w-screen lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
     >
       <div className="flex items-center px-6 bg-success w-full h-full xl:space-x-3 ">
         <p className="hidden sm:block font-medium text-[#555555] ">

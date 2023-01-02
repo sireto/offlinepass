@@ -174,7 +174,6 @@ export default function GeneratePasswordView() {
         generatePswState.msk,
         passwordProvider.msk !== generatePswState.msk
       )}
-
       <div>
         <MuiStyledTextField>
           <TextField
