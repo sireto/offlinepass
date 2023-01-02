@@ -11,6 +11,9 @@ import store, { persistor } from "@app/store/store";
 import Script from "next/script";
 import Link from "next/link";
 import CookieConsent from "react-cookie-consent";
+import { disableLogInProduction } from "@app/utils/disableConsoleUtils";
+
+disableLogInProduction();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>

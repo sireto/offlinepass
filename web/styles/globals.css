@@ -104,6 +104,10 @@ a {
   border-radius: 12px;
 }
 
+.inputRounded:focus {
+  border-color: "#003E6B";
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

@@ -22,8 +22,6 @@ const passwordSlice = createSlice({
       state = initialState,
       action: PayloadAction<IPasswordState>
     ) {
-      console.log(state);
-      debugger;
       state = { ...action.payload };
       return state;
     },
