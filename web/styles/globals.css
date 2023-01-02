@@ -104,6 +104,10 @@ a {
   border-radius: 12px;
 }
 
+.inputBgLightGray .MuiOutlinedInput-root {
+  background-color: #f6f8fb;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
