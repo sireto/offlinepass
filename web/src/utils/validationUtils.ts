@@ -42,7 +42,7 @@ export function isNetherUndefinedNorNull(data: unknown): boolean {
 export const isEmpty = (value: string | any[]) => value.length === 0;
 export  const isMskValid = (value: string) => {
     if (
-      value.match(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,50}$/) &&
+      value.match(/^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*=+-~<>|_])[a-zA-Z0-9!@#$%^&*=+-~<>|_]{8,50}$/) &&
       !isEmpty(value)
     ) {
       return true;

@@ -31,7 +31,7 @@ export default function CarouselView({ className }: IcarouselView) {
         </p>
         <ReactMarkdown
           children={carouselConstants[carouselSlideIndex].description}
-          remarkPlugins={[remarkGfm]}
+          // remarkPlugins={[remarkGfm]}
           className="text-sm md:text-lg text-center font-medium text-lightGray"
         />
       </>
