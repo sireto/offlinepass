@@ -23,7 +23,6 @@ const passwordSlice = createSlice({
       action: PayloadAction<IPasswordState>
     ) {
       console.log(state);
-      debugger;
       state = { ...action.payload };
       return state;
     },

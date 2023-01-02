@@ -10,7 +10,15 @@ import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 import { FormContent } from "@app/models/enums/formEnums";
-import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import {
+  isContainLowercase,
+  isContainNumber,
+  isContainSpecialCharacter,
+  isContainUppercase,
+  isEmpty,
+  isMinimumCharacter,
+  isMskValid,
+} from "@app/utils/validationUtils";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
@@ -22,6 +30,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePassword } from "@app/lib/hooks/use-password";
 import { selectPasswordProvider } from "@app/store/password/selectors";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
+import { Check } from "../icons/check";
+import { Xmark } from "../icons/xmark";
+import { ErrorPasswordContentEnums } from "@app/models/enums/errorPasswordContentEnums";
+import ErrorPassword from "./errorPassword";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -99,6 +111,23 @@ export default function GeneratePasswordView() {
     }
   };
 
+  const passwordErrorhandler = (
+    errorPasswordContent: string,
+    isPasswordContentmatch: boolean
+  ) => {
+    <div
+      className={`flex space-x-4 text-sm ${
+        isPasswordContentmatch ? "text-green-600" : "text-red-600"
+      }`}
+    >
+      {isPasswordContentmatch ? (
+        <Check className="h-5 w-5" />
+      ) : (
+        <Xmark className="h-5 w-5" />
+      )}
+      {errorPasswordContent}
+    </div>;
+  };
   const textfieldTitle = (
     label: FormContent,
     generatePswStateValue: string,
@@ -121,6 +150,22 @@ export default function GeneratePasswordView() {
       )}
     </div>
   );
+  const isPasswordContentMatch = (key: string) => {
+    switch (key) {
+      case "LOWERCASE":
+        return isContainLowercase(generatePswState.msk);
+      case "UPPERCASE":
+        return isContainUppercase(generatePswState.msk);
+      case "NUMBER":
+        return isContainNumber(generatePswState.msk);
+      case "SPECIAL_CHARACTER":
+        return isContainSpecialCharacter(generatePswState.msk);
+      case "LENGTH":
+        return isMinimumCharacter(generatePswState.msk);
+      default:
+        return false;
+    }
+  };
 
   const generatePasswordFormComponent = (
     <>
@@ -130,7 +175,6 @@ export default function GeneratePasswordView() {
         passwordProvider.msk !== generatePswState.msk
       )}
 
-    
       <div>
         <MuiStyledTextField>
           <TextField
@@ -176,10 +220,23 @@ export default function GeneratePasswordView() {
         </MuiStyledTextField>
         {!isEmpty(generatePswState.msk) &&
           !isMskValid(generatePswState.msk) && (
-            <p className="text-xs text-red-700 -mt-4 mb-2">
-              Security key must contain lowercase letter,uppercase
-              letter,number,special character and at least 8 characters
-            </p>
+            <div className="flex flex-col text-xs text-textfield_label  -mt-2 mb-2 space-y-2">
+              <p className=" font-semibold">
+                Password Must contain the following :
+              </p>
+              {Object.keys(ErrorPasswordContentEnums).map((key) => {
+                return (
+                  <ErrorPassword
+                    key={key}
+                    isPasswordContentMatch={isPasswordContentMatch(key)}
+                    errorPasswordContent={ErrorPasswordContentEnums[key]}
+                  />
+                );
+              })}
+
+              {/* Security key must contain lowercase letter,uppercase
+              letter,number,special character and at least 8 characters */}
+            </div>
           )}
       </div>
       {textfieldTitle(

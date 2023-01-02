@@ -21,7 +21,7 @@ const PasswordToast = () => {
 
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
-    toast.success(`Copied!`, {
+    toast.success(`Password copied for host`, {
       autoClose: 1000,
     });
   };
@@ -40,6 +40,7 @@ const PasswordToast = () => {
         <p className="hidden sm:block font-medium text-[#555555] ">
           Your password has been generated:
         </p>
+        <Identicon string={passwordHash} size={25} />
         <p className="text-center font-bold px-3 my-2 text-[#353535] py-1  rounded-lg">
           {passwordHash.substring(0, 2) +
             hideString(passwordHash.substring(2), isPasswordVisible)}
@@ -63,9 +64,9 @@ const PasswordToast = () => {
       <button onClick={handleCopyPassword} className="px-3 py-3 bg-white">
         <Copy className="h-6 w-6" />
       </button>
-      <div className="absolute top-16 left-4 ">
+      {/* <div className="absolute top-16 left-4 ">
         <Identicon string={passwordHash} size={25} />
-      </div>
+      </div> */}
     </motion.div>
   );
 };
