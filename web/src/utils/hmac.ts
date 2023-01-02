@@ -5,7 +5,6 @@ export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
   const msg = `${getHostName(generatePswState.host).toLowerCase()}|${
     generatePswState.usernameEmail.toLowerCase()
   }|${generatePswState.date}|${checkRetries(generatePswState.retries)}`;
-  debugger;
   const hash = "SHA-256";
   const keyUnit8Array = new TextEncoder().encode(generatePswState.msk);
   const msgUnit8Array = new TextEncoder().encode(msg);
