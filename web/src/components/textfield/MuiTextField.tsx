@@ -2,7 +2,7 @@ import { isEmpty } from "@app/utils/validationUtils";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import React, { Ref } from "react";
 import cn from "classnames";
-import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 
 type TextFieldTypes = "normal" | "autocomplete";
 

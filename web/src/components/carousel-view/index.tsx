@@ -1,6 +1,5 @@
 import React, { MouseEventHandler, useEffect, useState } from "react";
 import Image from "next/image";
-import remarkGfm from "remark-gfm";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import CarouselIndicator from "../ui/carousel-indicator";
