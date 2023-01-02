@@ -1,9 +1,11 @@
 import { FormViews } from "@app/models/enums/formEnums";
-import GeneratePasswordView from "@app/components/generate-password/generate-password-view";
 import GenerateMskView from "@app/components/msk/generate-msk-view";
+import GeneratePasswordView from "./generate-password-view";
+import cn from "classnames";
 
 interface FormContainerInterface {
   formView: FormViews;
+  className?: string;
 }
 function renderFormContent(view: FormViews) {
   switch (view) {
@@ -16,9 +18,17 @@ function renderFormContent(view: FormViews) {
   }
 }
 
-export default function FormContainer({ formView }: FormContainerInterface) {
+export default function FormContainer({
+  formView,
+  className,
+}: FormContainerInterface) {
   return (
-    <div className="w-full h-full mx-4 sm:mx-8 md:mx-32 lg:mx-64 xl:mx-80 2xl:mx-80 3xl:w-1/2 px-4 sm:px-12 py-10 bg-white rounded-lg shadow-xl">
+    <div
+      className={cn(
+        "flex flex-col  justify-center w-full h-full px-8  bg-white",
+        className
+      )}
+    >
       <div>{renderFormContent(formView)}</div>
     </div>
   );

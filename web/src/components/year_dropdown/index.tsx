@@ -19,9 +19,9 @@ export default function Dropdown({
         onClick={() => {
           setDropDownState((prevCheck) => !prevCheck);
         }}
-        className="flex h-5 w-full cursor-pointer border mb-3 border-slate-400 shrink-0 items-center justify-center rounded-md py-7 text-gray-900 "
+        className="flex h-5 w-full cursor-pointer border mb-3 border-slate-500  bg-lightBackground shrink-0 items-center justify-center rounded-md py-7 text-gray-900 "
       >
-        <div className="flex justify-between items-center w-full px-3">
+        <div className="flex justify-between items-center w-full px-3 space-x-3">
           <p>{generatePswState.date}</p>
           <ChevronDown className="h-6 w-6" />
         </div>

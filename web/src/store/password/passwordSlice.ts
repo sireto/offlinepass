@@ -4,18 +4,14 @@ import storage from "redux-persist/lib/storage";
 
 export interface IPasswordState {
   msk: string;
-  host: string[];
-  usernameEmail: string[];
-  year: string;
-  retries: number;
+  hosts: string[];
+  usernameEmails: string[];
 }
 
 const initialState: IPasswordState = {
   msk: "",
-  host: [],
-  usernameEmail: [],
-  year: "",
-  retries: 0,
+  hosts: [],
+  usernameEmails: [],
 };
 
 const passwordSlice = createSlice({
@@ -26,8 +22,6 @@ const passwordSlice = createSlice({
       state = initialState,
       action: PayloadAction<IPasswordState>
     ) {
-      console.log(state);
-      debugger;
       state = { ...action.payload };
       return state;
     },
