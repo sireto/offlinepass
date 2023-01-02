@@ -9,7 +9,7 @@ import styled from "@emotion/styled";
 import { hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
-import { FormContent } from "@app/models/enums/formEnums";
+import { formTitleConstants } from "@app/constants/formtitle-constants";
 import {
   isContainLowercase,
   isContainNumber,
@@ -21,19 +21,15 @@ import {
 } from "@app/utils/validationUtils";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
-import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
-import { hideString } from "@app/utils/stringUtils";
-import { useCopyToClipboard } from "@app/lib/hooks/ use-copy-to-clipboard";
-import { toast } from "react-toastify";
-import { Copy } from "../icons/copy";
 import { useDispatch, useSelector } from "react-redux";
 import { usePassword } from "@app/lib/hooks/use-password";
 import { selectPasswordProvider } from "@app/store/password/selectors";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
-import { Check } from "../icons/check";
-import { Xmark } from "../icons/xmark";
-import { ErrorPasswordContentEnums } from "@app/models/enums/errorPasswordContentEnums";
-import ErrorPassword from "./errorPassword";
+import { mskErrorsConstants } from "@app/constants/error-constants";
+import { checkMskValidation } from "@app/utils/passwordUtils";
+import { MskErrorEnums } from "@app/models/enums/errorEnums";
+import MuiTextField from "../textfield/MuiTextField";
+import TextFieldError from "../ui/textfield-error";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -54,13 +50,21 @@ export default function GeneratePasswordView() {
     date: moment(Date.now()).format("YYYY"),
     retries: 0,
   });
+  const mskErrors = [
+    MskErrorEnums.LENGTH,
+    MskErrorEnums.LOWERCASE,
+    MskErrorEnums.SPECIAL_CHARACTER,
+    MskErrorEnums.UPPERCASE,
+    MskErrorEnums.NUMBER,
+  ];
+
+  const isFormFieldsValid =
+    !isEmpty(generatePswState.host) &&
+    !isEmpty(generatePswState.usernameEmail) &&
+    isMskValid(generatePswState.msk);
 
   useEffect(() => {
-    if (
-      !isEmpty(generatePswState.host) &&
-      !isEmpty(generatePswState.usernameEmail) &&
-      isMskValid(generatePswState.msk)
-    ) {
+    if (isFormFieldsValid) {
       handleGeneratePassword();
     } else {
       setPasswordHash("");
@@ -73,9 +77,9 @@ export default function GeneratePasswordView() {
     });
   };
 
-  const handleStore = (label: FormContent) => {
+  const handleStore = (label: string) => {
     switch (label) {
-      case FormContent.SECURITY_KEY:
+      case formTitleConstants.SECURITY_KEY:
         dispatch(
           setPasswordProvider({
             msk: generatePswState.msk,
@@ -84,7 +88,7 @@ export default function GeneratePasswordView() {
           })
         );
         break;
-      case FormContent.HOST:
+      case formTitleConstants.HOST:
         dispatch(
           setPasswordProvider({
             msk: passwordProvider.msk,
@@ -96,7 +100,7 @@ export default function GeneratePasswordView() {
           })
         );
         break;
-      case FormContent.USERNAME_EMAIL:
+      case formTitleConstants.USERNAME_EMAIL:
         dispatch(
           setPasswordProvider({
             msk: passwordProvider.msk,
@@ -111,25 +115,8 @@ export default function GeneratePasswordView() {
     }
   };
 
-  const passwordErrorhandler = (
-    errorPasswordContent: string,
-    isPasswordContentmatch: boolean
-  ) => {
-    <div
-      className={`flex space-x-4 text-sm ${
-        isPasswordContentmatch ? "text-green-600" : "text-red-600"
-      }`}
-    >
-      {isPasswordContentmatch ? (
-        <Check className="h-5 w-5" />
-      ) : (
-        <Xmark className="h-5 w-5" />
-      )}
-      {errorPasswordContent}
-    </div>;
-  };
   const textfieldTitle = (
-    label: FormContent,
+    label: string,
     generatePswStateValue: string,
     showStoreOption: boolean = true
   ) => (
@@ -150,100 +137,82 @@ export default function GeneratePasswordView() {
       )}
     </div>
   );
-  const isPasswordContentMatch = (key: string) => {
-    switch (key) {
-      case "LOWERCASE":
-        return isContainLowercase(generatePswState.msk);
-      case "UPPERCASE":
-        return isContainUppercase(generatePswState.msk);
-      case "NUMBER":
-        return isContainNumber(generatePswState.msk);
-      case "SPECIAL_CHARACTER":
-        return isContainSpecialCharacter(generatePswState.msk);
-      case "LENGTH":
-        return isMinimumCharacter(generatePswState.msk);
-      default:
-        return false;
-    }
-  };
 
   const generatePasswordFormComponent = (
     <>
-      {textfieldTitle(
-        FormContent.SECURITY_KEY,
+      {/* {textfieldTitle(
+        formTitleConstants.SECURITY_KEY,
         generatePswState.msk,
         passwordProvider.msk !== generatePswState.msk
-      )}
+      )} */}
 
       <div>
-        <MuiStyledTextField>
-          <TextField
-            id="input-msk"
-            value={generatePswState.msk}
-            className="inputRounded"
-            type={isMskVisible ? "text" : "password"}
-            variant="outlined"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  {isMskVisible ? (
-                    <Eye
-                      onClick={() => {
-                        setMskVisiblity(false);
-                      }}
-                      className="h-6 w-6 cursor-pointer"
-                    />
-                  ) : (
-                    <EyeSlash
-                      onClick={() => {
-                        setMskVisiblity(true);
-                      }}
-                      className="h-6 w-6 cursor-pointer"
-                    />
-                  )}
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            error={
-              isEmpty(generatePswState.msk)
-                ? false
-                : !isMskValid(generatePswState.msk)
-            }
-            onChange={(event) =>
-              setGeneratePswState({
-                ...generatePswState,
-                msk: event.currentTarget.value,
-              })
-            }
-          />
-        </MuiStyledTextField>
+        {/* <MuiStyledTextField> */}
+        <MuiTextField
+          id="input-msk"
+          showStoreOption={passwordProvider.msk !== generatePswState.msk}
+          label={formTitleConstants.SECURITY_KEY}
+          value={generatePswState.msk}
+          type={isMskVisible ? "text" : "password"}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="start">
+                {isMskVisible ? (
+                  <Eye
+                    onClick={() => {
+                      setMskVisiblity(false);
+                    }}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                ) : (
+                  <EyeSlash
+                    onClick={() => {
+                      setMskVisiblity(true);
+                    }}
+                    className="h-6 w-6 cursor-pointer"
+                  />
+                )}
+              </InputAdornment>
+            ),
+          }}
+          fullWidth
+          error={
+            isEmpty(generatePswState.msk)
+              ? false
+              : !isMskValid(generatePswState.msk)
+          }
+          onChange={(event) =>
+            setGeneratePswState({
+              ...generatePswState,
+              msk: event.currentTarget.value,
+            })
+          }
+        />
+        {/* </MuiStyledTextField> */}
         {!isEmpty(generatePswState.msk) &&
           !isMskValid(generatePswState.msk) && (
             <div className="flex flex-col text-xs text-textfield_label  -mt-2 mb-2 space-y-2">
               <p className=" font-semibold">
                 Password Must contain the following :
               </p>
-              {Object.keys(ErrorPasswordContentEnums).map((key) => {
+              {mskErrors.map((error) => {
                 return (
-                  <ErrorPassword
-                    key={key}
-                    isPasswordContentMatch={isPasswordContentMatch(key)}
-                    errorPasswordContent={ErrorPasswordContentEnums[key]}
+                  <TextFieldError
+                    key={error}
+                    showIcon
+                    error={!checkMskValidation(error, generatePswState.msk)}
+                    message={mskErrorsConstants[error]}
                   />
                 );
               })}
-
-              {/* Security key must contain lowercase letter,uppercase
-              letter,number,special character and at least 8 characters */}
             </div>
           )}
       </div>
-      {textfieldTitle(
-        FormContent.HOST,
+      {/* {textfieldTitle(
+        formTitleConstants.HOST,
         generatePswState.host,
         !passwordProvider.host.includes(generatePswState.host.toLowerCase())
-      )}
+      )} */}
       <MuiStyledTextField>
         <Autocomplete
           id="host"
@@ -254,13 +223,17 @@ export default function GeneratePasswordView() {
           freeSolo
           includeInputInList
           renderInput={(params) => (
-            <TextField
-              {...params}
+            <MuiTextField
+              label={formTitleConstants.HOST}
+              showStoreOption={
+                !passwordProvider.host.includes(
+                  generatePswState.host.toLowerCase()
+                )
+              }
               className="inputRounded"
               value={generatePswState.host}
               fullWidth
               placeholder="eg: facebook.com"
-              variant="outlined"
               onChange={(event) =>
                 setGeneratePswState({
                   ...generatePswState,
@@ -272,7 +245,7 @@ export default function GeneratePasswordView() {
         />
       </MuiStyledTextField>
       {textfieldTitle(
-        FormContent.USERNAME_EMAIL,
+        formTitleConstants.USERNAME_EMAIL,
         generatePswState.usernameEmail,
         !passwordProvider.usernameEmail.includes(
           generatePswState.usernameEmail.toLowerCase()
@@ -307,7 +280,11 @@ export default function GeneratePasswordView() {
       </MuiStyledTextField>
       <div className="flex flex-col md:flex-row md:space-x-10 justify-between">
         <div className="md:w-1/2">
-          {textfieldTitle(FormContent.YEAR, generatePswState.date, false)}
+          {textfieldTitle(
+            formTitleConstants.YEAR,
+            generatePswState.date,
+            false
+          )}
           <MuiStyledTextField>
             <TextField
               id="date"
@@ -336,7 +313,7 @@ export default function GeneratePasswordView() {
 
         <div className="md:w-1/2">
           {textfieldTitle(
-            FormContent.RETRIES,
+            formTitleConstants.RETRIES,
             generatePswState.retries.toString(),
             false
           )}

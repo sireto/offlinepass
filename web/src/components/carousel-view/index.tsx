@@ -5,14 +5,11 @@ import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import CarouselIndicator from "../ui/carousel-indicator";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
-import { customLoader } from "../customloader";
+import { customLoader } from "../../utils/customLoaderUtils";
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
+import cn from "classnames";
 
-interface IcarouselView {
-  className:string;
-}
-
-export default function CarouselView({className}:IcarouselView) {
+export default function CarouselView({ className }) {
   const [carouselSlideIndex, setCarouselSlideIndex] = useState(0);
   const breakpoint = useBreakpoint();
   const isMounted = useIsMounted();
@@ -23,7 +20,7 @@ export default function CarouselView({className}:IcarouselView) {
           src={carouselConstants[carouselSlideIndex].src}
           height={450}
           width={450}
-          loader= {customLoader}
+          loader={customLoader}
           alt="Cartooon logo"
         />
         <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">
@@ -49,12 +46,12 @@ export default function CarouselView({className}:IcarouselView) {
     }, 5000);
   }, [carouselSlideIndex]);
 
-  const size =
-    ["md", "lg", "xl", "2xl", "3xl"].indexOf(breakpoint) > 0 ? "small" : "mini";
-
   return (
     <div
-      className={`flex relative flex-col  px-8 md:px-14 2xl:px-28  py-16 md:py-20 lg:py-0 items-center  justify-center space-y-4 lg:space-y-10 bg-lightBackground ${className}`}
+      className={cn(
+        "flex relative flex-col  px-8 md:px-14 2xl:px-28  py-16 md:py-20 lg:py-0 items-center  justify-center space-y-4 lg:space-y-10 bg-lightBackground",
+        className
+      )}
     >
       {getCarouselItem()}
 
@@ -64,21 +61,27 @@ export default function CarouselView({className}:IcarouselView) {
           onClick={() => {
             setCarouselSlideIndex(0);
           }}
-          size={isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"}
+          size={
+            isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"
+          }
           color={carouselSlideIndex === 0 ? "primary" : "slate"}
         />
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
-          size={isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"}
+          size={
+            isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"
+          }
           color={carouselSlideIndex === 1 ? "primary" : "slate"}
         />
         <CarouselIndicator
           onClick={() => {
             setCarouselSlideIndex(1);
           }}
-          size={isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"}
+          size={
+            isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"
+          }
           color={carouselSlideIndex === 2 ? "primary" : "slate"}
         />
       </div>

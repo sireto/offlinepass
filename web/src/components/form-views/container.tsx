@@ -5,14 +5,15 @@ import cn from "classnames";
 
 interface FormContainerInterface {
   formView: FormViews;
+  // remove classname
   className?: string;
 }
 function renderFormContent(view: FormViews) {
   switch (view) {
     case FormViews.GENERATE_PASSWORD_VIEW:
       return <GeneratePasswordView />;
-    case FormViews.GENERATE_MSK_VIEW:
-      return <GenerateMskView />;
+    // case FormViews.GENERATE_MSK_VIEW:
+    //   return <GenerateMskView />;
     default:
       return null;
   }

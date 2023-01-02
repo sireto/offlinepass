@@ -1,7 +1,7 @@
 import { Copy } from "@app/components/icons/copy";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
-import { hideString } from "@app/utils/stringUtils";
+import { hideString } from "@app/utils/helperUtils";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
