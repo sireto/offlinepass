@@ -4,6 +4,7 @@ import {
   InputAdornment,
   MenuItem,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import styled from "@emotion/styled";
 import { hmacSha256 } from "@app/utils/hmac";
@@ -34,6 +35,7 @@ import { Check } from "../icons/check";
 import { Xmark } from "../icons/xmark";
 import { ErrorPasswordContentEnums } from "@app/models/enums/errorPasswordContentEnums";
 import ErrorPassword from "./errorPassword";
+import { InformationCircle } from "../icons/information-circle";
 
 const MuiStyledTextField = styled.div`
   height: 55px;
@@ -88,10 +90,7 @@ export default function GeneratePasswordView() {
         dispatch(
           setPasswordProvider({
             msk: passwordProvider.msk,
-            host: [
-              ...passwordProvider.host,
-              generatePswState.host.toLowerCase(),
-            ],
+            host: [...passwordProvider.host, generatePswState.host],
             usernameEmail: passwordProvider.usernameEmail,
           })
         );
@@ -103,7 +102,7 @@ export default function GeneratePasswordView() {
             host: passwordProvider.host,
             usernameEmail: [
               ...passwordProvider.usernameEmail,
-              generatePswState.usernameEmail.toLowerCase(),
+              generatePswState.usernameEmail,
             ],
           })
         );
@@ -252,6 +251,12 @@ export default function GeneratePasswordView() {
           fullWidth
           freeSolo
           includeInputInList
+          onSelect={(event) => {
+            setGeneratePswState({
+              ...generatePswState,
+              host: event.target["value"],
+            });
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -286,6 +291,12 @@ export default function GeneratePasswordView() {
           fullWidth
           freeSolo
           includeInputInList
+          onSelect={(event) => {
+            setGeneratePswState({
+              ...generatePswState,
+              usernameEmail: event.target["value"],
+            });
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -348,6 +359,24 @@ export default function GeneratePasswordView() {
               value={generatePswState.retries}
               variant="outlined"
               fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <Tooltip
+                      enterDelay={500}
+                      enterNextDelay={500}
+                      title="Number of times you changes the password in selected year "
+                      arrow
+                      className="cursor-pointer"
+                      placement="top-start"
+                    >
+                      <div>
+                        <InformationCircle className="h-7 w-7 text-brand" />
+                      </div>
+                    </Tooltip>
+                  </InputAdornment>
+                ),
+              }}
               onChange={(event) =>
                 setGeneratePswState({
                   ...generatePswState,
