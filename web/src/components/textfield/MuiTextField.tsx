@@ -42,6 +42,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   error,
   select,
   onChange,
+  onSelect,
   children,
   showStoreOption = false,
   fullWidth = true,
@@ -119,6 +120,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
                   InputProps={InputProps}
                   fullWidth={fullWidth}
                   error={error}
+                  onSelect={onSelect}
                   onChange={onChange}
                 />
               );
