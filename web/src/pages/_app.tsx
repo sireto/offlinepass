@@ -1,5 +1,6 @@
 import "../../styles/globals.css";
 import "../../styles/tailwind.css";
+import "../../styles/swiper.css";
 import type { AppProps } from "next/app";
 import Layout from "@app/layouts/_layout";
 import { ToastContainer } from "react-toastify";
