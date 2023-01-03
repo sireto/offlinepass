@@ -21,10 +21,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>OfflinePass</title>
       </Head>
       {/* <!-- Google tag (gtag.js) --> */}
-      <script
-        async
+      <Script
+        strategy="afterInteractive"
         src="https://www.googletagmanager.com/gtag/js?id=G-FGMGC6TQ6L"
-      ></script>
+      ></Script>
       <Script
         id="google-analytics"
         strategy="afterInteractive"
