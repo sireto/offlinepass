@@ -9,15 +9,18 @@ import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
 import { usePassword } from "@app/lib/hooks/use-password";
 import Identicon from "react-identicons";
 import VariantsAnimation from "@app/animation/variants-animation";
+import { useSelector } from "react-redux";
+import { selectPasswordProvider } from "@app/store/password/selectors";
 
 const PasswordToast = () => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const passwordProvider = useSelector(selectPasswordProvider);
   const { passwordHash } = usePassword();
   const [_, copyToClipboard] = useCopyToClipboard();
 
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
-    toast.success(`Password copied for host`, {
+    toast.success(`Password copied for ${passwordProvider.host}`, {
       autoClose: 1000,
     });
   };
@@ -31,8 +34,8 @@ const PasswordToast = () => {
       endingPostion={0}
       className={`flex z-20 fixed top-20 sm:top-24 right-0 w-screen bg-[#CDFFD8] lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
     >
-      <div className="flex items-center px-6  w-full h-full xl:space-x-3 ">
-        <p className="hidden sm:block font-medium text-[#555555] ">
+      <div className="flex items-center px-6  w-full h-full space-x-2 xl:space-x-3 ">
+        <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
           Your password has been generated:
         </p>
         <Identicon string={passwordHash} size={24} />

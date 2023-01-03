@@ -2,26 +2,11 @@ import { FormViews } from "@app/models/enums/formEnums";
 import GeneratePasswordView from "./generate-password-view";
 import cn from "classnames";
 
-interface IFormContainerProps {
-  formView: FormViews;
-  className?: string;
+function renderFormContent() {
+  return <GeneratePasswordView />;
 }
 
-function renderFormContent(view: FormViews) {
-  switch (view) {
-    case FormViews.GENERATE_PASSWORD_VIEW:
-      return <GeneratePasswordView />;
-    // case FormViews.GENERATE_MSK_VIEW:
-    //   return <GenerateMskView />;
-    default:
-      return null;
-  }
-}
-
-export default function FormContainer({
-  formView,
-  className,
-}: IFormContainerProps) {
+export default function FormContainer({ className }) {
   return (
     <div
       className={cn(
@@ -29,7 +14,7 @@ export default function FormContainer({
         className
       )}
     >
-      <div>{renderFormContent(formView)}</div>
+      <div>{renderFormContent()}</div>
     </div>
   );
 }

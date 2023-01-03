@@ -3,6 +3,7 @@ import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import React, { Ref } from "react";
 import cn from "classnames";
 import Autocomplete from "@mui/material/Autocomplete";
+import MuiTooltip from "../ui/tooltip/mui-tooltip";
 
 type TextFieldTypes = "normal" | "autocomplete";
 
@@ -21,6 +22,8 @@ const colors: Record<ColorNames, string> = {
 interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   shape?: string;
   showStoreOption?: boolean;
+  toolTipTitle?: string;
+  showTooltip?: boolean;
   onSave?: React.MouseEventHandler<HTMLButtonElement>;
   label: string;
   bgColor?: string;
@@ -45,12 +48,18 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   shape = shapes.pill,
   bgColor = colors.lightBlue,
   textfieldTypes = "normal",
+  showTooltip = false,
   options = [],
+  toolTipTitle = "",
   ...muiTextFieldProps
 }) => {
   const getTextFieldTitle = (
     <div className="flex  justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
-      <p className="font-medium ">{label}</p>
+      <div className="flex items-center font-medium">
+        {label}{" "}
+        {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />}
+      </div>
+
       {
         //@ts-ignore
         showStoreOption && !isEmpty(value) && (
