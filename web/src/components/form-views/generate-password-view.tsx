@@ -24,6 +24,7 @@ import { MskErrorEnums } from "@app/models/enums/errorEnums";
 import MuiTextField from "../textfield/MuiTextField";
 import TextFieldError from "../ui/textfield-error";
 import { InformationCircle } from "../icons/information-circle";
+import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -60,7 +61,6 @@ export default function GeneratePasswordView() {
     !isEmpty(generatePswState.host) &&
     !isEmpty(generatePswState.usernameEmail) &&
     isMskValid(generatePswState.msk);
-
 
   useEffect(() => {
     if (isFormFieldsValid) {
@@ -247,25 +247,9 @@ export default function GeneratePasswordView() {
               label={formTitleConstants.RETRIES}
               type="number"
               value={generatePswState.retries}
+              toolTipTitle={numOfPasswordChangesTP}
+              showTooltip
               fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <Tooltip
-                      enterDelay={500}
-                      enterNextDelay={500}
-                      title="Number of times you changes the password in selected year "
-                      arrow
-                      className="cursor-pointer"
-                      placement="top-start"
-                    >
-                      <div>
-                        <InformationCircle className="h-7 w-7 text-brand" />
-                      </div>
-                    </Tooltip>
-                  </InputAdornment>
-                ),
-              }}
               onChange={(event) =>
                 setGeneratePswState({
                   ...generatePswState,
