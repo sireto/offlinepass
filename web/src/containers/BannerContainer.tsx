@@ -4,18 +4,33 @@ import { bannerConstants } from "@app/constants/banner-constants";
 import Button from "@app/components/ui/button/button";
 import AnchorLink from "@app/components/ui/links/anchor-link";
 import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
-import { customLoader } from "@app/components/customloader";
+import { customLoader } from "@app/utils/customLoaderUtils";
 
 export default function BannerContainer() {
   const breakpoint = useBreakpoint();
 
   const getResponsiveBannerImage = () => {
-    switch (breakpoint) {
-      case "3xl":
-        return <Image src={BannerImage} loader={customLoader} alt={""} height={600} width={400} />;
-      default:
-        return <Image src={BannerImage} loader={customLoader} alt={""} height={600} width={350} />;
+    if (breakpoint === "3xl") {
+      return (
+        <Image
+          src={BannerImage}
+          loader={customLoader}
+          alt={""}
+          height={600}
+          width={400}
+        />
+      );
     }
+
+    return (
+      <Image
+        src={BannerImage}
+        loader={customLoader}
+        alt={""}
+        height={600}
+        width={350}
+      />
+    );
   };
 
   const bannerDetailsComponent = (
