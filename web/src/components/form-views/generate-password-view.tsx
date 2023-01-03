@@ -216,7 +216,7 @@ export default function GeneratePasswordView() {
                 hosts: passwordProvider.hosts,
                 usernameEmails: [
                   ...passwordProvider.usernameEmails,
-                  generatePswState.usernameEmail.toLowerCase(),
+                  generatePswState.usernameEmail,
                 ],
               })
             );
