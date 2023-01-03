@@ -8,10 +8,7 @@ export default function Home() {
     <div className="flex flex-col lg:flex-row md:space-y-8 lg:space-y-0 w-full h-full">
       <PasswordToast />
       <CarouselView className="w-full lg:w-1/2 xl:w-2/5 h-full" />
-      <FormContainer
-        className="w-full lg:w-1/2 xl:w-3/5"
-        formView={FormViews.GENERATE_PASSWORD_VIEW}
-      />
+      <FormContainer className="w-full lg:w-1/2 xl:w-3/5" />
     </div>
   );
 }
