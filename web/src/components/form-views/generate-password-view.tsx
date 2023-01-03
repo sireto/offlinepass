@@ -62,6 +62,7 @@ export default function GeneratePasswordView() {
     !isEmpty(generatePswState.usernameEmail) &&
     isMskValid(generatePswState.msk);
 
+
   useEffect(() => {
     if (isFormFieldsValid) {
       handleGeneratePassword();
@@ -144,7 +145,6 @@ export default function GeneratePasswordView() {
             </div>
           )}
       </div>
-
       <MuiStyledTextField>
         <MuiTextField
           id="host"
@@ -190,6 +190,7 @@ export default function GeneratePasswordView() {
               generatePswState.usernameEmail.toLowerCase()
             )
           }
+
           fullWidth
           placeholder="eg: abc or abc@example.com"
           onChange={(event) =>
