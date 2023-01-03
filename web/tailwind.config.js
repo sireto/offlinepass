@@ -27,7 +27,8 @@ module.exports = {
         textfield_stroke: "#D9E5F6",
         textfield_label: "#4E4E4E",
 
-        success: "#CDFFD8",
+        success: "#4BB543",
+        danger: "#df4759",
       },
     },
   },

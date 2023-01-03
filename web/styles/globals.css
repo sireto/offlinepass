@@ -104,8 +104,8 @@ a {
   border-radius: 12px;
 }
 
-.inputRounded:focus {
-  border-color: "#003E6B";
+.inputBgLightGray .MuiOutlinedInput-root {
+  background-color: #f6f8fb;
 }
 
 @media (prefers-color-scheme: dark) {

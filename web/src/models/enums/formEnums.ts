@@ -5,9 +5,9 @@ export enum FormViews {
 }
 
 export enum FormContent {
-  SECURITY_KEY="Security Key",
-  HOST="Host",
-  USERNAME_EMAIL="Username/Email",
-  YEAR="Year",
-  RETRIES="No of password changes",
+  SECURITY_KEY = "Security Key",
+  HOST = "Host",
+  USERNAME_EMAIL = "Username/Email",
+  YEAR = "Year",
+  RETRIES = "No of password changes",
 }
