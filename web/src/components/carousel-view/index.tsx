@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -8,20 +8,37 @@ import { customLoader } from "../../utils/customLoaderUtils";
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 import cn from "classnames";
 import { useCarouselIndex } from "@app/lib/hooks/use-carousel-slide-index";
+import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from "swiper/react";
+import SwiperCore, { Autoplay } from "swiper";
+import "swiper/css/bundle";
 
+import { Pagination } from "swiper";
 
 export default function CarouselView({ className }) {
+  const swiperRef = useRef<SwiperCore>();
   const breakpoint = useBreakpoint();
   const isMounted = useIsMounted();
-  const { carouselIndex, setCarouselIndex } = useCarouselIndex();
-  const getCarouselItem = () => {
+  // autoplay init
+  SwiperCore.use([Autoplay]);
+  const onInit = (Swiper: SwiperCore): void => {
+    swiperRef.current = Swiper;
+  };
+  // hover on carousel pause
+  const handleMouseEnter = () => {
+    if (swiperRef.current) swiperRef.current.autoplay.stop();
+  };
+  const handleMouseLeave = () => {
+    if (swiperRef.current) swiperRef.current.autoplay.start();
+  };
+  const getCarouselItem = (carouselIndex: number) => {
     return (
-      <>
+      <div className="flex flex-col items-center lg:pt-10 sm:pt-0 justify-center space-y-4 lg:space-y-10">
         <Image
           src={carouselConstants[carouselIndex].src}
           height={450}
           width={450}
           loader={customLoader}
+          className="h-full w-full"
           alt="Cartooon logo"
         />
         <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">
@@ -32,66 +49,35 @@ export default function CarouselView({ className }) {
           // remarkPlugins={[remarkGfm]}
           className="text-sm md:text-lg text-center font-medium text-lightGray"
         />
-      </>
+      </div>
     );
   };
 
-  const sliderTime = setTimeout(() => {
-    if (carouselIndex === 2) {
-      setCarouselIndex(0);
-    } else if (carouselIndex === 1) {
-      setCarouselIndex(2);
-    } else if (carouselIndex === 0) {
-      setCarouselIndex(1);
-    }
-  }, 5000);
-
-  useEffect(() => {
-    sliderTime;
-  }, []);
-
   return (
     <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={cn(
-        "flex relative flex-col  px-8 md:px-14 2xl:px-28  py-16 md:py-20 lg:py-0 items-center  justify-center space-y-4 lg:space-y-10 bg-lightBackground",
+        "px-6 md:px-12 2xl:px-26  py-16 md:py-20 lg:py-0 bg-lightBackground",
         className
       )}
     >
-      {getCarouselItem()}
-
-      {/* carousel indicators */}
-      <div className="absolute flex space-x-3 bottom-6 lg:bottom-12">
-        <CarouselIndicator
-          onClick={() => {
-            setCarouselIndex(0);
-            clearInterval(sliderTime);
-          }}
-          size={
-            isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"
-          }
-          color={carouselIndex === 0 ? "primary" : "slate"}
-        />
-        <CarouselIndicator
-          onClick={() => {
-            setCarouselIndex(1);
-            clearInterval(sliderTime);
-          }}
-          size={
-            isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"
-          }
-          color={carouselIndex === 1 ? "primary" : "slate"}
-        />
-        <CarouselIndicator
-          onClick={() => {
-            setCarouselIndex(2);
-            clearInterval(sliderTime);
-          }}
-          size={
-            isMounted && ["xs", "sm"].indexOf(breakpoint) < 0 ? "small" : "mini"
-          }
-          color={carouselIndex === 2 ? "primary" : "slate"}
-        />
-      </div>
+      <Swiper
+        spaceBetween={1}
+        slidesPerView={1}
+        autoplay
+        onInit={onInit}
+        speed={500}
+        pagination={{
+          clickable: true,
+        }}
+        className="min-h-full"
+        modules={[Pagination]}
+      >
+        <SwiperSlide>{getCarouselItem(0)}</SwiperSlide>
+        <SwiperSlide>{getCarouselItem(1)}</SwiperSlide>
+        <SwiperSlide>{getCarouselItem(2)}</SwiperSlide>
+      </Swiper>
     </div>
   );
 }
