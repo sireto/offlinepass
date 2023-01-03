@@ -25,6 +25,7 @@ import MuiTextField from "../textfield/MuiTextField";
 import TextFieldError from "../ui/textfield-error";
 import { InformationCircle } from "../icons/information-circle";
 import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
+import { toLowerCaseAllElement } from "@app/utils/helperUtils";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -61,7 +62,6 @@ export default function GeneratePasswordView() {
     !isEmpty(generatePswState.host) &&
     !isEmpty(generatePswState.usernameEmail) &&
     isMskValid(generatePswState.msk);
-
 
   useEffect(() => {
     if (isFormFieldsValid) {
@@ -118,8 +118,8 @@ export default function GeneratePasswordView() {
               dispatch(
                 setPasswordProvider({
                   msk: generatePswState.msk,
-                  host: passwordProvider.host,
-                  usernameEmail: passwordProvider.usernameEmail,
+                  hosts: passwordProvider.hosts,
+                  usernameEmails: passwordProvider.usernameEmails,
                 })
               );
             }}
@@ -151,11 +151,13 @@ export default function GeneratePasswordView() {
           label={formTitleConstants.HOST}
           value={generatePswState.host}
           textfieldTypes="autocomplete"
-          options={passwordProvider.host}
+          options={passwordProvider.hosts}
           fullWidth
           placeholder="eg: facebook.com"
           showStoreOption={
-            !passwordProvider.host.includes(generatePswState.host.toLowerCase())
+            !toLowerCaseAllElement(passwordProvider.hosts).includes(
+              generatePswState.host.toLowerCase()
+            )
           }
           onChange={(event) =>
             setGeneratePswState({
@@ -163,15 +165,18 @@ export default function GeneratePasswordView() {
               host: event.target.value,
             })
           }
+          onSelect={(event) => {
+            setGeneratePswState({
+              ...generatePswState,
+              host: event.target["value"],
+            });
+          }}
           onSave={() => {
             dispatch(
               setPasswordProvider({
                 msk: passwordProvider.msk,
-                host: [
-                  ...passwordProvider.host,
-                  generatePswState.host.toLowerCase(),
-                ],
-                usernameEmail: passwordProvider.usernameEmail,
+                hosts: [...passwordProvider.hosts, generatePswState.host],
+                usernameEmails: passwordProvider.usernameEmails,
               })
             );
           }}
@@ -184,13 +189,18 @@ export default function GeneratePasswordView() {
           label={formTitleConstants.USERNAME_EMAIL}
           value={generatePswState.usernameEmail}
           textfieldTypes="autocomplete"
-          options={passwordProvider.usernameEmail}
+          options={passwordProvider.usernameEmails}
+          onSelect={(event) => {
+            setGeneratePswState({
+              ...generatePswState,
+              usernameEmail: event.target["value"],
+            });
+          }}
           showStoreOption={
-            !passwordProvider.usernameEmail.includes(
+            !toLowerCaseAllElement(passwordProvider.usernameEmails).includes(
               generatePswState.usernameEmail.toLowerCase()
             )
           }
-
           fullWidth
           placeholder="eg: abc or abc@example.com"
           onChange={(event) =>
@@ -203,9 +213,9 @@ export default function GeneratePasswordView() {
             dispatch(
               setPasswordProvider({
                 msk: passwordProvider.msk,
-                host: passwordProvider.host,
-                usernameEmail: [
-                  ...passwordProvider.usernameEmail,
+                hosts: passwordProvider.hosts,
+                usernameEmails: [
+                  ...passwordProvider.usernameEmails,
                   generatePswState.usernameEmail.toLowerCase(),
                 ],
               })
