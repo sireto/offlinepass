@@ -5,7 +5,7 @@ import React from "react";
 export default function GenerateMsk() {
   return (
     <div className="flex w-full min-h-screen justify-center py-44 bg-lightBackground">
-      <FormContainer formView={FormViews.GENERATE_MSK_VIEW} />
+      <FormContainer className={undefined} />
     </div>
   );
 }

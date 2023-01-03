@@ -20,7 +20,7 @@ const PasswordToast = () => {
 
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
-    toast.success(`Password copied for ${passwordProvider.host}`, {
+    toast.success(`Password copied for ${passwordProvider.hosts}`, {
       autoClose: 1000,
     });
   };
