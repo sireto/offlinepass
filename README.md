@@ -20,9 +20,9 @@ All you need to store is Master Security Key (MSK). This key is used to generate
 Passwords are generated using secure hash functions using the following algorithm
 ``` 
 PasswordHash = hmac(MSK,Message,sha256_algorithm)
-Password     = Index$PasswordHash
+Password     = No_of_password_changed$PasswordHash
 ```
-- The generated passwords are based on MSK and Message.
+- The generated passwords are based on MSK ,Message.
 - Message = Host | Identity | Year | No of password changed
 - MSK: Master Security Key
 - Host: Host indicates the URL of the app or website. For eg. facebook.com, twitter.com, gmail.com, github.com, ...
@@ -42,7 +42,7 @@ PasswordHash = hmac(MSK,Message,sha256_algorithm)
              = hmac("H@rdPassw0rd",`twitter.com | mail@example.com | 2023 | 0`,"SHA-256")
              = 87booSaeaKYnhgEq
 
-Password     = No_of_password_change$PasswordHash 
+Password     = No_of_password_changed$PasswordHash 
              = 0$87booSaeaKYnhgEq
 ```
 
