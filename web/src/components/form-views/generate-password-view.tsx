@@ -280,8 +280,8 @@ export default function GeneratePasswordView() {
   );
 
   return (
-    <div className="w-full h-full bg-white sm:px-2 md:px-10 lg:px-6 xl:px-24 2xl:px-32 3xl:px-44">
-      <div className="py-16 space-y-8">
+    <div className="w-full h-full bg-white  sm:px-2 md:px-10 lg:px-6 xl:px-24 2xl:px-32 3xl:px-44">
+      <div className="pt-16 space-y-8">
         <div className="flex flex-col space-y-2 ">
           <p className="font-bold text-xl md:text-3xl text-black">
             {generatePasswordViewConstants.title}

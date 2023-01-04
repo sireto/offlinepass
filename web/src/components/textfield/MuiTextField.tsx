@@ -39,6 +39,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   className,
   onSave,
   InputProps,
+  placeholder,
   error,
   select,
   onChange,
@@ -114,6 +115,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
                   value={value}
                   {...params}
                   ref={params.InputProps.ref}
+                  placeholder={placeholder}
                   className={cn(shape, bgColor, className)}
                   type={type}
                   variant="outlined"
