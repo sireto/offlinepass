@@ -23,9 +23,9 @@ import { checkMskValidation } from "@app/utils/passwordUtils";
 import { MskErrorEnums } from "@app/models/enums/errorEnums";
 import MuiTextField from "../textfield/MuiTextField";
 import TextFieldError from "../ui/textfield-error";
-import { InformationCircle } from "../icons/information-circle";
 import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
+import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -36,13 +36,14 @@ export default function GeneratePasswordView() {
   const [isMskVisible, setMskVisiblity] = useState(false);
   const dispatch = useDispatch();
   const passwordProvider = useSelector(selectPasswordProvider);
-  const [generatePswState, setGeneratePswState] = useState({
-    msk: passwordProvider.msk,
-    host: "",
-    usernameEmail: "",
-    date: moment(Date.now()).format("YYYY"),
-    retries: 0,
-  });
+  const {generatePswState,setGeneratePswState} = useGeneratePasswordState();
+  // const [generatePswState, setGeneratePswState] = useState({
+  //   msk: passwordProvider.msk,
+  //   host: "",
+  //   usernameEmail: "",
+  //   date: moment(Date.now()).format("YYYY"),
+  //   retries: 0,
+  // });
 
   const mskErrors = [
     MskErrorEnums.LENGTH,
@@ -69,8 +70,18 @@ export default function GeneratePasswordView() {
     } else {
       setPasswordHash("");
     }
+   
   }, [generatePswState]);
 
+  useEffect(()=>{
+    setGeneratePswState({
+      msk: passwordProvider.msk,
+      host: "",
+      usernameEmail: "",
+      date: moment(Date.now()).format("YYYY"),
+      retries: 0,
+    })
+  },[])
   const generatePasswordFormComponent = (
     <>
       <div>
