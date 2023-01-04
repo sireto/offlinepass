@@ -12,13 +12,13 @@ export const carouselConstants = [
   {
     title: "Philosophy",
     description:
-      "No central server. No server at all. Fully client side. Works Offline. No data to store or share No data or passwords to backup. Backup your Master Key only. No hidden agenda or false promise of security. We’re open source. Check the code for yourself",
+      `- No central server. No server at all. Fully client side. Works Offline.  \n- No data to store or share.  \n- No data or passwords to backup. Backup your Master Key only.\n- No hidden agenda or false promise of security. We’re open source. Check the code for yourself`,
     src: GeneratePasswordLogo,
   },
   {
     title: "Source Code",
     description:
-      "[https://github.com/sireto/offlinepass](https://github.com/sireto/offlinepass)",
+      `https://github.com/sireto/offlinepass`,
     src: Github,
   },
 ];

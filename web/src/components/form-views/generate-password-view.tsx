@@ -23,9 +23,9 @@ import { checkMskValidation } from "@app/utils/passwordUtils";
 import { MskErrorEnums } from "@app/models/enums/errorEnums";
 import MuiTextField from "../textfield/MuiTextField";
 import TextFieldError from "../ui/textfield-error";
-import { InformationCircle } from "../icons/information-circle";
 import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
+import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -36,13 +36,7 @@ export default function GeneratePasswordView() {
   const [isMskVisible, setMskVisiblity] = useState(false);
   const dispatch = useDispatch();
   const passwordProvider = useSelector(selectPasswordProvider);
-  const [generatePswState, setGeneratePswState] = useState({
-    msk: passwordProvider.msk,
-    host: "",
-    usernameEmail: "",
-    date: moment(Date.now()).format("YYYY"),
-    retries: 0,
-  });
+  const {generatePswState,setGeneratePswState} = useGeneratePasswordState();
 
   const mskErrors = [
     MskErrorEnums.LENGTH,
@@ -69,8 +63,18 @@ export default function GeneratePasswordView() {
     } else {
       setPasswordHash("");
     }
+   
   }, [generatePswState]);
 
+  useEffect(()=>{
+    setGeneratePswState({
+      msk: passwordProvider.msk,
+      host: "",
+      usernameEmail: "",
+      date: moment(Date.now()).format("YYYY"),
+      retries: 0,
+    })
+  },[])
   const generatePasswordFormComponent = (
     <>
       <div>
@@ -255,7 +259,7 @@ export default function GeneratePasswordView() {
           <MuiStyledTextField>
             <MuiTextField
               id="retries"
-              label={formTitleConstants.RETRIES}
+              label={`${formTitleConstants.RETRIES} ${generatePswState.date}`}
               type="number"
               value={generatePswState.retries}
               toolTipTitle={numOfPasswordChangesTP}
@@ -279,7 +283,7 @@ export default function GeneratePasswordView() {
     <div className="w-full h-full bg-white sm:px-2 md:px-10 lg:px-6 xl:px-24 2xl:px-32 3xl:px-44">
       <div className="py-16 space-y-8">
         <div className="flex flex-col space-y-2 ">
-          <p className="font-bold text-xl md:text-3xl">
+          <p className="font-bold text-xl md:text-3xl text-black">
             {generatePasswordViewConstants.title}
           </p>
           <p className="text-xs md:text-sm text-lightGray font-normal">

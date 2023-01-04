@@ -11,16 +11,18 @@ import Identicon from "react-identicons";
 import VariantsAnimation from "@app/animation/variants-animation";
 import { useSelector } from "react-redux";
 import { selectPasswordProvider } from "@app/store/password/selectors";
+import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
+import { getHostName } from "@app/utils/hmac";
 
 const PasswordToast = () => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const passwordProvider = useSelector(selectPasswordProvider);
   const { passwordHash } = usePassword();
+  const {generatePswState} = useGeneratePasswordState();
   const [_, copyToClipboard] = useCopyToClipboard();
 
   const handleCopyPassword = () => {
     copyToClipboard(passwordHash!);
-    toast.success(`Password copied for ${passwordProvider.hosts}`, {
+    toast.success(`Password copied for ${getHostName(generatePswState.host)}`, {
       autoClose: 1000,
     });
   };
@@ -32,9 +34,9 @@ const PasswordToast = () => {
     <VariantsAnimation
       startingPosition={-20}
       endingPostion={0}
-      className={`flex z-20 fixed top-20 sm:top-24 right-0 w-screen bg-[#CDFFD8] lg:w-1/2 xl:w-3/5 text-sm xl:text-base justify-between items-center`}
+      className={`flex z-20 fixed top-20 sm:top-24 right-0 w-screen  lg:w-1/2 xl:w-3/5 text-sm xl:text-base items-center`}
     >
-      <div className="flex items-center px-6  w-full h-full space-x-2 xl:space-x-3 ">
+      <div className="flex items-center px-6  w-full h-full space-x-2 bg-[#CDFFD8] justify-start lg:justify-center xl:justify-center xl:space-x-3 ">
         <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
           Your password has been generated:
         </p>
@@ -58,13 +60,14 @@ const PasswordToast = () => {
             className="h-6 w-6 cursor-pointer"
           />
         )}
-      </div>
-      <button
+          <button
         onClick={handleCopyPassword}
-        className="h-full px-3 py-3 bg-white"
+        className="h-full px-3 py-3 "
       >
         <Copy className="h-6 w-6" />
       </button>
+      </div>
+    
     </VariantsAnimation>
   );
 };
