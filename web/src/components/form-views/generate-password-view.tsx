@@ -37,13 +37,6 @@ export default function GeneratePasswordView() {
   const dispatch = useDispatch();
   const passwordProvider = useSelector(selectPasswordProvider);
   const {generatePswState,setGeneratePswState} = useGeneratePasswordState();
-  // const [generatePswState, setGeneratePswState] = useState({
-  //   msk: passwordProvider.msk,
-  //   host: "",
-  //   usernameEmail: "",
-  //   date: moment(Date.now()).format("YYYY"),
-  //   retries: 0,
-  // });
 
   const mskErrors = [
     MskErrorEnums.LENGTH,
@@ -266,7 +259,7 @@ export default function GeneratePasswordView() {
           <MuiStyledTextField>
             <MuiTextField
               id="retries"
-              label={formTitleConstants.RETRIES}
+              label={`${formTitleConstants.RETRIES} ${generatePswState.date}`}
               type="number"
               value={generatePswState.retries}
               toolTipTitle={numOfPasswordChangesTP}
