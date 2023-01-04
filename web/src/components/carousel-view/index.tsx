@@ -54,7 +54,7 @@ export default function CarouselView({ className }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "px-6 md:px-12 2xl:px-26 py-16 md:py-20 h-full lg:py-0 bg-lightBackground",
+        "px-6 md:px-12 2xl:px-26 pt-16 md:py-20 h-full lg:py-0 ",
         className
       )}
     >
@@ -67,7 +67,7 @@ export default function CarouselView({ className }) {
         pagination={{
           clickable: true,
         }}
-        className=" lg:h-[600px] h-[470px]"
+        className=" lg:h-[620px] h-[470px]"
         modules={[Pagination]}
       >
         <SwiperSlide>{getCarouselItem(0)}</SwiperSlide>
