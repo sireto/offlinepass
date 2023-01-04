@@ -15,10 +15,11 @@
   
   .swiper-container {
     height: 268px;
+    overflow: visible;
   }
   
   .swiper-pagination {
-    bottom: 0;
+    bottom: 0; 
   }
   
   /* .swiper-pagination-bullet {

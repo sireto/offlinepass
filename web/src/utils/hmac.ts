@@ -1,10 +1,15 @@
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
 import hmac from "js-crypto-hmac";
+import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
+import { isValidUrl } from "./validationUtils";
 const bs58 = require("bs58");
 export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
-  const msg = `${getHostName(generatePswState.host).toLowerCase()}|${
-    generatePswState.usernameEmail.toLowerCase()
-  }|${generatePswState.date}|${checkRetries(generatePswState.retries)}`;
+  const msg = `${getHostName(
+    generatePswState.host
+  ).toLowerCase()}|${generatePswState.usernameEmail.toLowerCase()}|${
+    generatePswState.date
+  }|${checkRetries(generatePswState.retries)}`;
+  debugger;
   const hash = "SHA-256";
   const keyUnit8Array = new TextEncoder().encode(generatePswState.msk);
   const msgUnit8Array = new TextEncoder().encode(msg);
@@ -30,8 +35,11 @@ const checkRetries = (retries: number) => {
 };
 
 export const getHostName = (host: string) => {
-  const removeProtocolHttps = host.replace("https://", "");
-  const removeProtocolHttp = removeProtocolHttps.replace("http://", "");
-  const removeWWW = removeProtocolHttp.replace("www.", "");
-  return removeWWW.toString().replace(/,/g, "");
+  if (!isValidUrl(host)) return host;
+  const removeWWW = host.replace("www.", "");
+  const addProtocol =
+    removeWWW.includes("https://") || removeWWW.includes("http://")
+      ? removeWWW
+      : "http://".concat(removeWWW);
+  return parseUrl(addProtocol).hostname!;
 };

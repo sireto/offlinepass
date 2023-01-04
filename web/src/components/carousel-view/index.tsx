@@ -16,8 +16,6 @@ import { Pagination } from "swiper";
 
 export default function CarouselView({ className }) {
   const swiperRef = useRef<SwiperCore>();
-  const breakpoint = useBreakpoint();
-  const isMounted = useIsMounted();
   // autoplay init
   SwiperCore.use([Autoplay]);
   const onInit = (Swiper: SwiperCore): void => {
@@ -32,13 +30,12 @@ export default function CarouselView({ className }) {
   };
   const getCarouselItem = (carouselIndex: number) => {
     return (
-      <div className="flex flex-col items-center lg:pt-10 sm:pt-0 justify-center space-y-4 lg:space-y-10">
+      <div className="flex flex-col items-center lg:pt-16 sm:pt-0 justify-center space-y-4 lg:space-y-10">
         <Image
           src={carouselConstants[carouselIndex].src}
           height={450}
           width={450}
           loader={customLoader}
-          className="h-full w-full"
           alt="Cartooon logo"
         />
         <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">
@@ -58,7 +55,7 @@ export default function CarouselView({ className }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "px-6 md:px-12 2xl:px-26  py-16 md:py-20 lg:py-0 bg-lightBackground",
+        "px-6 md:px-12 2xl:px-26  py-16 md:py-20 h-full lg:py-0 bg-lightBackground",
         className
       )}
     >
@@ -71,7 +68,7 @@ export default function CarouselView({ className }) {
         pagination={{
           clickable: true,
         }}
-        className="min-h-full"
+        className="h-full"
         modules={[Pagination]}
       >
         <SwiperSlide>{getCarouselItem(0)}</SwiperSlide>
