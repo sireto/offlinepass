@@ -1,7 +1,7 @@
 export const formTitleConstants = {
-  SECURITY_KEY: "Security Key",
-  HOST: "Host",
-  USERNAME_EMAIL: "Username/Email",
+  SECURITY_KEY: "Master Security Key",
+  HOST: "Host or Url",
+  USERNAME_EMAIL: "Username or Email Address",
   YEAR: "Year",
-  RETRIES: "No of password changes",
+  RETRIES: "No of password changes in ",
 };
