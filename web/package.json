@@ -47,6 +47,7 @@
     "react-use": "^17.4.0",
     "redux-persist": "^6.0.0",
     "remark-gfm": "^3.0.1",
+    "sass": "^1.57.1",
     "sweetalert2": "^11.6.16",
     "swiper": "^8.4.5",
     "tw-elements": "^1.0.0-alpha13",

@@ -10,7 +10,7 @@ export const verifyMskViewConstants = {
 };
 
 export const generatePasswordViewConstants = {
-  title: "Generate Password",
-  description: "Enter secret key,host,username/email,date,No of password changes",
+  title: "Your Offline Password",
+  description:
+    "Password will be generated based on your msk  when you fill up the details",
 };
-

@@ -26,6 +26,7 @@ import TextFieldError from "../ui/textfield-error";
 import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
 import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
+import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -33,11 +34,12 @@ const MuiStyledTextField = styled.div`
 
 export default function GeneratePasswordView() {
   const { setPasswordHash } = usePassword();
+  const isMounted = useIsMounted();
   const [isMskVisible, setMskVisiblity] = useState(false);
   const dispatch = useDispatch();
   const passwordProvider = useSelector(selectPasswordProvider);
-  const {generatePswState,setGeneratePswState} = useGeneratePasswordState();
-
+  const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
+  const [years, setYears] = useState([2022]);
   const mskErrors = [
     MskErrorEnums.LENGTH,
     MskErrorEnums.LOWERCASE,
@@ -58,23 +60,26 @@ export default function GeneratePasswordView() {
     isMskValid(generatePswState.msk);
 
   useEffect(() => {
+    if (!isMounted) {
+      setGeneratePswState({
+        msk: passwordProvider.msk,
+        host: "",
+        usernameEmail: "",
+        date: moment(Date.now()).format("YYYY"),
+        retries: 0,
+      });
+      if (!years.includes(parseInt(moment(Date.now()).format("YYYY")))) {
+        years.push(parseInt(moment(Date.now()).format("YYYY")));
+        setYears(years);
+      }
+    }
     if (isFormFieldsValid) {
       handleGeneratePassword();
     } else {
       setPasswordHash("");
     }
-   
   }, [generatePswState]);
 
-  useEffect(()=>{
-    setGeneratePswState({
-      msk: passwordProvider.msk,
-      host: "",
-      usernameEmail: "",
-      date: moment(Date.now()).format("YYYY"),
-      retries: 0,
-    })
-  },[])
   const generatePasswordFormComponent = (
     <>
       <div>
@@ -246,7 +251,7 @@ export default function GeneratePasswordView() {
               }
               inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             >
-              {[2022, 2023, 2024].map((option) => (
+              {years.map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>
