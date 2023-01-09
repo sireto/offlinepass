@@ -2,19 +2,20 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import CarouselIndicator from "../ui/carousel-indicator";
-import { useBreakpoint } from "@app/lib/hooks/use-breakpoint";
 import { customLoader } from "../../utils/customLoaderUtils";
 import cn from "classnames";
-import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css/bundle";
 
 import { Pagination } from "swiper";
 import remarkGfm from "remark-gfm";
+import SwiperComponent from "../swiper";
+import { ChevronDown } from "../icons/chevrondown";
+import CarouselSliderButton from "../ui/carousel-slider-button";
 
 export default function CarouselView({ className }) {
   const swiperRef = useRef<SwiperCore>();
+  const [ActiveIndex, setActiveIndex] = useState(0);
   // autoplay init
   SwiperCore.use([Autoplay]);
   const onInit = (Swiper: SwiperCore): void => {
@@ -48,17 +49,35 @@ export default function CarouselView({ className }) {
       </div>
     );
   };
+  console.log(swiperRef.current?.isBeginning);
 
   return (
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "px-6 md:px-12 2xl:px-26 pt-16 md:py-20 h-full lg:py-0 ",
+        "px-6 md:px-12 2xl:px-26 pt-16 md:py-20 h-full lg:py-0 relative ",
         className
       )}
     >
-      <Swiper
+      {/* previous button */}
+      <CarouselSliderButton
+        IconClassName=" h-6 w-6 text-brand rotate-90"
+        className={cn(
+          "cursor-pointer absolute top-10 left-4 rounded-full bg-white px-2 py-2",
+          ActiveIndex === 0 ? "hidden" : "flex"
+        )}
+        onClick={() => swiperRef.current?.slidePrev()}
+      />
+      <CarouselSliderButton
+        IconClassName=" h-6 w-6 text-brand -rotate-90"
+        className={cn(
+          "cursor-pointer absolute top-10 right-4 rounded-full bg-white px-2 py-2",
+          ActiveIndex === 2 ? "hidden" : "flex"
+        )}
+        onClick={() => swiperRef.current?.slideNext()}
+      />
+      <SwiperComponent
         spaceBetween={1}
         slidesPerView={1}
         autoplay
@@ -67,13 +86,15 @@ export default function CarouselView({ className }) {
         pagination={{
           clickable: true,
         }}
-        className=" lg:h-[620px] h-[470px]"
+        className="lg:h-[620px] h-[470px]"
         modules={[Pagination]}
-      >
-        <SwiperSlide>{getCarouselItem(0)}</SwiperSlide>
-        <SwiperSlide>{getCarouselItem(1)}</SwiperSlide>
-        <SwiperSlide>{getCarouselItem(2)}</SwiperSlide>
-      </Swiper>
+        onRealIndexChange={(element) => setActiveIndex(element.activeIndex)}
+        carouselItems={[
+          getCarouselItem(0),
+          getCarouselItem(1),
+          getCarouselItem(2),
+        ]}
+      />
     </div>
   );
 }
