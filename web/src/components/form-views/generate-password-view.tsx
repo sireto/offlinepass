@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { hmacSha256 } from "@app/utils/hmac";
+import { getHostName, hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 import { formTitleConstants } from "@app/constants/formtitle-constants";
@@ -39,7 +39,7 @@ export default function GeneratePasswordView() {
   const dispatch = useDispatch();
   const passwordProvider = useSelector(selectPasswordProvider);
   const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
-  const [years, setYears] = useState([2022]);
+  // const [years, setYears] = useState([2022]);
   const mskErrors = [
     MskErrorEnums.LENGTH,
     MskErrorEnums.LOWERCASE,
@@ -68,14 +68,14 @@ export default function GeneratePasswordView() {
         date: moment(Date.now()).format("YYYY"),
         retries: 0,
       });
-      if (!years.includes(parseInt(moment(Date.now()).format("YYYY")))) {
-        const yearDuration =
-          parseInt(moment(Date.now()).format("YYYY")) - years[0];
-        for (let i: number = 0; i < yearDuration; i++) {
-          years.push(years[i] + 1);
-        }
-        setYears(years);
-      }
+      // if (!years.includes(parseInt(moment(Date.now()).format("YYYY")))) {
+      //   const yearDuration =
+      //     parseInt(moment(Date.now()).format("YYYY")) - years[0];
+      //   for (let i: number = 0; i < yearDuration; i++) {
+      //     years.push(years[i] + 1);
+      //   }
+      //   setYears(years);
+      // }
     }
     if (isFormFieldsValid) {
       handleGeneratePassword();
@@ -194,6 +194,11 @@ export default function GeneratePasswordView() {
             );
           }}
         />
+        {generatePswState.host !== "" && (
+          <p className="text-xs text-danger pt-3">
+            Hostname: <span>{getHostName(generatePswState.host)}</span>
+          </p>
+        )}
       </MuiStyledTextField>
 
       <MuiStyledTextField>
@@ -255,7 +260,7 @@ export default function GeneratePasswordView() {
               }
               inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             >
-              {years.map((option) => (
+              {[2022, 2023, 2024].map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>
