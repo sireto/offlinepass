@@ -12,5 +12,5 @@ export const verifyMskViewConstants = {
 export const generatePasswordViewConstants = {
   title: "Your Offline Password",
   description:
-    "Password will be generated based on your msk  when you fill up the details",
+    "Password will be generated based on your master password when you fill up the other details.",
 };
