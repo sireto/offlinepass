@@ -49,6 +49,7 @@ export default function GeneratePasswordView() {
     MskErrorEnums.UPPERCASE,
     MskErrorEnums.NUMBER,
   ];
+  // const [years, setYears] = useState([2022]);
 
   const handleGeneratePassword = async () => {
     await hmacSha256(generatePswState).then((passwordhash) => {
@@ -65,23 +66,37 @@ export default function GeneratePasswordView() {
     let queryOptions = { active: true, lastFocusedWindow: true };
     // `tab` will either be a `tabs.Tab` instance or `undefined`.
     let [tab] = await chrome.tabs.query(queryOptions);
-    debugger;
-    return tab.url;
+    if (tab.url === "chrome://newtab/") return "";
+    return getHostName(tab.url!);
   };
 
   const initialPswState = async () => {
     if (!isMounted) {
+      const passwordProviderUsernameEmailsLength =
+        passwordProvider.usernameEmails.length;
       setGeneratePswState({
         msk: passwordProvider.msk,
-        host: (await getCurrentTab()) ?? "",
-        usernameEmail: "",
+        host: await getCurrentTab(),
+        usernameEmail:
+          passwordProviderUsernameEmailsLength !== 0
+            ? passwordProvider.usernameEmails[
+                passwordProviderUsernameEmailsLength - 1
+              ]
+            : "",
         date: moment(Date.now()).format("YYYY"),
         retries: 0,
       });
+      // if (!years.includes(parseInt(moment(Date.now()).format("YYYY")))) {
+      //   const yearDuration =
+      //     parseInt(moment(Date.now()).format("YYYY")) - years[0];
+      //   for (let i: number = 0; i < yearDuration; i++) {
+      //     years.push(years[i] + 1);
+      //   }
+      //   setYears(years);
+      // }
     }
   };
   useEffect(() => {
-    // getCurrentTab();
     initialPswState();
     if (isFormFieldsValid) {
       handleGeneratePassword();
@@ -172,6 +187,7 @@ export default function GeneratePasswordView() {
           id="host"
           label={formTitleConstants.HOST}
           value={generatePswState.host}
+          disabled
           // textfieldTypes="autocomplete"
           options={passwordProvider.hosts}
           fullWidth

@@ -54,6 +54,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   showTooltip = false,
   options = [],
   toolTipTitle = "",
+  disabled = false,
   InputProps = InputPropsFontSize,
   ...muiTextFieldProps
 }) => {
@@ -91,6 +92,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             className={cn(shape, bgColor, className)}
             type={type}
             select={select}
+            disabled={disabled}
             variant="outlined"
             InputProps={InputProps}
             fullWidth={fullWidth}
@@ -111,6 +113,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             getOptionLabel={(option: string) => option}
             autoComplete
             fullWidth
+            value={typeof value === "string" ? value : undefined}
             freeSolo
             includeInputInList
             renderOption={(props, option) => {
