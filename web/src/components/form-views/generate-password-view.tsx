@@ -69,7 +69,11 @@ export default function GeneratePasswordView() {
         retries: 0,
       });
       if (!years.includes(parseInt(moment(Date.now()).format("YYYY")))) {
-        years.push(parseInt(moment(Date.now()).format("YYYY")));
+        const yearDuration =
+          parseInt(moment(Date.now()).format("YYYY")) - years[0];
+        for (let i: number = 0; i < yearDuration; i++) {
+          years.push(years[i] + 1);
+        }
         setYears(years);
       }
     }
