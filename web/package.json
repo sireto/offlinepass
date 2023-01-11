@@ -15,6 +15,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@fingerprintjs/fingerprintjs": "^3.3.6",
+    "@fingerprintjs/fingerprintjs-pro": "^3.8.1",
     "@headlessui/react": "^1.7.7",
     "@mui/material": "^5.11.2",
     "@mui/x-date-pickers": "^5.0.12",

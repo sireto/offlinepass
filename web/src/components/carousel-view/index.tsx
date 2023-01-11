@@ -30,7 +30,10 @@ export default function CarouselView({ className }) {
   };
   const getCarouselItem = (carouselIndex: number) => {
     return (
-      <div className="flex flex-col items-center lg:pt-16 sm:pt-0 justify-center space-y-4 lg:space-y-8">
+      <div
+        key={carouselIndex}
+        className="flex flex-col items-center lg:pt-16 sm:pt-0 justify-center space-y-4 lg:space-y-8"
+      >
         <Image
           src={carouselConstants[carouselIndex].src}
           height={350}
@@ -49,7 +52,6 @@ export default function CarouselView({ className }) {
       </div>
     );
   };
-  console.log(swiperRef.current?.isBeginning);
 
   return (
     <div

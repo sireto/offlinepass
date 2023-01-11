@@ -41,7 +41,7 @@ const SwiperComponent: React.FC<ISwiperProps> = ({
       onSwiper={onSwiper}
     >
       {carouselItems.map((carouselItem) => {
-        return <SwiperSlide>{carouselItem}</SwiperSlide>;
+        return <SwiperSlide key={carouselItem.key}>{carouselItem}</SwiperSlide>;
       })}
     </Swiper>
   );
