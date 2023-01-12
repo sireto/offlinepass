@@ -22,5 +22,5 @@
       "description": "Open Offline Pass"
     }
   },
-  "permissions": ["tabs","activeTab"]
+  "permissions": ["activeTab"]
   }
