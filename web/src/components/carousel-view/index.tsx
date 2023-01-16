@@ -2,16 +2,15 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { customLoader } from "../../utils/customLoaderUtils";
+import { customLoader } from "@app/utils/customLoaderUtils";
 import cn from "classnames";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css/bundle";
 
 import { Pagination } from "swiper";
 import remarkGfm from "remark-gfm";
-import SwiperComponent from "../swiper";
-import { ChevronDown } from "../icons/chevrondown";
-import CarouselSliderButton from "../ui/carousel-slider-button";
+import SwiperComponent from "@app/components/swiper";
+import CarouselSliderButton from "@app/components/ui/carousel-slider-button";
 
 export default function CarouselView({ className }) {
   const swiperRef = useRef<SwiperCore>();

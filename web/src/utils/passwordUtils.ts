@@ -1,5 +1,6 @@
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { MskErrorEnums } from "@app/models/enums/errorEnums";
+import * as CryptoJS from "crypto-js";
 import {
   isContainLowercase,
   isContainNumber,
@@ -30,5 +31,36 @@ export const checkMskValidation = (error: MskErrorEnums, msk: string) => {
 export const visitorIdentity = async () => {
   const fp = await fpPromise;
   const result = await fp.get();
-  console.log(result.visitorId);
+  return result.visitorId;
 };
+
+export const encrypt = (password: string, visitorId) => {
+  return CryptoJS.AES.encrypt(password, visitorId).toString();
+};
+
+export const decrypt = (encryptedData: string, visitorId: string) => {
+  try {
+    if (encryptedData === "" || visitorId === "") return "";
+    const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, visitorId);
+    const decryptedString = decryptedBytes.toString(CryptoJS.enc.Utf8);
+    return decryptedString;
+  } catch (e) {
+    return "";
+  }
+};
+
+export const stringTosha256 = (data: string) => {
+  if (data === "") return "";
+  return CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex);
+};
+
+// export const sha256ToString = (hash: string) => {
+//   return CryptoJS.sha256;
+// };
+
+// export const isEncryptedData = (data, visitorId) => {
+//   if (decrypt(data, visitorId) === false) {
+//     return false;
+//   }
+//   return true;
+// };

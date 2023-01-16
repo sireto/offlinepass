@@ -1,7 +1,7 @@
 import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
 import hmac from "js-crypto-hmac";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
-import { isValidUrl } from "./validationUtils";
+import { isValidUrl } from "@app/utils/validationUtils";
 const bs58 = require("bs58");
 export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
   const msg = `${getHostName(

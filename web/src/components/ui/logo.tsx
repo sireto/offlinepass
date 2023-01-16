@@ -1,8 +1,4 @@
-import BrandLogo from "@app/assets/images/brandlogo.png";
-
-import Image from "next/image";
 import AnchorLink from "@app/components/ui/links/anchor-link";
-import { customLoader } from "@app/utils/customLoaderUtils";
 
 export default function Logo() {
   return (

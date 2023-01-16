@@ -1,5 +1,5 @@
 import React from "react";
-import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css/bundle";
 

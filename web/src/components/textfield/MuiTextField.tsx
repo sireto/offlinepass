@@ -1,9 +1,9 @@
-import { isEmpty } from "@app/utils/validationUtils";
+import { isEmptyString } from "@app/utils/validationUtils";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import React, { Ref } from "react";
 import cn from "classnames";
 import Autocomplete from "@mui/material/Autocomplete";
-import MuiTooltip from "../ui/tooltip/mui-tooltip";
+import MuiTooltip from "@app/components/ui/tooltip/mui-tooltip";
 
 type TextFieldTypes = "normal" | "autocomplete";
 
@@ -64,7 +64,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
 
       {
         //@ts-ignore
-        showStoreOption && !isEmpty(value) && (
+        showStoreOption && !isEmptyString(value) && (
           <div className="flex items-center space-x-4 text-xs">
             <p className=" text-red-400 font-normal">Do you want to save?</p>
             <button
@@ -134,7 +134,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
 
   return (
     <>
-      {getTextFieldTitle}
+      {label !== "" && getTextFieldTitle}
       {getTextfield()}
     </>
   );

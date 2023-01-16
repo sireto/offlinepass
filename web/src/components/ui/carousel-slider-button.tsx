@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown } from "../icons/chevrondown";
+import { ChevronDown } from "@app/components/icons/chevrondown";
 
 interface IcarouselSliderButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
