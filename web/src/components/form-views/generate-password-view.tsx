@@ -111,10 +111,10 @@ export default function GeneratePasswordView() {
           <MuiTextField
             id="input-msk"
             showStoreOption={
+              isMskValid(generatePswState.msk) &&
               (passwordProvider.hashMsk !==
-                stringTosha256(generatePswState.msk) &&
-                isMskValid(generatePswState.msk)) ||
-              isEmptyString(passwordProvider.pinHash)
+                stringTosha256(generatePswState.msk) ||
+                isEmptyString(passwordProvider.pinHash))
             }
             label={formTitleConstants.SECURITY_KEY}
             value={generatePswState.msk}

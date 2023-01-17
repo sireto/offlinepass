@@ -5,13 +5,19 @@ import { showSweetAlertModal } from "@app/lib/modals/showModals";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
 import { selectPasswordProvider } from "@app/store/password/selectors";
-import { encrypt, stringTosha256 } from "@app/utils/passwordUtils";
+import {
+  encrypt,
+  stringTosha256,
+  repeatPinError,
+  pinError,
+} from "@app/utils/passwordUtils";
 import React, { useEffect, useState } from "react";
 import { useModal } from "@app/components/modal-views/context";
 import PinInputs from "@app/components/pin-boxes";
+import { PincodeDetailsDto } from "@app/models/dtos/pindto";
 
 interface IpinCodeDetailsProps {
-  pincodeDetails: { isSave: boolean };
+  pincodeDetails: PincodeDetailsDto;
 }
 
 export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
@@ -23,25 +29,9 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
   const { generatePswState } = useGeneratePasswordState();
   const passwordProvider = useAppSelector(selectPasswordProvider);
   const { setMskVisiblity } = useMskVisibility();
-  const repeatPinError = () => {
-    if (
-      pin.toString() === repeatPin.toString() ||
-      repeatPin.toString() === ["", "", "", ""].toString()
-    )
-      return "";
-    return "Pin Mismatch";
-  };
 
-  const pinError = () => {
-    if (
-      stringTosha256(pin.toString()) === passwordProvider.pinHash ||
-      pincodeDetails.isSave ||
-      pin.toString() === ["", "", "", ""].toString()
-    )
-      return "";
-    return "Wrong Pin";
-  };
   useEffect(() => {
+    // pincode validation
     if (
       stringTosha256(pin.toString()) === passwordProvider.pinHash &&
       !pincodeDetails.isSave
@@ -49,11 +39,11 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
       closeModal();
       setMskVisiblity(true);
     }
+    // set pincode
     if (
       pin.toString() === repeatPin.toString() &&
       pin.toString() !== ["", "", "", ""].toString()
     ) {
-      debugger;
       dispatch(
         setPasswordProvider({
           msk: encrypt(generatePswState.msk, visitorId),
@@ -64,11 +54,12 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
         })
       );
       closeModal();
+      setMskVisiblity(false);
       showSweetAlertModal("Pin Set Successfully", "", "success");
     }
   }, [repeatPin, pin]);
   return (
-    <div className="flex flex-col space-y-8 p-8  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[350px]">
+    <div className="flex flex-col space-y-4 px-8 py-4  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[300px]">
       {/* <div
         className="flex cursor-pointer flex-row-reverse"
         onClick={() => closeModal()}
@@ -76,7 +67,7 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
         <Close className="h-4 w-4 text-gray-600 dark:text-white" />
       </div> */}
       {pincodeDetails.isSave && (
-        <p className="font-medium text-xl text-black text-center">
+        <p className="font-medium text-lg text-black text-center">
           Secure Master Password Visibility
         </p>
       )}
@@ -84,9 +75,9 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
         label="Enter your Pin"
         autoFocus
         mask
-        error={pinError()}
+        error={pinError(pin, passwordProvider, pincodeDetails)}
         type="number"
-        size="lg"
+        size="md"
         onChange={(
           value: string | string[],
           index: number,
@@ -101,8 +92,8 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
           <PinInputs
             label="Retype your Pin"
             type="number"
-            size="lg"
-            error={repeatPinError()}
+            size="md"
+            error={repeatPinError(pin, repeatPin)}
             mask
             onChange={(
               value: string | string[],

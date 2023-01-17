@@ -8,6 +8,8 @@ import {
   isContainUppercase,
   isMinimumCharacter,
 } from "./validationUtils";
+import { IPasswordState } from "@app/store/password/passwordSlice";
+import { PincodeDetailsDto } from "@app/models/dtos/pindto";
 
 const fpPromise = FingerprintJS.load({ monitoring: false });
 
@@ -64,3 +66,28 @@ export const stringTosha256 = (data: string) => {
 //   }
 //   return true;
 // };
+export const repeatPinError = (
+  pin: Array<string>,
+  repeatPin: Array<string>
+) => {
+  if (
+    pin.toString() === repeatPin.toString() ||
+    repeatPin.toString() === ["", "", "", ""].toString()
+  )
+    return "";
+  return "Pin Mismatch";
+};
+
+export const pinError = (
+  pin: Array<string>,
+  passwordProvider: IPasswordState,
+  pincodeDetails: PincodeDetailsDto
+) => {
+  if (
+    stringTosha256(pin.toString()) === passwordProvider.pinHash ||
+    pincodeDetails.isSave ||
+    pin.toString() === ["", "", "", ""].toString()
+  )
+    return "";
+  return "Wrong Pin";
+};

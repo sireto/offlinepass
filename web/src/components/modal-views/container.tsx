@@ -45,19 +45,6 @@ export default function container() {
         >
           <Dialog.Overlay className="fixed inset-0 z-40 cursor-pointer bg-gray-700 bg-opacity-60 backdrop-blur" />
         </Transition.Child>
-
-        {/* This element is need to fix FocusTap headless-ui warning issue */}
-        <div className="sr-only">
-          <Button
-            size="small"
-            color="gray"
-            shape="circle"
-            onClick={closeModal}
-            className="opacity-50 hover:opacity-80 "
-          >
-            <Close className="h-auto w-[13px]" />
-          </Button>
-        </div>
         <div className="flex min-h-full items-center justify-center p-4 text-center">
           <Transition.Child
             as={Fragment}

@@ -63,7 +63,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <CookieConsent
         location="bottom"
         cookieName="OfflinePassCookies"
-        expires={999}
+        expires={365}
         buttonStyle={{
           marginRight: 90,
         }}

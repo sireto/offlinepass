@@ -20,7 +20,7 @@ const PinInputs: React.FC<IPinInputsProps> = ({
 }) => {
   return (
     <div>
-      <p className="ml-3 font-medium text-lg pb-5 text-black">{label}</p>
+      <p className="ml-3 font-medium pb-2 text-black">{label}</p>
       <PinInput
         autoFocus={autoFocus}
         type={type}
@@ -31,10 +31,10 @@ const PinInputs: React.FC<IPinInputsProps> = ({
         showState={showState}
         onChange={onChange}
         values={values}
-        inputStyle={{ marginLeft: 14 }}
+        inputStyle={{ marginLeft: 12 }}
       />
       {error !== "" && (
-        <p className="text-danger pl-2 pt-3 text-sm ">{error}</p>
+        <p className="text-danger pl-2 pt-3 text-xs ">{error}</p>
       )}
     </div>
   );
