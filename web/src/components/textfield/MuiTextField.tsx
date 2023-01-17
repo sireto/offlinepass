@@ -45,6 +45,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   onChange,
   onSelect,
   children,
+  autoComplete,
   showStoreOption = false,
   fullWidth = true,
   shape = shapes.pill,

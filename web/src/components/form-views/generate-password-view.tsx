@@ -208,10 +208,12 @@ export default function GeneratePasswordView() {
             })
           }
           onSelect={(event) => {
+            debugger;
             setGeneratePswState({
               ...generatePswState,
               host: event.target["value"],
             });
+            debugger;
           }}
           onSave={() => {
             dispatch(
