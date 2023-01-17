@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# offlinepass
 
-## Getting Started
+Self Service Password Manager
 
-First, run the development server:
+### Project Setup and Scripts
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+1. Run `yarn install` in terminal to set up project
+2. Run `yarn build && yarn export` to start production build and export the Next.js application to static HTML,which can be run standalone without the need of a Node.js server .
+3. Enable the developer mode option on chrome or Chromium-Based Browsers extensions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![developer_mode](https://user-images.githubusercontent.com/49801844/212818099-2846f51d-99c8-462d-8558-1e1e2a0fefbb.png)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+4. click on load unpacked to load your export project folder i.e out folder from project directory.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+![load_out](https://user-images.githubusercontent.com/49801844/212818151-90015269-b654-4b0e-a990-d6f09c56da47.jpg)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+5. press CTRL + SHIFT + F at the same time to open offlinepass extension or you can open offlinepass extension by clicking on offlinepass inside extension icon
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![open_offlinepass](https://user-images.githubusercontent.com/49801844/212818252-9b482727-153d-44f6-bc1a-6f4582d79cd5.png)
 
-## Learn More
+# offlinepass chrome extension
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![chrome_extension](https://user-images.githubusercontent.com/49801844/212818317-237776a4-f566-494d-ae64-e24abad65e37.png)
