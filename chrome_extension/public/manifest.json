@@ -1,17 +1,17 @@
 {
-    "name": "Offline Pass",
-    "version": "1.0.0",
-    "manifest_version": 3,
-    "action": {
-      "default_title": "Offline Pass",
-      "default_popup": "index.html"
-    },
-    "short_name": "Offline Pass",
-    "description": "Self Service Password Manager",
-    "icons": {
-      "16": "/favicon.ico",
-      "32": "/favicon.ico",
-      "150": "/favicon.ico"
+  "name": "Offline Pass",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "Offline Pass",
+    "default_popup": "index.html"
+  },
+  "short_name": "Offline Pass",
+  "description": "Self Service Password Manager",
+  "icons": {
+    "16": "/favicon.ico",
+    "32": "/favicon.ico",
+    "150": "/favicon.ico"
   },
   "commands": {
     "_execute_action": {
@@ -22,5 +22,7 @@
       "description": "Open Offline Pass"
     }
   },
-  "permissions": ["activeTab"]
-  }
+  "permissions": [
+    "activeTab"
+  ]
+}

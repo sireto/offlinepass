@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import store, { persistor } from "@app/store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import "react-toastify/dist/ReactToastify.css";
+import ModalContainer from "@app/components/modal-views/container";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -31,6 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <Component {...pageProps} />
+          <ModalContainer />
         </PersistGate>
       </Provider>
     </>

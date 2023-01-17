@@ -101,6 +101,13 @@ a {
   text-decoration: none;
 }
 
+.swal-wide{
+  width:250px !important;
+}
+.swal2-popup {
+  font-size: 10px !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
