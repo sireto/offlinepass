@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, { useState } from "react";
 import { PinInput } from "react-input-pin-code";
 import { PinInputProps } from "react-input-pin-code/dist/types/PinInput";
@@ -20,7 +21,7 @@ const PinInputs: React.FC<IPinInputsProps> = ({
 }) => {
   return (
     <div>
-      <p className="font-medium pb-3 text-sm text-black">{label}</p>
+      <p className="font-medium pb-3 text-md text-black">{label}</p>
       <PinInput
         autoFocus={autoFocus}
         type={type}
@@ -33,7 +34,14 @@ const PinInputs: React.FC<IPinInputsProps> = ({
         values={values}
         inputStyle={{ marginLeft: 2 }}
       />
-      {error !== "" && <p className="text-danger  pt-3 text-xs ">{error}</p>}
+      <p
+        className={classNames(
+          "text-danger text-xs ",
+          error !== "" ? "pt-3" : "pt-7"
+        )}
+      >
+        {error}
+      </p>
     </div>
   );
 };

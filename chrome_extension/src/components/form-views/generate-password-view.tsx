@@ -10,12 +10,10 @@ import {
 import styled from "@emotion/styled";
 import { getHostName, hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
-import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 import { formTitleConstants } from "@app/constants/formtitle-constants";
 import { isEmptyString, isMskValid } from "@app/utils/validationUtils";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
-import { useDispatch, useSelector } from "react-redux";
 import { usePassword } from "@app/lib/hooks/use-password";
 import { selectPasswordProvider } from "@app/store/password/selectors";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
@@ -32,12 +30,12 @@ import TextFieldError from "@app/components/ui/textfield-error";
 import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
 import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
-import { useRouter } from "next/router";
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 import { useModal } from "../modal-views/context";
 import useMskVisibility from "@app/lib/hooks/use-msk-visibility";
 import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import useVisitorId from "@app/lib/hooks/use-visitorId";
+import cn from "classnames";
 const MuiStyledTextField = styled.div`
   margin-bottom: 20px;
 `;
@@ -333,7 +331,7 @@ export default function GeneratePasswordView() {
 
   return (
     <div className="w-full h-full bg-white px-10 ">
-      <div className="pt-4 space-y-2">
+      <div className={cn("space-y-2", isFormFieldsValid ? "pt-8" : "pt-2")}>
         <div className="flex flex-col font-Chau_Philomene_One ">
           <p className="font-medium text-3xl text-black">
             Offline<span className="text-brand">Pass</span>
