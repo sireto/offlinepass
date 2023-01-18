@@ -53,6 +53,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   textfieldTypes = "normal",
   showTooltip = false,
   options = [],
+  disabled = false,
   toolTipTitle = "",
   ...muiTextFieldProps
 }) => {
@@ -91,6 +92,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             type={type}
             select={select}
             variant="outlined"
+            disabled={disabled}
             InputProps={InputProps}
             fullWidth={fullWidth}
             error={error}

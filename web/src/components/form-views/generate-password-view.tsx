@@ -29,6 +29,7 @@ import { useModal } from "@app/components/modal-views/context";
 import useVisitorId from "@app/lib/hooks/use-visitorId";
 import useMskVisibility from "@app/lib/hooks/use-msk-visibility";
 import { useAppSelector, useAppDispatch } from "@app/store/hooks";
+import { Close } from "../icons/close";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -118,35 +119,57 @@ export default function GeneratePasswordView() {
             }
             label={formTitleConstants.SECURITY_KEY}
             value={generatePswState.msk}
+            disabled={
+              passwordProvider.hashMsk ===
+                stringTosha256(generatePswState.msk) &&
+              !isMskVisible &&
+              !isEmptyString(passwordProvider.pinHash)
+            }
             type={isMskVisible ? "text" : "password"}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="start">
-                  {!isEmptyString(generatePswState.msk) &&
-                    (isMskVisible ? (
-                      <Eye
-                        onClick={() => {
-                          setMskVisiblity(false);
-                        }}
-                        className="h-6 w-6 cursor-pointer"
-                      />
-                    ) : (
-                      <EyeSlash
-                        onClick={() => {
-                          if (
-                            isEmptyString(passwordProvider.msk) ||
-                            passwordProvider.hashMsk !==
-                              stringTosha256(generatePswState.msk) ||
-                            isEmptyString(passwordProvider.pinHash)
-                          ) {
-                            setMskVisiblity(true);
-                          } else {
-                            openModal("PINCODE_VIEW", { isSave: false });
-                          }
-                        }}
-                        className="h-6 w-6 cursor-pointer"
-                      />
-                    ))}
+                  {!isEmptyString(generatePswState.msk) && (
+                    <div className="flex space-x-4 items-center">
+                      {isMskVisible ? (
+                        <Eye
+                          onClick={() => {
+                            setMskVisiblity(false);
+                          }}
+                          className="h-6 w-6 cursor-pointer"
+                        />
+                      ) : (
+                        <EyeSlash
+                          onClick={() => {
+                            if (
+                              isEmptyString(passwordProvider.msk) ||
+                              passwordProvider.hashMsk !==
+                                stringTosha256(generatePswState.msk) ||
+                              isEmptyString(passwordProvider.pinHash)
+                            ) {
+                              setMskVisiblity(true);
+                            } else {
+                              openModal("PINCODE_VIEW", { isSave: false });
+                            }
+                          }}
+                          className="h-6 w-6 cursor-pointer"
+                        />
+                      )}
+                      {passwordProvider.hashMsk ===
+                        stringTosha256(generatePswState.msk) &&
+                        !isEmptyString(passwordProvider.pinHash) && (
+                          <Close
+                            onClick={() => {
+                              setGeneratePswState({
+                                ...generatePswState,
+                                msk: "",
+                              });
+                            }}
+                            className="h-4 w-4 cursor-pointer"
+                          />
+                        )}
+                    </div>
+                  )}
                 </InputAdornment>
               ),
             }}
