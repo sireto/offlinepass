@@ -114,6 +114,15 @@ a {
   }
 }
 
+.swal-wide {
+  width: 250px !important;
+}
+
+.swal2-popup {
+  font-size: 12px !important;
+  font-family: Georgia, serif;
+}
+
 @font-face {
   font-family: "Chau_Philomene_One";
   src: url("../src/assets/fonts/Chau_Philomene_One/ChauPhilomeneOne-Regular.ttf");

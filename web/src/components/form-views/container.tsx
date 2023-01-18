@@ -1,5 +1,4 @@
-import { FormViews } from "@app/models/enums/formEnums";
-import GeneratePasswordView from "./generate-password-view";
+import GeneratePasswordView from "@app/components/form-views/generate-password-view";
 import cn from "classnames";
 
 function renderFormContent() {

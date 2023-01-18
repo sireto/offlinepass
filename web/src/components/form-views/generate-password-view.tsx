@@ -1,32 +1,35 @@
 import React, { useEffect, useState } from "react";
-import {
-  Autocomplete,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { InputAdornment, MenuItem } from "@mui/material";
 import styled from "@emotion/styled";
 import { getHostName, hmacSha256 } from "@app/utils/hmac";
 import moment from "moment";
 import { generatePasswordViewConstants } from "@app/constants/form-view-constants";
 import { formTitleConstants } from "@app/constants/formtitle-constants";
-import { isEmpty, isMskValid } from "@app/utils/validationUtils";
+import { isEmptyString, isMskValid } from "@app/utils/validationUtils";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
-import { useDispatch, useSelector } from "react-redux";
 import { usePassword } from "@app/lib/hooks/use-password";
 import { selectPasswordProvider } from "@app/store/password/selectors";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
 import { mskErrorsConstants } from "@app/constants/error-constants";
-import { checkMskValidation } from "@app/utils/passwordUtils";
+import {
+  checkMskValidation,
+  decrypt,
+  stringTosha256,
+  visitorIdentity,
+} from "@app/utils/passwordUtils";
 import { MskErrorEnums } from "@app/models/enums/errorEnums";
-import MuiTextField from "../textfield/MuiTextField";
-import TextFieldError from "../ui/textfield-error";
+import MuiTextField from "@app/components/textfield/MuiTextField";
+import TextFieldError from "@app/components/ui/textfield-error";
 import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
 import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
+import { useModal } from "@app/components/modal-views/context";
+import useVisitorId from "@app/lib/hooks/use-visitorId";
+import useMskVisibility from "@app/lib/hooks/use-msk-visibility";
+import { useAppSelector, useAppDispatch } from "@app/store/hooks";
+import { Close } from "../icons/close";
 
 const MuiStyledTextField = styled.div`
   margin-bottom: 22px;
@@ -35,9 +38,11 @@ const MuiStyledTextField = styled.div`
 export default function GeneratePasswordView() {
   const { setPasswordHash } = usePassword();
   const isMounted = useIsMounted();
-  const [isMskVisible, setMskVisiblity] = useState(false);
-  const dispatch = useDispatch();
-  const passwordProvider = useSelector(selectPasswordProvider);
+  const { openModal } = useModal();
+  const { isMskVisible, setMskVisiblity } = useMskVisibility();
+  const dispatch = useAppDispatch();
+  const { setVisitorId } = useVisitorId();
+  const passwordProvider = useAppSelector(selectPasswordProvider);
   const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
   // const [years, setYears] = useState([2022]);
   const mskErrors = [
@@ -55,19 +60,35 @@ export default function GeneratePasswordView() {
   };
 
   const isFormFieldsValid =
-    !isEmpty(generatePswState.host) &&
-    !isEmpty(generatePswState.usernameEmail) &&
+    !isEmptyString(generatePswState.host) &&
+    !isEmptyString(generatePswState.usernameEmail) &&
     isMskValid(generatePswState.msk);
 
   useEffect(() => {
     if (!isMounted) {
-      setGeneratePswState({
-        msk: passwordProvider.msk,
-        host: "",
-        usernameEmail: "",
-        date: moment(Date.now()).format("YYYY"),
-        retries: 0,
+      // for previously saved original password without encryption in V1
+      visitorIdentity().then((visitorIdentification) => {
+        if (decrypt(passwordProvider.msk, visitorIdentification) === "") {
+          dispatch(
+            setPasswordProvider({
+              msk: "",
+              hosts: passwordProvider.hosts,
+              usernameEmails: passwordProvider.usernameEmails,
+              hashMsk: "",
+              pinHash: "",
+            })
+          );
+        }
+        setGeneratePswState({
+          msk: decrypt(passwordProvider.msk, visitorIdentification),
+          host: "",
+          usernameEmail: "",
+          date: moment(Date.now()).format("YYYY"),
+          retries: 0,
+        });
+        setVisitorId(visitorIdentification);
       });
+
       // if (!years.includes(parseInt(moment(Date.now()).format("YYYY")))) {
       //   const yearDuration =
       //     parseInt(moment(Date.now()).format("YYYY")) - years[0];
@@ -90,34 +111,71 @@ export default function GeneratePasswordView() {
         <MuiStyledTextField>
           <MuiTextField
             id="input-msk"
-            showStoreOption={passwordProvider.msk !== generatePswState.msk}
+            showStoreOption={
+              isMskValid(generatePswState.msk) &&
+              (passwordProvider.hashMsk !==
+                stringTosha256(generatePswState.msk) ||
+                isEmptyString(passwordProvider.pinHash))
+            }
             label={formTitleConstants.SECURITY_KEY}
             value={generatePswState.msk}
+            disabled={
+              passwordProvider.hashMsk ===
+                stringTosha256(generatePswState.msk) &&
+              !isMskVisible &&
+              !isEmptyString(passwordProvider.pinHash)
+            }
             type={isMskVisible ? "text" : "password"}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="start">
-                  {isMskVisible ? (
-                    <Eye
-                      onClick={() => {
-                        setMskVisiblity(false);
-                      }}
-                      className="h-6 w-6 cursor-pointer"
-                    />
-                  ) : (
-                    <EyeSlash
-                      onClick={() => {
-                        setMskVisiblity(true);
-                      }}
-                      className="h-6 w-6 cursor-pointer"
-                    />
+                  {!isEmptyString(generatePswState.msk) && (
+                    <div className="flex space-x-4 items-center">
+                      {isMskVisible ? (
+                        <Eye
+                          onClick={() => {
+                            setMskVisiblity(false);
+                          }}
+                          className="h-6 w-6 cursor-pointer"
+                        />
+                      ) : (
+                        <EyeSlash
+                          onClick={() => {
+                            if (
+                              isEmptyString(passwordProvider.msk) ||
+                              passwordProvider.hashMsk !==
+                                stringTosha256(generatePswState.msk) ||
+                              isEmptyString(passwordProvider.pinHash)
+                            ) {
+                              setMskVisiblity(true);
+                            } else {
+                              openModal("PINCODE_VIEW", { isSave: false });
+                            }
+                          }}
+                          className="h-6 w-6 cursor-pointer"
+                        />
+                      )}
+                      {passwordProvider.hashMsk ===
+                        stringTosha256(generatePswState.msk) &&
+                        !isEmptyString(passwordProvider.pinHash) && (
+                          <Close
+                            onClick={() => {
+                              setGeneratePswState({
+                                ...generatePswState,
+                                msk: "",
+                              });
+                            }}
+                            className="h-4 w-4 cursor-pointer"
+                          />
+                        )}
+                    </div>
                   )}
                 </InputAdornment>
               ),
             }}
             fullWidth
             error={
-              isEmpty(generatePswState.msk)
+              isEmptyString(generatePswState.msk)
                 ? false
                 : !isMskValid(generatePswState.msk)
             }
@@ -128,18 +186,12 @@ export default function GeneratePasswordView() {
               })
             }
             onSave={() => {
-              dispatch(
-                setPasswordProvider({
-                  msk: generatePswState.msk,
-                  hosts: passwordProvider.hosts,
-                  usernameEmails: passwordProvider.usernameEmails,
-                })
-              );
+              openModal("PINCODE_VIEW", { isSave: true });
             }}
           />
         </MuiStyledTextField>
 
-        {!isEmpty(generatePswState.msk) &&
+        {!isEmptyString(generatePswState.msk) &&
           !isMskValid(generatePswState.msk) && (
             <div className="flex flex-col text-xs text-textfield_label  -mt-2 mb-2 space-y-2">
               <p className=" font-semibold">
@@ -179,10 +231,12 @@ export default function GeneratePasswordView() {
             })
           }
           onSelect={(event) => {
+            debugger;
             setGeneratePswState({
               ...generatePswState,
               host: event.target["value"],
             });
+            debugger;
           }}
           onSave={() => {
             dispatch(
@@ -190,6 +244,8 @@ export default function GeneratePasswordView() {
                 msk: passwordProvider.msk,
                 hosts: [...passwordProvider.hosts, generatePswState.host],
                 usernameEmails: passwordProvider.usernameEmails,
+                hashMsk: stringTosha256(passwordProvider.msk),
+                pinHash: passwordProvider.pinHash,
               })
             );
           }}
@@ -236,6 +292,8 @@ export default function GeneratePasswordView() {
                   ...passwordProvider.usernameEmails,
                   generatePswState.usernameEmail,
                 ],
+                hashMsk: stringTosha256(passwordProvider.msk),
+                pinHash: passwordProvider.pinHash,
               })
             );
           }}

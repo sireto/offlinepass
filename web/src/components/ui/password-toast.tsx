@@ -4,20 +4,17 @@ import { EyeSlash } from "@app/components/icons/eyeslash";
 import { hideString } from "@app/utils/helperUtils";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { motion } from "framer-motion";
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
 import { usePassword } from "@app/lib/hooks/use-password";
 import Identicon from "react-identicons";
 import VariantsAnimation from "@app/animation/variants-animation";
-import { useSelector } from "react-redux";
-import { selectPasswordProvider } from "@app/store/password/selectors";
 import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
 import { getHostName } from "@app/utils/hmac";
 
 const PasswordToast = () => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const { passwordHash } = usePassword();
-  const {generatePswState} = useGeneratePasswordState();
+  const { generatePswState } = useGeneratePasswordState();
   const [_, copyToClipboard] = useCopyToClipboard();
 
   const handleCopyPassword = () => {
@@ -60,14 +57,10 @@ const PasswordToast = () => {
             className="h-6 w-6 cursor-pointer"
           />
         )}
-          <button
-        onClick={handleCopyPassword}
-        className="h-full px-3 py-3 "
-      >
-        <Copy className="h-6 w-6" />
-      </button>
+        <button onClick={handleCopyPassword} className="h-full px-3 py-3 ">
+          <Copy className="h-6 w-6" />
+        </button>
       </div>
-    
     </VariantsAnimation>
   );
 };

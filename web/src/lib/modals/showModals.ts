@@ -1,8 +1,8 @@
 import Swal from "sweetalert2";
-
-export function showSuccessModal(title: string, text = "") {
+type iconType = "success" | "error" | "info" | "question" | "warning";
+export function showSweetAlertModal(title: string, text = "", type: iconType) {
   return Swal.fire({
-    icon: "success",
+    icon: `${type}`,
     title: `${title}`,
     text: `${text}`,
     showConfirmButton: false,

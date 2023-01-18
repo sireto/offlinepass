@@ -9,7 +9,7 @@ import Button from "@app/components/ui/button/button";
 import { removeElementFromArray } from "@app/utils/helperUtils";
 import SeedBubble from "@app/components/seed-bubble";
 import { toast } from "react-toastify";
-import { showSuccessModal } from "@app/lib/modals/showModals";
+import { showSweetAlertModal } from "@app/lib/modals/showModals";
 
 interface MskState {
   mnemonicWordList: string[];
@@ -73,7 +73,7 @@ export default function GenerateMskView() {
       if (selectedSeeds.length === mskState.mnemonicWordList.length) {
         const result = validateMnemonic(selectedSeeds, mskState.msk);
         if (result) {
-          showSuccessModal("MSK generated", mskState.msk);
+          showSweetAlertModal("MSK generated", mskState.msk, "success");
         } else {
           toast.error("Invalid seeds");
         }

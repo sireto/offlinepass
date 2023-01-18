@@ -1,5 +1,5 @@
 import React from "react";
-import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css/bundle";
 
@@ -41,7 +41,7 @@ const SwiperComponent: React.FC<ISwiperProps> = ({
       onSwiper={onSwiper}
     >
       {carouselItems.map((carouselItem) => {
-        return <SwiperSlide>{carouselItem}</SwiperSlide>;
+        return <SwiperSlide key={carouselItem.key}>{carouselItem}</SwiperSlide>;
       })}
     </Swiper>
   );

@@ -12,6 +12,7 @@ import Script from "next/script";
 import Link from "next/link";
 import CookieConsent from "react-cookie-consent";
 import { disableLogInProduction } from "@app/utils/disableConsoleUtils";
+import ModalContainer from "@app/components/modal-views/container";
 
 disableLogInProduction();
 export default function App({ Component, pageProps }: AppProps) {
@@ -55,13 +56,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <Component {...pageProps} />
+            <ModalContainer />
           </PersistGate>
         </Provider>
       </Layout>
       <CookieConsent
         location="bottom"
         cookieName="OfflinePassCookies"
-        expires={999}
+        expires={365}
         buttonStyle={{
           marginRight: 90,
         }}

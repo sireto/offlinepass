@@ -2,16 +2,15 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { customLoader } from "../../utils/customLoaderUtils";
+import { customLoader } from "@app/utils/customLoaderUtils";
 import cn from "classnames";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css/bundle";
 
 import { Pagination } from "swiper";
 import remarkGfm from "remark-gfm";
-import SwiperComponent from "../swiper";
-import { ChevronDown } from "../icons/chevrondown";
-import CarouselSliderButton from "../ui/carousel-slider-button";
+import SwiperComponent from "@app/components/swiper";
+import CarouselSliderButton from "@app/components/ui/carousel-slider-button";
 
 export default function CarouselView({ className }) {
   const swiperRef = useRef<SwiperCore>();
@@ -30,7 +29,10 @@ export default function CarouselView({ className }) {
   };
   const getCarouselItem = (carouselIndex: number) => {
     return (
-      <div className="flex flex-col items-center lg:pt-16 sm:pt-0 justify-center space-y-4 lg:space-y-8">
+      <div
+        key={carouselIndex}
+        className="flex flex-col items-center lg:pt-16 sm:pt-0 justify-center space-y-4 lg:space-y-8"
+      >
         <Image
           src={carouselConstants[carouselIndex].src}
           height={350}
@@ -49,7 +51,6 @@ export default function CarouselView({ className }) {
       </div>
     );
   };
-  console.log(swiperRef.current?.isBeginning);
 
   return (
     <div

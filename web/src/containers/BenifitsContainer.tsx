@@ -12,11 +12,7 @@ export default function BenefitContainer() {
   const breakpoint = useBreakpoint();
   const isMounted = useIsMounted();
   //  webview
-  if (
-    isMounted &&
-    (["xs", "sm", "md", "lg"].indexOf(breakpoint) === -1 ||
-      ["xs", "sm", "md", "lg"].indexOf(breakpoint) === 3)
-  )
+  if (isMounted && ["xs", "sm", "md"].indexOf(breakpoint) === -1)
     return (
       <div className="flex space-x-24 h-full w-full mt-20 items-center justify-center xl:px-16">
         <div className="space-y-12">
