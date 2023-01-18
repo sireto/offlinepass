@@ -1,7 +1,8 @@
+import classNames from "classnames";
 import React, { useState } from "react";
 import { PinInput } from "react-input-pin-code";
 import { PinInputProps } from "react-input-pin-code/dist/types/PinInput";
-
+import cn from "classnames";
 interface IPinInputsProps extends PinInputProps {
   label: string;
   error?: string;
@@ -33,9 +34,10 @@ const PinInputs: React.FC<IPinInputsProps> = ({
         values={values}
         inputStyle={{ marginLeft: 12 }}
       />
-      {error !== "" && (
-        <p className="text-danger pl-2 pt-3 text-xs ">{error}</p>
-      )}
+
+      <p className={cn("text-danger pl-2  text-xs ", error ? "pt-3" : "pt-7")}>
+        {error}
+      </p>
     </div>
   );
 };

@@ -114,11 +114,11 @@ a {
   }
 }
 
-.swal-wide{
-  width:250px !important;
+.swal-wide {
+  width: 250px !important;
 }
 
-.swal2-popup  {
+.swal2-popup {
   font-size: 12px !important;
   font-family: Georgia, serif;
 }

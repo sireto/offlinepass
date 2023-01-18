@@ -59,7 +59,7 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
     }
   }, [repeatPin, pin]);
   return (
-    <div className="flex flex-col space-y-4 px-8 py-4  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[300px]">
+    <div className="flex flex-col px-8 py-3  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[300px]">
       {/* <div
         className="flex cursor-pointer flex-row-reverse"
         onClick={() => closeModal()}
@@ -67,12 +67,16 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
         <Close className="h-4 w-4 text-gray-600 dark:text-white" />
       </div> */}
       {pincodeDetails.isSave && (
-        <p className="font-medium text-lg text-black text-center">
+        <p className="font-medium pb-4 text-lg text-black text-center">
           Secure Master Password Visibility
         </p>
       )}
       <PinInputs
-        label="Enter your Pin"
+        label={
+          pincodeDetails.isSave
+            ? "Enter pin to Secure Password"
+            : "Enter pin to View Password"
+        }
         autoFocus
         mask
         error={pinError(pin, passwordProvider, pincodeDetails)}
@@ -90,7 +94,7 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
       {pincodeDetails.isSave && (
         <>
           <PinInputs
-            label="Retype your Pin"
+            label="Confirm your Pin"
             type="number"
             size="md"
             error={repeatPinError(pin, repeatPin)}
@@ -122,7 +126,7 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
                 "warning"
               );
             }}
-            className="text-end text-danger pr-5 "
+            className="text-end text-danger pr-2 "
           >
             Skip
           </button>
