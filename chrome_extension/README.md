@@ -1,7 +1,9 @@
 # Offlinepass
+
 Self Service Password Manager
 
 ### Project Setup and Scripts
+
 1. Run `yarn install` in terminal to set up project
 2. Run `yarn build && yarn export` to start production build and export the Next.js application to static HTML,which can be run standalone without the need of a Node.js server .
 3. Enable the developer mode option on chrome or Chromium-Based Browsers extensions.
