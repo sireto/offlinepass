@@ -20,4 +20,4 @@ Self Service Password Manager
 
 # Offlinepass chrome extension preview
 
-![chrome_extension](https://user-images.githubusercontent.com/49801844/212818317-237776a4-f566-494d-ae64-e24abad65e37.png)
+![chrome_extension](https://user-images.githubusercontent.com/49801844/212911974-1c075c0c-2957-4db6-b643-f8d767851166.png)
