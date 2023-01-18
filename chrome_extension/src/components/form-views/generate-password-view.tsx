@@ -219,7 +219,6 @@ export default function GeneratePasswordView() {
           label={formTitleConstants.HOST}
           value={generatePswState.host}
           disabled
-          // textfieldTypes="autocomplete"
           options={passwordProvider.hosts}
           fullWidth
           placeholder="eg: facebook.com"

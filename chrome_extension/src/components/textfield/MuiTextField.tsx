@@ -62,7 +62,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
     <div className="flex  justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <div className="flex items-center font-medium">
         {label}{" "}
-        {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />}
+        {/* {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />} */}
       </div>
 
       {
