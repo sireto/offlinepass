@@ -1,4 +1,3 @@
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { MskErrorEnums } from "@app/models/enums/errorEnums";
 import * as CryptoJS from "crypto-js";
 import {
@@ -10,8 +9,6 @@ import {
 } from "./validationUtils";
 import { IPasswordState } from "@app/store/password/passwordSlice";
 import { PincodeDetailsDto } from "@app/models/dtos/pindto";
-
-const fpPromise = FingerprintJS.load({ monitoring: false });
 
 export const checkMskValidation = (error: MskErrorEnums, msk: string) => {
   switch (error) {
@@ -31,6 +28,9 @@ export const checkMskValidation = (error: MskErrorEnums, msk: string) => {
 };
 
 export const visitorIdentity = async () => {
+  const fpPromise = import("@fingerprintjs/fingerprintjs").then(
+    (FingerprintJS) => FingerprintJS.load()
+  );
   const fp = await fpPromise;
   const result = await fp.get();
   return result.visitorId;
@@ -56,16 +56,6 @@ export const stringTosha256 = (data: string) => {
   return CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex);
 };
 
-// export const sha256ToString = (hash: string) => {
-//   return CryptoJS.sha256;
-// };
-
-// export const isEncryptedData = (data, visitorId) => {
-//   if (decrypt(data, visitorId) === false) {
-//     return false;
-//   }
-//   return true;
-// };
 export const repeatPinError = (
   pin: Array<string>,
   repeatPin: Array<string>

@@ -41,7 +41,7 @@ export default function GeneratePasswordView() {
   const { openModal } = useModal();
   const { isMskVisible, setMskVisiblity } = useMskVisibility();
   const dispatch = useAppDispatch();
-  const { setVisitorId } = useVisitorId();
+  const { setVisitorId, visitorId } = useVisitorId();
   const passwordProvider = useAppSelector(selectPasswordProvider);
   const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
   // const [years, setYears] = useState([2022]);
@@ -65,9 +65,9 @@ export default function GeneratePasswordView() {
     isMskValid(generatePswState.msk);
 
   useEffect(() => {
-    if (!isMounted) {
-      // for previously saved original password without encryption in V1
+    if (visitorId === "") {
       visitorIdentity().then((visitorIdentification) => {
+        // for previously saved original password without encryption in V1 replace msk with ""
         if (decrypt(passwordProvider.msk, visitorIdentification) === "") {
           dispatch(
             setPasswordProvider({
@@ -79,6 +79,7 @@ export default function GeneratePasswordView() {
             })
           );
         }
+        // set GeneratePswState hooks for display saved value in textfield
         setGeneratePswState({
           msk: decrypt(passwordProvider.msk, visitorIdentification),
           host: "",
