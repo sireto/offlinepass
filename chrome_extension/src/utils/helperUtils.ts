@@ -1,0 +1,59 @@
+export function removeElementFromArray(array: any[], element: any) {
+  const index = array.indexOf(element);
+  if (index > -1) {
+    // only splice array when item is found
+    array.splice(index, 1);
+  }
+  return array;
+}
+
+export const toLowerCaseAllElement = (array: string[]) => {
+  return array.map((value) => value.toLowerCase());
+};
+
+import { isNetherUndefinedNorNull } from "@app/utils/validationUtils";
+
+export const shortenStr = (
+  str: string | number,
+  expectedLength?: number,
+  firstIndex = 0
+) => {
+  if (isNetherUndefinedNorNull(expectedLength)) {
+    return str.toString().substring(firstIndex, expectedLength);
+  }
+  return str;
+};
+
+export const toMidDottedStr = (
+  str: string | number,
+  leadingVisible = 7,
+  firstIndex = 0
+) => {
+  if (str === undefined) return str;
+  const total = str.toString().length;
+  const leadingStr = str.toString().substring(firstIndex, leadingVisible);
+  const trailingStr = str.toString().substring(total - leadingVisible);
+  return `${leadingStr}...${trailingStr}`;
+};
+
+export const toEndDottedStr = (
+  str: string | number,
+  leadingVisible = 12,
+  firstIndex = 0
+) => {
+  if (str === undefined) return str;
+  if (str.toString().length <= leadingVisible) return str.toString();
+  const leadingStr = str.toString().substring(firstIndex, leadingVisible);
+  return `${leadingStr}...`;
+};
+
+export const capitalize = (val: { toString: () => string }): string => {
+  if (!val) return "";
+  const firstChar = val.toString()[0]?.toUpperCase();
+  return `${firstChar}${val.toString().substring(1).toLowerCase()}`;
+};
+
+export const hideString = (val: string, isVisible: boolean) => {
+  if (!isVisible) return "*".repeat(val.length);
+  return val;
+};
