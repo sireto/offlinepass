@@ -109,7 +109,11 @@ const Button: React.FC<ButtonProps> = ({
       )}
       {...buttonProps}
     >
-      {isLoading ? <CircularProgress color="inherit" className="p-2" /> : children}
+      {isLoading ? (
+        <CircularProgress color="inherit" className="p-2" />
+      ) : (
+        children
+      )}
     </button>
   );
 };

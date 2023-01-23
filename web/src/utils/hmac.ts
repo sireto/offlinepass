@@ -3,13 +3,13 @@ import hmac from "js-crypto-hmac";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import { isValidUrl } from "@app/utils/validationUtils";
 const bs58 = require("bs58");
+
 export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
   const msg = `${getHostName(
     generatePswState.host
   ).toLowerCase()}|${generatePswState.usernameEmail.toLowerCase()}|${
     generatePswState.date
   }|${checkRetries(generatePswState.retries)}`;
-  debugger;
   const hash = "SHA-256";
   const keyUnit8Array = new TextEncoder().encode(generatePswState.msk);
   const msgUnit8Array = new TextEncoder().encode(msg);
@@ -20,14 +20,12 @@ export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
       const passwordhash = `${checkRetries(generatePswState.retries)}$${bs58
         .encode(mac)
         .substring(0, 16)}`;
-      console.log(passwordhash);
       return passwordhash;
-      //   console.log(new TextDecoder("utf-8").decode(mac));
     });
 };
 
-const checkRetries = (retries: number) => {
-  if (Number.isNaN(retries)) {
+const checkRetries = (retries: string) => {
+  if (Number.isNaN(parseInt(retries))) {
     return 0;
   } else {
     return retries;

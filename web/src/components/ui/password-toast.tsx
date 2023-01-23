@@ -31,9 +31,9 @@ const PasswordToast = () => {
     <VariantsAnimation
       startingPosition={-20}
       endingPostion={0}
-      className={`flex z-20 fixed top-20 sm:top-24 right-0 w-screen  lg:w-1/2 xl:w-3/5 text-sm xl:text-base items-center`}
+      className={`flex z-20 fixed top-20 sm:top-24 left-0 w-full lg:w-1/2 lg:pr-10 pr-0  text-sm xl:text-base items-center`}
     >
-      <div className="flex items-center px-6  w-full h-full space-x-2 bg-[#CDFFD8] justify-start lg:justify-center xl:justify-center xl:space-x-3 ">
+      <div className="flex items-center px-6  w-full h-full space-x-2 bg-[#CDFFD8] justify-center  xl:space-x-3 ">
         <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
           Your password has been generated:
         </p>

@@ -1,7 +1,7 @@
 export interface GeneratePswStateDtos {
-    msk: string;
-    host: string;
-    usernameEmail: string;
-    date: string;
-    retries: number;
+  msk: string;
+  host: string;
+  usernameEmail: string;
+  date: string;
+  retries: string;
 }

@@ -1,22 +1,19 @@
 import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { customLoader } from "@app/utils/customLoaderUtils";
 import cn from "classnames";
 import SwiperCore, { Autoplay } from "swiper";
-import "swiper/css/bundle";
 
 import { Pagination } from "swiper";
 import remarkGfm from "remark-gfm";
 import SwiperComponent from "@app/components/swiper";
-import CarouselSliderButton from "@app/components/ui/carousel-slider-button";
+import CarouselSliderButton from "@app/components/ui/button/carousel-slider-button";
+import ImageRenderer from "@app/components/media-renderer/image-renderer";
 
 export default function CarouselView({ className }) {
   const swiperRef = useRef<SwiperCore>();
   const [ActiveIndex, setActiveIndex] = useState(0);
-  // autoplay init
-  SwiperCore.use([Autoplay]);
+  // swiper ref
   const onInit = (Swiper: SwiperCore): void => {
     swiperRef.current = Swiper;
   };
@@ -31,22 +28,19 @@ export default function CarouselView({ className }) {
     return (
       <div
         key={carouselIndex}
-        className="flex flex-col items-center lg:pt-16 sm:pt-0 justify-center space-y-4 lg:space-y-8"
+        className="flex flex-col py-10 items-center px-4 lg:h-[560px] sm:h-[500px]   space-y-2 lg:space-y-6"
       >
-        <Image
-          src={carouselConstants[carouselIndex].src}
-          height={350}
-          width={350}
-          loader={customLoader}
-          alt="Cartooon logo"
-        />
+        <div className="h-[240px] w-[400px] flex items-center ">
+          <ImageRenderer imageSrc={carouselConstants[carouselIndex].src} />
+        </div>
+
         <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">
           {carouselConstants[carouselIndex].title}
         </p>
         <ReactMarkdown
           children={carouselConstants[carouselIndex].description}
           remarkPlugins={[remarkGfm]}
-          className="text-sm md:text-lg text-center font-medium text-lightGray"
+          className="text-sm md:text-md text-center font-medium text-lightGray"
         />
       </div>
     );
@@ -57,45 +51,44 @@ export default function CarouselView({ className }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "px-6 md:px-12 2xl:px-26 pt-16 md:py-20 h-full lg:py-0 relative ",
+        " h-full flex flex-col  items-center justify-center bg-white relative",
         className
       )}
     >
       {/* previous button */}
       <CarouselSliderButton
-        IconClassName=" h-6 w-6 text-brand rotate-90"
+        IconClassName="rotate-90"
         className={cn(
-          "cursor-pointer absolute top-10 left-4 rounded-full bg-white px-2 py-2",
+          " absolute top-1/2 left-4",
           ActiveIndex === 0 ? "hidden" : "flex"
         )}
         onClick={() => swiperRef.current?.slidePrev()}
       />
+      {/* next button */}
       <CarouselSliderButton
-        IconClassName=" h-6 w-6 text-brand -rotate-90"
+        IconClassName="-rotate-90"
         className={cn(
-          "cursor-pointer absolute top-10 right-4 rounded-full bg-white px-2 py-2",
+          "absolute top-1/2 right-4",
           ActiveIndex === 2 ? "hidden" : "flex"
         )}
         onClick={() => swiperRef.current?.slideNext()}
       />
-      <SwiperComponent
-        spaceBetween={1}
-        slidesPerView={1}
-        autoplay
-        onInit={onInit}
-        speed={500}
-        pagination={{
-          clickable: true,
-        }}
-        className="lg:h-[620px] h-[470px]"
-        modules={[Pagination]}
-        onRealIndexChange={(element) => setActiveIndex(element.activeIndex)}
-        carouselItems={[
-          getCarouselItem(0),
-          getCarouselItem(1),
-          getCarouselItem(2),
-        ]}
-      />
+      <div className=" w-5/6 align-middle pt-4 ">
+        <SwiperComponent
+          autoplay
+          onInit={onInit}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[Pagination]}
+          onRealIndexChange={(element) => setActiveIndex(element.activeIndex)}
+          carouselItems={[
+            getCarouselItem(0),
+            getCarouselItem(1),
+            getCarouselItem(2),
+          ]}
+        />
+      </div>
     </div>
   );
 }

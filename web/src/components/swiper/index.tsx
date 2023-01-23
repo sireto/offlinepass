@@ -1,7 +1,6 @@
 import React from "react";
 import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay } from "swiper";
-import "swiper/css/bundle";
 
 interface ISwiperProps extends SwiperProps {
   carouselItems: Array<JSX.Element>;
@@ -9,10 +8,7 @@ interface ISwiperProps extends SwiperProps {
 
 const SwiperComponent: React.FC<ISwiperProps> = ({
   carouselItems,
-  spaceBetween,
-  slidesPerView,
   onInit,
-  speed,
   pagination,
   className,
   modules,
@@ -20,6 +16,9 @@ const SwiperComponent: React.FC<ISwiperProps> = ({
   grabCursor,
   onRealIndexChange,
   onSwiper,
+  spaceBetween = 1,
+  slidesPerView = 1,
+  speed = 500,
   autoplay = false,
   allowTouchMove = false,
 }) => {

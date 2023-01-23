@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useModal } from "@app/components/modal-views/context";
 import PinInputs from "@app/components/pin-boxes";
 import { PincodeDetailsDto } from "@app/models/dtos/pindto";
+import Button from "../ui/button/button";
 
 interface IpinCodeDetailsProps {
   pincodeDetails: PincodeDetailsDto;
@@ -40,10 +41,7 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
       setMskVisiblity(true);
     }
     // set pincode
-    if (
-      pin.toString() === repeatPin.toString() &&
-      pin.toString() !== ["", "", "", ""].toString()
-    ) {
+    if (pin.toString() === repeatPin.toString() && !pin.includes("")) {
       dispatch(
         setPasswordProvider({
           msk: encrypt(generatePswState.msk, visitorId),
@@ -58,6 +56,24 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
       showSweetAlertModal("Pin Set Successfully", "", "success");
     }
   }, [repeatPin, pin]);
+
+  const skipButtonClickHandler = () => {
+    dispatch(
+      setPasswordProvider({
+        msk: encrypt(generatePswState.msk, visitorId),
+        hosts: passwordProvider.hosts,
+        usernameEmails: passwordProvider.usernameEmails,
+        hashMsk: stringTosha256(generatePswState.msk),
+        pinHash: "",
+      })
+    );
+    closeModal();
+    showSweetAlertModal(
+      "Warning!!",
+      "Your Master Password is not secure",
+      "warning"
+    );
+  };
   return (
     <div className="flex flex-col px-8 py-3  transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[300px]">
       {/* <div
@@ -80,8 +96,6 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
         autoFocus
         mask
         error={pinError(pin, passwordProvider, pincodeDetails)}
-        type="number"
-        size="md"
         onChange={(
           value: string | string[],
           index: number,
@@ -95,8 +109,6 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
         <>
           <PinInputs
             label="Confirm your Pin"
-            type="number"
-            size="md"
             error={repeatPinError(pin, repeatPin)}
             mask
             onChange={(
@@ -108,28 +120,13 @@ export default function PincodeBox({ pincodeDetails }: IpinCodeDetailsProps) {
             }}
             values={repeatPin}
           />
-          <button
-            onClick={() => {
-              dispatch(
-                setPasswordProvider({
-                  msk: encrypt(generatePswState.msk, visitorId),
-                  hosts: passwordProvider.hosts,
-                  usernameEmails: passwordProvider.usernameEmails,
-                  hashMsk: stringTosha256(generatePswState.msk),
-                  pinHash: "",
-                })
-              );
-              closeModal();
-              showSweetAlertModal(
-                "Warning!!",
-                "Your Master Password is not secure",
-                "warning"
-              );
-            }}
-            className="text-end text-danger pr-2 "
+          <Button
+            color="danger"
+            onClick={skipButtonClickHandler}
+            variant="transparent"
           >
             Skip
-          </button>
+          </Button>
         </>
       )}
     </div>
