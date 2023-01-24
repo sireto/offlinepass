@@ -2,8 +2,7 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { carouselConstants } from "@app/constants/carousel-constants";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import cn from "classnames";
-import SwiperCore, { Autoplay } from "swiper";
-
+import SwiperCore from "swiper";
 import { Pagination } from "swiper";
 import remarkGfm from "remark-gfm";
 import SwiperComponent from "@app/components/swiper";
@@ -51,7 +50,7 @@ export default function CarouselView({ className }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        " h-full flex flex-col  items-center justify-center bg-white relative",
+        " h-full flex flex-col pt-10  items-center justify-center  relative",
         className
       )}
     >
@@ -73,7 +72,7 @@ export default function CarouselView({ className }) {
         )}
         onClick={() => swiperRef.current?.slideNext()}
       />
-      <div className=" w-5/6 align-middle pt-4 ">
+      <div className=" w-5/6 align-middle pt-4  rounded-xl">
         <SwiperComponent
           autoplay
           onInit={onInit}

@@ -1,6 +1,4 @@
-import classNames from "classnames";
-import React, { useState } from "react";
-import { PinInput, StatefulPinInput } from "react-input-pin-code";
+import { PinInput } from "react-input-pin-code";
 import { PinInputProps } from "react-input-pin-code/dist/types/PinInput";
 import cn from "classnames";
 

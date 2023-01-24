@@ -10,14 +10,10 @@ import { removeElementFromArray } from "@app/utils/helperUtils";
 import SeedBubble from "@app/components/seed-bubble";
 import { toast } from "react-toastify";
 import { showSweetAlertModal } from "@app/lib/modals/showModals";
-import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
 import { useRouter } from "next/router";
-import { setPasswordProvider } from "@app/store/password/passwordSlice";
-import { selectPasswordProvider } from "@app/store/password/selectors";
-import { useAppDispatch, useAppSelector } from "@app/store/hooks";
-import { encrypt, stringTosha256 } from "@app/utils/passwordUtils";
-import useVisitorId from "@app/lib/hooks/use-visitorId";
+
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
+import useFormContext from "../form-views/form-context";
 
 interface MskState {
   mnemonicWordList: string[];
@@ -27,11 +23,8 @@ interface MskState {
 export default function GenerateMskView() {
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [selectedSeeds, setSelectedSeeds] = useState<string[]>([]);
-  const passwordProvider = useAppSelector(selectPasswordProvider);
-  const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
-  const dispatch = useAppDispatch();
+  const { formContext, setFormContext } = useFormContext();
   const [_, copyToClipboard] = useCopyToClipboard();
-  const { visitorId } = useVisitorId();
   const [titleDescriptionState, setTitleDescriptionState] = useState({
     title: generateMskViewConstants.title,
     description: generateMskViewConstants.description,
@@ -92,18 +85,12 @@ export default function GenerateMskView() {
       if (selectedSeeds.length === mskState.mnemonicWordList.length) {
         const result = validateMnemonic(selectedSeeds, mskState.msk);
         if (result) {
-          dispatch(
-            setPasswordProvider({
-              msk: encrypt(mskState.msk, visitorId),
-              hosts: passwordProvider.hosts,
-              usernameEmails: passwordProvider.usernameEmails,
-              hashMsk: stringTosha256(mskState.msk),
-              pinHash: "",
-            })
-          );
-          setGeneratePswState({
-            ...generatePswState,
-            msk: mskState.msk,
+          setFormContext({
+            ...formContext,
+            generatePswState: {
+              ...formContext.generatePswState,
+              msk: mskState.msk,
+            },
           });
           showSweetAlertModal(
             "Master Password generated",
