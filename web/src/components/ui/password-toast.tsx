@@ -33,7 +33,7 @@ const PasswordToast = () => {
     <VariantsAnimation
       startingPosition={-20}
       endingPostion={0}
-      className={`flex z-20 fixed top-18 lg:top-24 left-0 w-full h-[46px] overflow-hidden  lg:w-1/2  text-sm xl:text-base items-center justify-between`}
+      className={`flex z-20 fixed top-20 left-0 w-full h-[46px] overflow-hidden  lg:w-1/2  text-sm xl:text-base items-center justify-between`}
     >
       <div className="flex items-center px-6  w-full h-full space-x-2 bg-[#CDFFD8]  xl:space-x-3 ">
         <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
@@ -63,7 +63,7 @@ const PasswordToast = () => {
       <Button
         onClick={handleCopyPassword}
         color="gray"
-        className="h-[46px] flex  space-x-4 "
+        className="h-[50px] flex  space-x-4 "
       >
         <p>Copy</p>
         <Copy className="h-6 w-6" />
