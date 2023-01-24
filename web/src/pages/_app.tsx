@@ -1,5 +1,6 @@
 import "../../styles/globals.css";
 import "../../styles/tailwind.css";
+import "swiper/css/bundle";
 import type { AppProps } from "next/app";
 import Layout from "@app/layouts/_layout";
 import { ToastContainer } from "react-toastify";
@@ -9,6 +10,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import Head from "next/head";
 import store, { persistor } from "@app/store/store";
 import Script from "next/script";
+import NextNProgress from "@app/components/ui/nprogress";
 import Link from "next/link";
 import CookieConsent from "react-cookie-consent";
 import { disableLogInProduction } from "@app/utils/disableConsoleUtils";
@@ -51,6 +53,13 @@ export default function App({ Component, pageProps }: AppProps) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+      />
+      <NextNProgress
+        color="#AFE1AF"
+        startPosition={0}
+        stopDelayMs={400}
+        height={5}
+        options={{ easing: "ease" }}
       />
       <Layout>
         <Provider store={store}>

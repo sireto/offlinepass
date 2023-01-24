@@ -60,11 +60,7 @@ export const repeatPinError = (
   pin: Array<string>,
   repeatPin: Array<string>
 ) => {
-  if (
-    pin.toString() === repeatPin.toString() ||
-    repeatPin.toString() === ["", "", "", ""].toString() ||
-    repeatPin[3] === ""
-  )
+  if (pin.toString() === repeatPin.toString() || repeatPin.includes(""))
     return "";
   return "Pin Mismatch";
 };
@@ -77,8 +73,7 @@ export const pinError = (
   if (
     stringTosha256(pin.toString()) === passwordProvider.pinHash ||
     pincodeDetails.isSave ||
-    pin.toString() === ["", "", "", ""].toString() ||
-    pin[3] === ""
+    pin.includes("")
   )
     return "";
   return "Wrong Pin";

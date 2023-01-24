@@ -4,12 +4,21 @@ import React, { Ref } from "react";
 import cn from "classnames";
 import Autocomplete from "@mui/material/Autocomplete";
 import MuiTooltip from "@app/components/ui/tooltip/mui-tooltip";
+import styled from "@emotion/styled";
+import useFormContext from "@app/components/form-views/form-context";
+import Button from "@app/components/ui/button/button";
 
 type TextFieldTypes = "normal" | "autocomplete";
 
 type ShapeNames = "pill";
 
 type ColorNames = "lightBlue";
+export type passwordState =
+  | "msk"
+  | "host"
+  | "usernameEmail"
+  | "date"
+  | "retries";
 
 const shapes: Record<ShapeNames, string> = {
   pill: "inputRounded",
@@ -18,6 +27,10 @@ const shapes: Record<ShapeNames, string> = {
 const colors: Record<ColorNames, string> = {
   lightBlue: "inputBgLightGray",
 };
+
+const MuiStyledTextField = styled.div`
+  margin-bottom: 22px;
+`;
 
 interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   shape?: string;
@@ -42,7 +55,6 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   placeholder,
   error,
   select,
-  onChange,
   onSelect,
   children,
   autoComplete,
@@ -57,6 +69,8 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   toolTipTitle = "",
   ...muiTextFieldProps
 }) => {
+  // const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
+  const { setFormContext, formContext } = useFormContext();
   const getTextFieldTitle = (
     <div className="flex  justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <div className="flex items-center font-medium">
@@ -68,18 +82,43 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
         //@ts-ignore
         showStoreOption && !isEmptyString(value) && (
           <div className="flex items-center space-x-4 text-xs">
-            <p className=" text-red-400 font-normal">Do you want to save?</p>
-            <button
+            <Button
               onClick={onSave}
-              className="px-3 py-[5px] font-semibold rounded-lg bg-red-400  text-white"
+              color="success"
+              shape="rounded"
+              size="mini"
             >
-              Yes
-            </button>
+              Save
+            </Button>
           </div>
         )
       }
     </div>
   );
+
+  //@ts-ignore
+  const passwordState: passwordState = typeof id === "string" && id;
+  const handleOnChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) =>
+    setFormContext({
+      ...formContext,
+      generatePswState: {
+        ...formContext.generatePswState,
+        [passwordState]: select
+          ? event.target["value"]
+          : event.currentTarget["value"],
+      },
+    });
+
+  const handleOnSelect = (event: React.SyntheticEvent<HTMLDivElement, Event>) =>
+    setFormContext({
+      ...formContext,
+      generatePswState: {
+        ...formContext.generatePswState,
+        [passwordState]: event.target["value"],
+      },
+    });
 
   const getTextfield = () => {
     switch (textfieldTypes) {
@@ -96,7 +135,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             InputProps={InputProps}
             fullWidth={fullWidth}
             error={error}
-            onChange={onChange}
+            onChange={handleOnChange}
           >
             {children}
           </TextField>
@@ -107,6 +146,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
           <Autocomplete
             id={id}
             options={options}
+            value={typeof value === "string" ? value : undefined}
             getOptionLabel={(option: string) => option}
             autoComplete
             fullWidth
@@ -125,8 +165,8 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
                   InputProps={InputProps}
                   fullWidth={fullWidth}
                   error={error}
-                  onSelect={onSelect}
-                  onChange={onChange}
+                  onSelect={handleOnSelect}
+                  onChange={handleOnChange}
                 />
               );
             }}
@@ -134,11 +174,23 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
         );
     }
   };
+  //  TODO generate password using seedwords
+  // const getGeneratePassword = () => {
+  //   return (
+  //     <AnchorLink
+  //       href={"/msk/generate"}
+  //       className="flex justify-end lg:text-sm text-xs text-textfield_label pr-2 pt-2"
+  //     >
+  //       Generate Password
+  //     </AnchorLink>
+  //   );
+  // };
 
   return (
     <>
-      {label !== "" && getTextFieldTitle}
-      {getTextfield()}
+      {getTextFieldTitle}
+      <MuiStyledTextField>{getTextfield()}</MuiStyledTextField>
+      {/* {label === formTitleConstants.SECURITY_KEY && getGeneratePassword()} */}
     </>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronDown } from "@app/components/icons/chevrondown";
+import cn from "classnames";
 
 interface IcarouselSliderButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,8 +13,8 @@ const CarouselSliderButton: React.FC<IcarouselSliderButtonProps> = ({
   IconClassName,
 }) => {
   return (
-    <button onClick={onClick} className={className}>
-      <ChevronDown className={IconClassName} />
+    <button onClick={onClick} className={cn("cursor-pointer", className)}>
+      <ChevronDown className={cn("h-6 w-6 text-brand", IconClassName)} />
     </button>
   );
 };

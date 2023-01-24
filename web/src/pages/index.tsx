@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <div className="flex flex-col lg:flex-row md:space-y-8 lg:space-y-0 w-full h-full">
       <PasswordToast />
-      <CarouselView className="w-full lg:w-1/2 xl:w-2/5 h-full bg-lightBackground" />
-      <FormContainer className="w-full lg:w-1/2 xl:w-3/5" />
+      <FormContainer className="w-full lg:w-1/2 h-full" />
+      <CarouselView className="w-full lg:w-1/2 h-full bg-lightBackground" />
     </div>
   );
 }

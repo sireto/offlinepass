@@ -1,7 +1,7 @@
 import {
   generateMskViewConstants,
   verifyMskViewConstants,
-} from "@app/constants/form-view-constants";
+} from "@app/constants/form-constants";
 import { generateMsk, validateMnemonic } from "@app/utils/mskUtils";
 import React, { useEffect, useState } from "react";
 import SeedCard from "@app/components/seed-card";
@@ -10,6 +10,10 @@ import { removeElementFromArray } from "@app/utils/helperUtils";
 import SeedBubble from "@app/components/seed-bubble";
 import { toast } from "react-toastify";
 import { showSweetAlertModal } from "@app/lib/modals/showModals";
+import { useRouter } from "next/router";
+
+import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
+import useFormContext from "../form-views/form-context";
 
 interface MskState {
   mnemonicWordList: string[];
@@ -19,6 +23,8 @@ interface MskState {
 export default function GenerateMskView() {
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [selectedSeeds, setSelectedSeeds] = useState<string[]>([]);
+  const { formContext, setFormContext } = useFormContext();
+  const [_, copyToClipboard] = useCopyToClipboard();
   const [titleDescriptionState, setTitleDescriptionState] = useState({
     title: generateMskViewConstants.title,
     description: generateMskViewConstants.description,
@@ -27,7 +33,7 @@ export default function GenerateMskView() {
     mnemonicWordList: [],
     msk: "",
   });
-
+  const router = useRouter();
   const getSeedCard = (seed: string, index: number) => {
     return (
       <SeedCard
@@ -57,6 +63,12 @@ export default function GenerateMskView() {
       />
     );
   };
+  const handleCopyMnemonic = () => {
+    copyToClipboard(mskState.msk);
+    toast.success(`Copied! ${mskState.msk} `, {
+      autoClose: 1000,
+    });
+  };
 
   const handleButtonPressed = () => {
     if (!isNextClicked) {
@@ -73,10 +85,29 @@ export default function GenerateMskView() {
       if (selectedSeeds.length === mskState.mnemonicWordList.length) {
         const result = validateMnemonic(selectedSeeds, mskState.msk);
         if (result) {
-          showSweetAlertModal("MSK generated", mskState.msk, "success");
+          setFormContext({
+            ...formContext,
+            generatePswState: {
+              ...formContext.generatePswState,
+              msk: mskState.msk,
+            },
+          });
+          showSweetAlertModal(
+            "Master Password generated",
+            mskState.msk,
+            "success",
+            true
+          ).then((result) => {
+            if (result.isConfirmed) {
+              handleCopyMnemonic();
+            }
+            router.push("/");
+          });
         } else {
           toast.error("Invalid seeds");
         }
+      } else {
+        toast.error("Please select all seeds");
       }
     }
   };
@@ -87,9 +118,11 @@ export default function GenerateMskView() {
   }, []);
 
   return (
-    <div className="w-full h-full space-y-8">
+    <div className="w-[630px] h-full space-y-8">
       <div className="flex flex-col items-center space-y-2">
-        <p className="font-bold text-2xl">{titleDescriptionState.title}</p>
+        <p className="font-bold text-xl lg:text-2xl  text-black">
+          {titleDescriptionState.title}
+        </p>
         <p className="text-sm text-gray-500 text-center">
           {titleDescriptionState.description}
         </p>
