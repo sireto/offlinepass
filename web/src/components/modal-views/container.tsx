@@ -1,7 +1,5 @@
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect } from "react";
-import { Close } from "@app/components/icons/close";
-import Button from "@app/components/ui/button/button";
 import { Dialog } from "@app/components/ui/dialog";
 import { Transition } from "@app/components/ui/transition";
 import { MODAL_VIEW, useModal } from "@app/components/modal-views/context";
