@@ -143,7 +143,7 @@ export default function GenerateMskView() {
       <Button
         fullWidth
         onClick={handleButtonPressed}
-        className="text-lg font-medium"
+        className="text-lg font-medium h-10 sm:h-12"
       >
         {isNextClicked ? "Verify" : "Next"}
       </Button>

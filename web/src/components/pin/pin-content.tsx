@@ -117,10 +117,10 @@ export default function PinContent({ pincodeDetails }: IpinCodeDetailsProps) {
             }}
             values={repeatPin}
           />
-          <div className="flex flex-row-reverse">
+          <div className="flex  justify-center">
             <Button
               color="danger"
-              className="w-min hover:bg-white -mt-3"
+              className="w-min  -mt-3 h-10"
               onClick={skipButtonClickHandler}
               variant="transparent"
             >

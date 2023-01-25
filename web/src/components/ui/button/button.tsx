@@ -24,7 +24,7 @@ const shapes: Record<ShapeNames, string[]> = {
 const variants: Record<VariantNames, string[]> = {
   ghost: ["bg-transparent"],
   solid: ["text-white"],
-  transparent: ["bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800"],
+  transparent: ["bg-transparent"],
 };
 
 const colors: Record<ColorNames, string[]> = {
@@ -34,11 +34,11 @@ const colors: Record<ColorNames, string[]> = {
   success: ["text-white", "bg-green-500", "border-green-500"],
   info: ["text-blue-500", "bg-blue-500", "border-blue-500"],
   warning: ["text-yellow-500", "bg-yellow-500", "border-yellow-500"],
-  danger: ["text-red-500", "bg-red-500", "border-red-500"],
+  danger: ["text-red-500", "bg-white-500", "border-red-500"],
 };
 const sizes: Record<SizeNames, string[]> = {
   large: ["px-7 sm:px-9 h-11 sm:h-13"],
-  medium: ["px-5 sm:px-8 h-10 sm:h-12"],
+  medium: ["px-5 sm:px-8"],
   small: ["px-7 h-10", "w-10 h-10"],
   mini: ["px-4 h-8", "w-8 h-8"],
 };
@@ -80,12 +80,12 @@ const Button: React.FC<ButtonProps> = ({
       buttonDripColor = "rgba(0, 0, 0, 0.1)";
       break;
 
-    case "transparent":
-      buttonColorClassNames = `${colorClassNames[0]} ${
-        disabled || isLoading
-          ? ""
-          : "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800"
-      } `;
+      // case "transparent":
+      //   buttonColorClassNames = `${colorClassNames[0]} ${
+      //     disabled || isLoading
+      //       ? ""
+      //       : "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800"
+      //   } `;
       buttonDripColor = "rgba(0, 0, 0, 0.1)";
       break;
 
