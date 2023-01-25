@@ -3,9 +3,12 @@ import { checkMskValidation } from "@app/utils/passwordUtils";
 import React from "react";
 import TextFieldError from "@app/components/textfield-error";
 import { mskErrorsConstants } from "@app/constants/error-constants";
-import useFormContext from "../form-views/form-context";
 
-export default function TextFieldErrorList() {
+interface ITextFieldErrorList {
+  value: string;
+}
+
+export default function TextFieldErrorList({ value }: ITextFieldErrorList) {
   const mskErrors = [
     MskErrorEnums.LENGTH,
     MskErrorEnums.LOWERCASE,
@@ -13,17 +16,16 @@ export default function TextFieldErrorList() {
     MskErrorEnums.UPPERCASE,
     MskErrorEnums.NUMBER,
   ];
-  const { formContext } = useFormContext();
   return (
     <div className="flex flex-col text-xs text-textfield_label  -mt-2 mb-2 space-y-2">
       <p className=" font-semibold">Password Must contain the following :</p>
-      {mskErrors.map((error) => {
+      {mskErrors.map((errorText) => {
         return (
           <TextFieldError
-            key={error}
+            key={errorText}
             showIcon
-            error={!checkMskValidation(error, formContext.generatePswState.msk)}
-            message={mskErrorsConstants[error]}
+            error={!checkMskValidation(errorText, value)}
+            message={mskErrorsConstants[errorText]}
           />
         );
       })}

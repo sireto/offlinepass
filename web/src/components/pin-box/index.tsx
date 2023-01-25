@@ -17,7 +17,6 @@ interface IPinInputsProps extends PinInputProps {
 }
 
 const PinInputs: React.FC<IPinInputsProps> = ({
-  id,
   autoFocus,
   onChange,
   values,

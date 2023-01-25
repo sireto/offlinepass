@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { InputAdornment, MenuItem } from "@mui/material";
-import { getHostName, hmacSha256 } from "@app/utils/hmac";
+import React, { useEffect, useState } from "react";
+import { InputAdornment } from "@mui/material";
+import { getHostName, hmacSha256 } from "@app/utils/hmacUtils";
 import cn from "classnames";
 import {
   formIds,
@@ -28,22 +28,38 @@ import { useModal } from "@app/components/modal-views/context";
 import { useAppSelector, useAppDispatch } from "@app/store/hooks";
 import { Close } from "@app/components/icons/close";
 import TextFieldErrorList from "@app/components/textfield-error-list";
-import useFormContext from "@app/components/form-views/form-context";
+import moment from "moment";
+import PasswordToast from "@app/components/ui/password-toast";
+import MuiSelect from "@app/components/select/MuiSelect";
 
 export default function GeneratePasswordView() {
-  const { setFormContext, formContext } = useFormContext();
   const { openModal } = useModal();
   const dispatch = useAppDispatch();
   const passwordProvider = useAppSelector(selectPasswordProvider);
-  const generatePswState = formContext.generatePswState;
+  const [generatePasswordHash, setGeneratePasswordHash] = useState("");
+  const [isMskVisible, setMskVisibility] = useState(false);
+  const [visitorId, setVisitorId] = useState("");
+  const [generatePswState, setGeneratePswState] = useState({
+    msk: "",
+    host: "",
+    usernameEmail: "",
+    date: moment(Date.now()).format("YYYY"),
+    retries: "0",
+  });
 
   const handleGeneratePassword = async () => {
     await hmacSha256(generatePswState).then((passwordhash) => {
-      setFormContext({
-        ...formContext,
-        passwordHash: passwordhash,
-      });
+      setGeneratePasswordHash(passwordhash);
     });
+  };
+
+  const showPasswordToast = (host: string, generatedPasswordHash: string) => {
+    return (
+      <PasswordToast
+        host={host}
+        generatedPasswordHash={generatedPasswordHash}
+      />
+    );
   };
 
   const isFormFieldsValid =
@@ -56,13 +72,10 @@ export default function GeneratePasswordView() {
 
   const getMskInputProps = (
     <div className="flex space-x-4 items-center">
-      {formContext.isMskVisible ? (
+      {isMskVisible ? (
         <Eye
           onClick={() => {
-            setFormContext({
-              ...formContext,
-              isMskVisible: false,
-            });
+            setMskVisibility(false);
           }}
           className="h-6 w-6 cursor-pointer"
         />
@@ -74,12 +87,13 @@ export default function GeneratePasswordView() {
               !isPasswordHashMatch ||
               isEmptyString(passwordProvider.pinHash)
             ) {
-              setFormContext({
-                ...formContext,
-                isMskVisible: true,
-              });
+              setMskVisibility(true);
             } else {
-              openModal("PINCODE_VIEW", { isSave: false });
+              openModal("PINCODE_VIEW", {
+                setMskVisiblity: setMskVisibility,
+                visitorId: visitorId,
+                generatePswState: generatePswState,
+              });
             }
           }}
           className="h-6 w-6 cursor-pointer"
@@ -88,12 +102,9 @@ export default function GeneratePasswordView() {
       {isPasswordHashMatch && !isEmptyString(passwordProvider.pinHash) && (
         <Close
           onClick={() => {
-            setFormContext({
-              ...formContext,
-              generatePswState: {
-                ...generatePswState,
-                msk: "",
-              },
+            setGeneratePswState({
+              ...generatePswState,
+              msk: "",
             });
           }}
           className="h-4 w-4 cursor-pointer"
@@ -101,6 +112,39 @@ export default function GeneratePasswordView() {
       )}
     </div>
   );
+
+  const handleOnChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setGeneratePswState({
+      ...generatePswState,
+      [event.target.id]: event.target.value,
+    });
+  };
+
+  const handleDate = (event) => {
+    setGeneratePswState({
+      ...generatePswState,
+      date: event.target.value,
+    });
+  };
+
+  const handleOnSelect = (event: React.SyntheticEvent<HTMLDivElement, Event>) =>
+    setGeneratePswState({
+      ...generatePswState,
+      [event.target["id"]]: event.target["value"],
+    });
+
+  // type PswStateType = "msk" | "hosts" | "usernameEmails" | "hashMsk" | "pinHash";
+
+  // const onSavehandler = (PswState: PswStateType, value) => {
+  //   dispatch(
+  //     setPasswordProvider({
+  //       ...passwordProvider,
+  //       [PswState]: value,
+  //     })
+  //   );
+  // };
 
   const generatePasswordFormComponent = (
     <>
@@ -112,12 +156,13 @@ export default function GeneratePasswordView() {
         }
         label={formTitleConstants.SECURITY_KEY}
         value={generatePswState.msk}
+        onChange={handleOnChange}
         disabled={
           isPasswordHashMatch &&
-          !formContext.isMskVisible &&
+          !isMskVisible &&
           !isEmptyString(passwordProvider.pinHash)
         }
-        type={formContext.isMskVisible ? "text" : "password"}
+        type={isMskVisible ? "text" : "password"}
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
@@ -131,20 +176,29 @@ export default function GeneratePasswordView() {
             : !isMskValid(generatePswState.msk)
         }
         onSave={() => {
-          openModal("PINCODE_VIEW", { isSave: true });
+          openModal("PINCODE_VIEW", {
+            isSave: true,
+            setMskVisiblity: setMskVisibility,
+            visitorId: visitorId,
+            generatePswState: generatePswState,
+          });
         }}
       />
       {/* msk validation error */}
       {!isEmptyString(generatePswState.msk) &&
-        !isMskValid(generatePswState.msk) && <TextFieldErrorList />}
+        !isMskValid(generatePswState.msk) && (
+          <TextFieldErrorList value={generatePswState.msk} />
+        )}
 
       <MuiTextField
         id={formIds.HOST}
         label={formTitleConstants.HOST}
         value={generatePswState.host}
+        onSelect={handleOnSelect}
         textfieldTypes="autocomplete"
         options={passwordProvider.hosts}
         placeholder="eg: facebook.com"
+        onChange={handleOnChange}
         showStoreOption={
           !toLowerCaseAllElement(passwordProvider.hosts).includes(
             generatePswState.host.toLowerCase()
@@ -167,9 +221,11 @@ export default function GeneratePasswordView() {
 
       <MuiTextField
         id={formIds.USERNAME_EMAIL}
+        onSelect={handleOnSelect}
         label={formTitleConstants.USERNAME_EMAIL}
         value={generatePswState.usernameEmail}
         textfieldTypes="autocomplete"
+        onChange={handleOnChange}
         options={passwordProvider.usernameEmails}
         showStoreOption={
           !toLowerCaseAllElement(passwordProvider.usernameEmails).includes(
@@ -190,29 +246,24 @@ export default function GeneratePasswordView() {
         }}
       />
 
-      <div className="flex flex-col md:flex-row md:space-x-10 justify-between w-full ">
+      <div className="flex flex-col md:flex-row md:space-x-10 space-y-[22px] md:space-y-0 justify-between w-full ">
         <div className="md:w-1/2">
-          <MuiTextField
-            id={formIds.DATE}
-            label={formTitleConstants.YEAR}
-            type="number"
-            select
+          <div className="flex items-center font-medium text-xs md:text-sm text-textfield_label mb-2">
+            {formTitleConstants.YEAR}
+          </div>
+          <MuiSelect
+            className="w-full"
+            options={["2022", "2023", "2024"]}
+            onChange={handleDate}
             value={generatePswState.date}
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-          >
-            {[2022, 2023, 2024].map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </MuiTextField>
+          />
         </div>
-
         <div className="md:w-1/2">
           <MuiTextField
             id={formIds.RETRIES}
             label={`${formTitleConstants.RETRIES} ${generatePswState.date}`}
             type="number"
+            onChange={handleOnChange}
             value={generatePswState.retries}
             toolTipTitle={numOfPasswordChangesTP}
             showTooltip
@@ -224,26 +275,23 @@ export default function GeneratePasswordView() {
   );
 
   const getInitialMskRenderer = () => {
-    if (formContext.visitorId === "") {
+    if (visitorId === "") {
       const savedUsernameEmailsLength = passwordProvider.usernameEmails.length;
       const savedHostsLength = passwordProvider.hosts.length;
       visitorIdentity().then((visitorIdentification) => {
         // set GeneratePswState hooks for display saved value in textfield
-        setFormContext({
-          ...formContext,
-          visitorId: visitorIdentification,
-          generatePswState: {
-            ...formContext.generatePswState,
-            msk: decrypt(passwordProvider.msk, visitorIdentification),
-            host:
-              savedHostsLength !== 0
-                ? passwordProvider.hosts[savedHostsLength - 1]
-                : "",
-            usernameEmail:
-              savedUsernameEmailsLength !== 0
-                ? passwordProvider.usernameEmails[savedUsernameEmailsLength - 1]
-                : "",
-          },
+        setVisitorId(visitorIdentification);
+        setGeneratePswState({
+          ...generatePswState,
+          msk: decrypt(passwordProvider.msk, visitorIdentification),
+          host:
+            savedHostsLength !== 0
+              ? passwordProvider.hosts[savedHostsLength - 1]
+              : "",
+          usernameEmail:
+            savedUsernameEmailsLength !== 0
+              ? passwordProvider.usernameEmails[savedUsernameEmailsLength - 1]
+              : "",
         });
       });
     }
@@ -254,15 +302,14 @@ export default function GeneratePasswordView() {
     if (isFormFieldsValid) {
       handleGeneratePassword();
     } else {
-      setFormContext({
-        ...formContext,
-        passwordHash: "",
-      });
+      setGeneratePasswordHash("");
     }
   }, [generatePswState]);
 
   return (
     <div className="w-full h-full bg-white  px-10 lg:px-20">
+      {!isEmptyString(generatePasswordHash) &&
+        showPasswordToast(generatePswState.host, generatePasswordHash)}
       <div
         className={cn(
           " space-y-8",

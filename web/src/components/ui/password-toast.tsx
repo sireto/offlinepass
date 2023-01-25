@@ -7,27 +7,31 @@ import { toast } from "react-toastify";
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
 import Identicon from "react-identicons";
 import VariantsAnimation from "@app/animation/variants-animation";
-import { getHostName } from "@app/utils/hmac";
-import useFormContext from "@app/components/form-views/form-context";
+import { getHostName } from "@app/utils/hmacUtils";
 import Button from "@app/components/ui/button/button";
+import { isEmptyString } from "@app/utils/validationUtils";
 
-const PasswordToast = () => {
+interface IPasswordToastProps {
+  host: string;
+  generatedPasswordHash: string;
+}
+
+const PasswordToast = ({
+  host,
+  generatedPasswordHash,
+}: IPasswordToastProps) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const { formContext } = useFormContext();
   const [_, copyToClipboard] = useCopyToClipboard();
-  const passwordHash = formContext.passwordHash;
+
   const handleCopyPassword = () => {
-    copyToClipboard(passwordHash);
-    toast.success(
-      `Password copied for ${getHostName(formContext.generatePswState.host)}`,
-      {
-        autoClose: 1000,
-      }
-    );
+    copyToClipboard(generatedPasswordHash);
+    toast.success(`Password copied for ${getHostName(host)}`, {
+      autoClose: 1000,
+    });
   };
 
   // console.log(animalIdenticon("camelmasa").toSvg(64));
-  return passwordHash === "" ? (
+  return isEmptyString(generatedPasswordHash) ? (
     <></>
   ) : (
     <VariantsAnimation
@@ -39,10 +43,10 @@ const PasswordToast = () => {
         <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
           Generated Password:
         </p>
-        <Identicon string={passwordHash} size={24} />
+        <Identicon string={generatedPasswordHash} size={24} />
         <p className="text-center font-bold px-3 py-3 text-[#353535]  rounded-lg">
-          {passwordHash.substring(0, 2) +
-            hideString(passwordHash.substring(2), isPasswordVisible)}
+          {generatedPasswordHash.substring(0, 2) +
+            hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>
         {isPasswordVisible ? (
           <Eye

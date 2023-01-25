@@ -5,7 +5,7 @@ import cn from "classnames";
 import Autocomplete from "@mui/material/Autocomplete";
 import MuiTooltip from "@app/components/ui/tooltip/mui-tooltip";
 import styled from "@emotion/styled";
-import useFormContext from "@app/components/form-views/form-context";
+import useFormContext from "@app/components/form-views/context";
 import Button from "@app/components/ui/button/button";
 
 type TextFieldTypes = "normal" | "autocomplete";
@@ -56,6 +56,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   error,
   select,
   onSelect,
+  onChange,
   children,
   autoComplete,
   showStoreOption = false,
@@ -70,7 +71,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   ...muiTextFieldProps
 }) => {
   // const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
-  const { setFormContext, formContext } = useFormContext();
+  // const { setFormContext, formContext } = useFormContext();
   const getTextFieldTitle = (
     <div className="flex  justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
       <div className="flex items-center font-medium">
@@ -97,28 +98,6 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   );
 
   //@ts-ignore
-  const passwordState: passwordState = typeof id === "string" && id;
-  const handleOnChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) =>
-    setFormContext({
-      ...formContext,
-      generatePswState: {
-        ...formContext.generatePswState,
-        [passwordState]: select
-          ? event.target["value"]
-          : event.currentTarget["value"],
-      },
-    });
-
-  const handleOnSelect = (event: React.SyntheticEvent<HTMLDivElement, Event>) =>
-    setFormContext({
-      ...formContext,
-      generatePswState: {
-        ...formContext.generatePswState,
-        [passwordState]: event.target["value"],
-      },
-    });
 
   const getTextfield = () => {
     switch (textfieldTypes) {
@@ -135,7 +114,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             InputProps={InputProps}
             fullWidth={fullWidth}
             error={error}
-            onChange={handleOnChange}
+            onChange={onChange}
           >
             {children}
           </TextField>
@@ -165,8 +144,8 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
                   InputProps={InputProps}
                   fullWidth={fullWidth}
                   error={error}
-                  onSelect={handleOnSelect}
-                  onChange={handleOnChange}
+                  onSelect={onSelect}
+                  onChange={onChange}
                 />
               );
             }}

@@ -8,7 +8,7 @@ import {
   isMinimumCharacter,
 } from "./validationUtils";
 import { IPasswordState } from "@app/store/password/passwordSlice";
-import { PincodeDetailsDto } from "@app/models/dtos/pindto";
+import { IPincodeProps } from "@app/components/pin";
 
 export const checkMskValidation = (error: MskErrorEnums, msk: string) => {
   switch (error) {
@@ -68,11 +68,11 @@ export const repeatPinError = (
 export const pinError = (
   pin: Array<string>,
   passwordProvider: IPasswordState,
-  pincodeDetails: PincodeDetailsDto
+  pincodeProps: IPincodeProps
 ) => {
   if (
     stringTosha256(pin.toString()) === passwordProvider.pinHash ||
-    pincodeDetails.isSave ||
+    pincodeProps.isSave ||
     pin.includes("")
   )
     return "";
