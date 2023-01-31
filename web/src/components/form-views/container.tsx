@@ -9,11 +9,11 @@ export default function FormContainer({ className }) {
   return (
     <div
       className={cn(
-        "flex flex-col  justify-center w-full h-full items-center  bg-white",
+        "flex flex-col  justify-center w-full h-full items-end",
         className
       )}
     >
-      <div>{renderFormContent()}</div>
+      <div className="lg:w-auto w-full h-min">{renderFormContent()}</div>
     </div>
   );
 }

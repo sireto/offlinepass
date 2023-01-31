@@ -15,7 +15,7 @@ type VariantNames = "ghost" | "solid" | "transparent";
 type SizeNames = "large" | "medium" | "small" | "mini";
 
 const shapes: Record<ShapeNames, string[]> = {
-  rounded: ["rounded-md sm:rounded-lg"],
+  rounded: ["rounded-md sm:rounded-sm"],
   pill: ["rounded-full"],
   square: ["rounded-none"],
   circle: ["rounded-full"],
@@ -38,9 +38,9 @@ const colors: Record<ColorNames, string[]> = {
 };
 const sizes: Record<SizeNames, string[]> = {
   large: ["px-7 sm:px-9 h-11 sm:h-13"],
-  medium: ["px-5 sm:px-8"],
+  medium: ["px-5 sm:px-4"],
   small: ["px-7 h-10", "w-10 h-10"],
-  mini: ["px-4 h-8", "w-8 h-8"],
+  mini: ["px-3 h-6", "w-8 h-8"],
 };
 
 export interface ButtonProps
@@ -80,12 +80,12 @@ const Button: React.FC<ButtonProps> = ({
       buttonDripColor = "rgba(0, 0, 0, 0.1)";
       break;
 
-      // case "transparent":
-      //   buttonColorClassNames = `${colorClassNames[0]} ${
-      //     disabled || isLoading
-      //       ? ""
-      //       : "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800"
-      //   } `;
+    case "transparent":
+      buttonColorClassNames = `${colorClassNames[0]} ${
+        disabled || isLoading
+          ? ""
+          : "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800"
+      } `;
       buttonDripColor = "rgba(0, 0, 0, 0.1)";
       break;
 

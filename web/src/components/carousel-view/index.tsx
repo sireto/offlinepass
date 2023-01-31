@@ -30,7 +30,7 @@ export default function CarouselView({ className }) {
         className="flex flex-col py-10 items-center px-4 lg:h-[560px] sm:h-[500px]   space-y-2 lg:space-y-6"
       >
         <div className="h-[240px] w-[400px] flex items-center ">
-          <ImageRenderer imageSrc={carouselConstants[carouselIndex].src} />
+          <ImageRenderer src={carouselConstants[carouselIndex].src} />
         </div>
 
         <p className="text-xl md:text-2xl text-center font-bold text-[#303030]">

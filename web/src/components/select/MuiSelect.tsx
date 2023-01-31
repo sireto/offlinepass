@@ -7,20 +7,36 @@ interface IMuiSelect extends Omit<SelectProps, "options"> {
 }
 
 const CustomSelect = styled(Select)({
-  borderRadius: 12,
+  borderRadius: 4,
 });
+
+const customStyle = {
+  fontSize: 12,
+  height: 40,
+};
 
 export default function MuiSelect({
   options,
   className,
   onChange,
   value,
+  style = customStyle,
 }: IMuiSelect) {
   return (
-    <CustomSelect value={value} className={className} onChange={onChange}>
+    <CustomSelect
+      value={value}
+      style={style}
+      className={className}
+      onChange={onChange}
+      size="small"
+    >
       {options.map((item) => {
         return (
-          <MenuItem key={item} value={item}>
+          <MenuItem
+            style={{ fontSize: style.fontSize }}
+            key={item}
+            value={item}
+          >
             {item}
           </MenuItem>
         );

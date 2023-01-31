@@ -9,10 +9,12 @@ const ImageDiv = styled.img`
   overflow: hidden;
   object-fit: cover;
 `;
-interface ImageRendererProps {
-  imageSrc: string;
-}
 
-export default function ImageRenderer({ imageSrc }: ImageRendererProps) {
-  return <ImageDiv src={imageSrc} alt="Offline Pass" />;
-}
+const ImageRenderer: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({
+  src,
+  className,
+}) => {
+  return <ImageDiv src={src} alt="Offline Pass" className={className} />;
+};
+
+export default ImageRenderer;

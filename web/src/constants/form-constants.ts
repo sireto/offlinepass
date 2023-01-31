@@ -32,3 +32,9 @@ export const formIds = {
   DATE: "date",
   RETRIES: "retries",
 };
+
+export const storeOptionToolTipConstants = {
+  SECURITY_KEY: "Save encrypted password on localstorage",
+  HOST: "Save host or URL on localstorage",
+  USERNAME_EMAIL: "Save username or email on localstorage ",
+};

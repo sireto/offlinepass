@@ -37,14 +37,11 @@ const PasswordToast = ({
     <VariantsAnimation
       startingPosition={-20}
       endingPostion={0}
-      className={`flex z-20 fixed top-20 left-0 w-full h-[46px] overflow-hidden  lg:w-1/2  text-sm xl:text-base items-center justify-between`}
+      className={`flex z-20 fixed lg:static lg:my-2 my-0 lg:py-7 py-4 lg:rounded-lg rounded-none top-16 left-0 w-full h-[46px] bg-buttonColor overflow-hidden  lg:w-[400px]  text-sm xl:text-base items-center justify-between`}
     >
-      <div className="flex items-center px-6  w-full h-full space-x-2 bg-[#CDFFD8]  xl:space-x-3 ">
-        <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
-          Generated Password:
-        </p>
-        <Identicon string={generatedPasswordHash} size={24} />
-        <p className="text-center font-bold px-3 py-3 text-[#353535]  rounded-lg">
+      <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
+        <Identicon string={generatedPasswordHash} size={24} fg="white" />
+        <p className="text-center font-bold p-3 text-white ">
           {generatedPasswordHash.substring(0, 2) +
             hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>
@@ -53,25 +50,21 @@ const PasswordToast = ({
             onClick={() => {
               setPasswordVisibility(false);
             }}
-            className="h-6 w-6 cursor-pointer"
+            className="h-6 w-6 cursor-pointer text-white"
           />
         ) : (
           <EyeSlash
             onClick={() => {
               setPasswordVisibility(true);
             }}
-            className="h-6 w-6 cursor-pointer"
+            className="h-6 w-6 cursor-pointer text-white"
           />
         )}
+        <Copy
+          onClick={handleCopyPassword}
+          className="h-6 w-6 text-white cursor-pointer"
+        />
       </div>
-      <Button
-        onClick={handleCopyPassword}
-        color="gray"
-        className="h-[50px] flex  space-x-4 "
-      >
-        <p>Copy</p>
-        <Copy className="h-6 w-6" />
-      </Button>
     </VariantsAnimation>
   );
 };

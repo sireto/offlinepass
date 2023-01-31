@@ -1,18 +1,17 @@
 import { isEmptyString } from "@app/utils/validationUtils";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
-import React, { Ref } from "react";
+import React from "react";
 import cn from "classnames";
 import Autocomplete from "@mui/material/Autocomplete";
 import MuiTooltip from "@app/components/ui/tooltip/mui-tooltip";
 import styled from "@emotion/styled";
-import useFormContext from "@app/components/form-views/context";
 import Button from "@app/components/ui/button/button";
 
 type TextFieldTypes = "normal" | "autocomplete";
 
 type ShapeNames = "pill";
 
-type ColorNames = "lightBlue";
+type ColorNames = "lightBlue" | "white";
 export type passwordState =
   | "msk"
   | "host"
@@ -26,11 +25,18 @@ const shapes: Record<ShapeNames, string> = {
 
 const colors: Record<ColorNames, string> = {
   lightBlue: "inputBgLightGray",
+  white: "white",
 };
 
 const MuiStyledTextField = styled.div`
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 `;
+
+export const inputPropsStyle = {
+  fontSize: 12,
+  borderRadius: 4,
+  height: 40,
+};
 
 interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   shape?: string;
@@ -42,6 +48,8 @@ interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   bgColor?: string;
   textfieldTypes?: TextFieldTypes;
   options?: string[];
+  showTitleToolTip?: boolean;
+  isSave?: boolean;
 }
 
 const MuiTextField: React.FC<MuiTextFieldProps> = ({
@@ -51,53 +59,39 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   type,
   className,
   onSave,
-  InputProps,
   placeholder,
   error,
   select,
   onSelect,
   onChange,
   children,
-  autoComplete,
-  showStoreOption = false,
+  showStoreOption = true,
   fullWidth = true,
   shape = shapes.pill,
-  bgColor = colors.lightBlue,
+  bgColor = colors.white,
   textfieldTypes = "normal",
   showTooltip = false,
+  isSave = false,
+  InputProps = { style: inputPropsStyle },
   options = [],
   disabled = false,
   toolTipTitle = "",
-  ...muiTextFieldProps
 }) => {
-  // const { generatePswState, setGeneratePswState } = useGeneratePasswordState();
-  // const { setFormContext, formContext } = useFormContext();
   const getTextFieldTitle = (
-    <div className="flex  justify-between mb-2 space-x-4 items-center text-xs md:text-sm text-textfield_label font-medium">
+    <div className="flex  justify-between pb-2 items-center lg:text-sm text-xs text-textfield_label font-medium">
       <div className="flex items-center font-medium">
         {label}{" "}
         {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />}
       </div>
+      {showStoreOption && (
+        <div className="flex items-center space-x-1 text-[10px]">
+          <p className=" text-lightGray">Do you want to save?</p>
 
-      {
-        //@ts-ignore
-        showStoreOption && !isEmptyString(value) && (
-          <div className="flex items-center space-x-4 text-xs">
-            <Button
-              onClick={onSave}
-              color="success"
-              shape="rounded"
-              size="mini"
-            >
-              Save
-            </Button>
-          </div>
-        )
-      }
+          <MuiTooltip title={toolTipTitle} className="ml-2" />
+        </div>
+      )}
     </div>
   );
-
-  //@ts-ignore
 
   const getTextfield = () => {
     switch (textfieldTypes) {
@@ -131,6 +125,19 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             fullWidth
             freeSolo
             includeInputInList
+            renderOption={(props, option) => {
+              return (
+                <span
+                  {...props}
+                  style={{
+                    fontSize: 12,
+                    color: "brand",
+                  }}
+                >
+                  {option}
+                </span>
+              );
+            }}
             renderInput={(params) => {
               return (
                 <TextField
@@ -168,7 +175,23 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   return (
     <>
       {getTextFieldTitle}
-      <MuiStyledTextField>{getTextfield()}</MuiStyledTextField>
+      <MuiStyledTextField className="w-full flex space-x-2 items-center justify-between ">
+        {getTextfield()}
+        {showStoreOption && (
+          <Button
+            onClick={onSave}
+            disabled={!isSave}
+            className={cn(
+              "text-xs rounded-md h-full  text-white py-2",
+              isSave && !isEmptyString(typeof value === "string" ? value : "")
+                ? "bg-buttonColor hover:bg-brand"
+                : " bg-gray-200 cursor-not-allowed"
+            )}
+          >
+            Yes
+          </Button>
+        )}
+      </MuiStyledTextField>
       {/* {label === formTitleConstants.SECURITY_KEY && getGeneratePassword()} */}
     </>
   );
