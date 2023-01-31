@@ -12,10 +12,9 @@ export function Header() {
   return (
     <nav
       className={`fixed top-0 z-30 flex w-full items-center justify-between px-4 transition-all duration-300  sm:px-6 lg:px-8 xl:px-10 3xl:px-12 ${
-        "h-16 lg:h-20 bg-blue-50"
-        // isMounted && windowScroll.y > 10
-        //   ? "h-20 bg-gradient-to-b from-white to-white/80 shadow-card backdrop-blur dark:from-dark dark:to-dark/80"
-        //   : "h-20 border-b-[0.5px] border-neutral-100 dark:border-neutral-700 bg-white dark:bg-dark"
+        isMounted && windowScroll.y > 10
+          ? "h-16 lg:h-20 shadow-card backdrop-blur"
+          : "h-16 lg:h-20  bg-blue-50"
       }`}
     >
       <main className="flex items-center justify-between w-full">

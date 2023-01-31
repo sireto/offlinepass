@@ -7,7 +7,7 @@ export default function BannerContainer({ className }) {
   return (
     <div
       className={cn(
-        "flex flex-col space-y-8 px-10 lg:px-0  lg:py-0 py-10 w-full h-full justify-center text-brand",
+        "flex flex-col space-y-8 px-10 lg:px-0 min-h-[450px]  lg:py-0 py-10 w-full h-full justify-center text-brand",
         className
       )}
     >

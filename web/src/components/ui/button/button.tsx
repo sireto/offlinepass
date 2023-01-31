@@ -15,7 +15,7 @@ type VariantNames = "ghost" | "solid" | "transparent";
 type SizeNames = "large" | "medium" | "small" | "mini";
 
 const shapes: Record<ShapeNames, string[]> = {
-  rounded: ["rounded-md sm:rounded-sm"],
+  rounded: ["rounded-md"],
   pill: ["rounded-full"],
   square: ["rounded-none"],
   circle: ["rounded-full"],
@@ -28,7 +28,7 @@ const variants: Record<VariantNames, string[]> = {
 };
 
 const colors: Record<ColorNames, string[]> = {
-  primary: ["text-white", "bg-brand", "border-brand"],
+  primary: ["text-white", "bg-buttonColor", "border-buttonColor"],
   white: ["text-gray-900", "bg-white", "border-white"],
   gray: ["text-gray-900", "bg-gray-100", "border-gray-100"],
   success: ["text-white", "bg-green-500", "border-green-500"],

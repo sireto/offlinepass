@@ -116,7 +116,7 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
         <div className="flex  justify-center">
           <Button
             color="danger"
-            className="w-min  -mt-3 h-10 border-transparent"
+            className="w-min  -mt-3 h-10 border-none"
             onClick={skipButtonClickHandler}
             variant="ghost"
           >

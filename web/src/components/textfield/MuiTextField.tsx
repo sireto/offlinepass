@@ -78,7 +78,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   toolTipTitle = "",
 }) => {
   const getTextFieldTitle = (
-    <div className="flex  justify-between pb-2 items-center lg:text-sm text-xs text-textfield_label font-medium">
+    <div className="flex  justify-between pb-2 items-center text-sm text-textfield_label font-medium">
       <div className="flex items-center font-medium">
         {label}{" "}
         {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />}
@@ -130,7 +130,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
                 <span
                   {...props}
                   style={{
-                    fontSize: 12,
+                    fontSize: inputPropsStyle.fontSize,
                     color: "brand",
                   }}
                 >
@@ -181,8 +181,9 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
           <Button
             onClick={onSave}
             disabled={!isSave}
+            shape="rounded"
             className={cn(
-              "text-xs rounded-md h-full  text-white py-2",
+              "text-xs  h-full  text-white py-2",
               isSave && !isEmptyString(typeof value === "string" ? value : "")
                 ? "bg-buttonColor hover:bg-brand"
                 : " bg-gray-200 cursor-not-allowed"
