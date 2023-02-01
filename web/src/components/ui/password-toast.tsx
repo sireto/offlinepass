@@ -30,7 +30,7 @@ const PasswordToast = ({
     });
   };
 
-  // console.log(animalIdenticon("camelmasa").toSvg(64));
+  const iconClassName = "h-5 w-5 lg:w-6 lg:h-6 cursor-pointer text-white";
   return isEmptyString(generatedPasswordHash) ? (
     <></>
   ) : (
@@ -40,8 +40,8 @@ const PasswordToast = ({
       className={`flex z-20 fixed lg:static lg:my-2 my-0 lg:py-7 py-4 lg:rounded-lg rounded-none top-16 left-0 w-full h-[46px] bg-buttonColor overflow-hidden  lg:w-[430px]  text-sm xl:text-base items-center justify-between`}
     >
       <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
-        <Identicon string={generatedPasswordHash} size={24} fg="white" />
-        <p className="text-center font-bold p-3 text-white ">
+        <Identicon string={generatedPasswordHash} size={22} fg="white" />
+        <p className="text-center text-md lg:text-xl font-bold p-3 text-white ">
           {generatedPasswordHash.substring(0, 2) +
             hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>
@@ -50,20 +50,17 @@ const PasswordToast = ({
             onClick={() => {
               setPasswordVisibility(false);
             }}
-            className="h-6 w-6 cursor-pointer text-white"
+            className={iconClassName}
           />
         ) : (
           <EyeSlash
             onClick={() => {
               setPasswordVisibility(true);
             }}
-            className="h-6 w-6 cursor-pointer text-white"
+            className={iconClassName}
           />
         )}
-        <Copy
-          onClick={handleCopyPassword}
-          className="h-6 w-6 text-white cursor-pointer"
-        />
+        <Copy onClick={handleCopyPassword} className={iconClassName} />
       </div>
     </VariantsAnimation>
   );

@@ -3,7 +3,7 @@ export interface GeneratePswStateDto {
   host: string;
   usernameEmail: string;
   date: string;
-  retries: string;
+  retries: number;
 }
 
 export interface GeneratePswFormPropsDto {

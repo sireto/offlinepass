@@ -6,7 +6,7 @@ import {
   isContainSpecialCharacter,
   isContainUppercase,
   isMinimumCharacter,
-} from "./validationUtils";
+} from "@app/utils/validationUtils";
 import { IPasswordState } from "@app/store/password/passwordSlice";
 import { IPincodeProps } from "@app/components/pin";
 

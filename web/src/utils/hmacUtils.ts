@@ -1,6 +1,6 @@
 import hmac from "js-crypto-hmac";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
-import { isValidUrl } from "@app/utils/validationUtils";
+import { isEmptyString, isValidUrl } from "@app/utils/validationUtils";
 import { GeneratePswStateDto } from "@app/models/dtos/generate-psw-form-dtos";
 const bs58 = require("bs58");
 
@@ -24,8 +24,9 @@ export const hmacSha256 = async (generatePswState: GeneratePswStateDto) => {
     });
 };
 
-const checkRetries = (retries: string) => {
-  if (Number.isNaN(parseInt(retries))) {
+const checkRetries = (retries: number | string) => {
+  debugger;
+  if (Number.isNaN(retries) || isEmptyString(retries.toString())) {
     return 0;
   } else {
     return retries;

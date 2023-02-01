@@ -3,7 +3,6 @@ import { InputAdornment } from "@mui/material";
 import { getHostName, hmacSha256 } from "@app/utils/hmacUtils";
 import {
   formIds,
-  generatePasswordViewConstants,
   storeOptionToolTipConstants,
 } from "@app/constants/form-constants";
 import { formTitleConstants } from "@app/constants/form-constants";
@@ -24,7 +23,6 @@ import {
 import MuiTextField, {
   inputPropsStyle,
 } from "@app/components/textfield/MuiTextField";
-import { numOfPasswordChangesTP } from "@app/constants/tooltip-constants";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
 import { useModal } from "@app/components/modal-views/context";
 import { useAppSelector, useAppDispatch } from "@app/store/hooks";
@@ -46,7 +44,7 @@ export default function GeneratePasswordView() {
     host: "",
     usernameEmail: "",
     date: moment(Date.now()).format("YYYY"),
-    retries: "0",
+    retries: 0,
   });
 
   const handleGeneratePassword = async () => {
@@ -267,7 +265,6 @@ export default function GeneratePasswordView() {
         onChange={handleOnChange}
         showStoreOption={false}
         value={generatePswState.retries}
-        toolTipTitle={numOfPasswordChangesTP}
         inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
       />
     </>
@@ -275,8 +272,6 @@ export default function GeneratePasswordView() {
 
   const getInitialMskRenderer = () => {
     if (visitorId === "") {
-      // const savedUsernameEmailsLength = passwordProvider.usernameEmails.length;
-      // const savedHostsLength = passwordProvider.hosts.length;
       visitorIdentity().then((visitorIdentification) => {
         // set GeneratePswState hooks for display saved value in textfield
         setVisitorId(visitorIdentification);
@@ -303,7 +298,7 @@ export default function GeneratePasswordView() {
     <div className="lg:w-[430px] w-full h-full lg:px-0 px-4 lg:py-0 py-2 ">
       {!isEmptyString(generatePasswordHash) &&
         showPasswordToast(generatePswState.host, generatePasswordHash)}
-      <div className="px-8 pt-8 pb-4 shadow-md rounded-lg bg-white">
+      <div className="px-8 pt-8 pb-4 shadow-lg rounded-lg bg-white">
         {generatePasswordFormComponent}
       </div>
     </div>

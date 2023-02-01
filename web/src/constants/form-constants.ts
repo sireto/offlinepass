@@ -9,12 +9,6 @@ export const verifyMskViewConstants = {
   description: "Choose the seeds in the correct order.",
 };
 
-export const generatePasswordViewConstants = {
-  title: "Your Offline Password",
-  description:
-    "Password will be generated based on your master password when you fill up the other details.",
-};
-
 export const formTitleConstants = {
   SECURITY_KEY: "Master Password",
   HOST: "Host or URL",
