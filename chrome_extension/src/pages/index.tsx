@@ -5,7 +5,6 @@ const Home: NextPage = () => {
   return (
     <main className="py-4 bg-white h-full">
       <section>
-        <PasswordToast />
         <FormContainer className="w-full h-full" />
       </section>
     </main>

@@ -1,9 +1,10 @@
-import { GeneratePswStateDtos } from "@app/models/dtos/generatepsw";
 import hmac from "js-crypto-hmac";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import { isValidUrl } from "@app/utils/validationUtils";
+import { GeneratePswStateDto } from "@app/models/dtos/generate-psw-form-dtos";
 const bs58 = require("bs58");
-export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
+
+export const hmacSha256 = async (generatePswState: GeneratePswStateDto) => {
   const msg = `${getHostName(
     generatePswState.host
   ).toLowerCase()}|${generatePswState.usernameEmail.toLowerCase()}|${
@@ -19,14 +20,12 @@ export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
       const passwordhash = `${checkRetries(generatePswState.retries)}$${bs58
         .encode(mac)
         .substring(0, 16)}`;
-      console.log(passwordhash);
       return passwordhash;
-      //   console.log(new TextDecoder("utf-8").decode(mac));
     });
 };
 
-const checkRetries = (retries: number) => {
-  if (Number.isNaN(retries)) {
+const checkRetries = (retries: string) => {
+  if (Number.isNaN(parseInt(retries))) {
     return 0;
   } else {
     return retries;
