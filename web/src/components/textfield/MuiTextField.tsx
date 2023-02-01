@@ -2,7 +2,9 @@ import { isEmptyString } from "@app/utils/validationUtils";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import React from "react";
 import cn from "classnames";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, {
+  AutocompleteRenderOptionState,
+} from "@mui/material/Autocomplete";
 import MuiTooltip from "@app/components/ui/tooltip/mui-tooltip";
 import styled from "@emotion/styled";
 import Button from "@app/components/ui/button/button";
@@ -38,6 +40,23 @@ export const inputPropsStyle = {
   height: 40,
 };
 
+const customRenderOption = (
+  props: React.HTMLAttributes<HTMLLIElement>,
+  option: string
+) => {
+  return (
+    <span
+      {...props}
+      style={{
+        fontSize: inputPropsStyle.fontSize,
+        color: "brand",
+      }}
+    >
+      {option}
+    </span>
+  );
+};
+
 interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   shape?: string;
   showStoreOption?: boolean;
@@ -50,6 +69,11 @@ interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   options?: string[];
   showTitleToolTip?: boolean;
   isSave?: boolean;
+  renderOption?: (
+    props: React.HTMLAttributes<HTMLLIElement>,
+    option: string,
+    state: AutocompleteRenderOptionState
+  ) => React.ReactNode;
 }
 
 const MuiTextField: React.FC<MuiTextFieldProps> = ({
@@ -65,6 +89,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   onSelect,
   onChange,
   children,
+  renderOption = customRenderOption,
   showStoreOption = true,
   fullWidth = true,
   shape = shapes.pill,
@@ -80,7 +105,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   const getTextFieldTitle = (
     <div className="flex  justify-between pb-2 items-center text-sm text-textfield_label font-medium">
       <div className="flex items-center font-medium">
-        {label}{" "}
+        {label}
         {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />}
       </div>
       {showStoreOption && (
@@ -125,19 +150,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
             fullWidth
             freeSolo
             includeInputInList
-            renderOption={(props, option) => {
-              return (
-                <span
-                  {...props}
-                  style={{
-                    fontSize: inputPropsStyle.fontSize,
-                    color: "brand",
-                  }}
-                >
-                  {option}
-                </span>
-              );
-            }}
+            renderOption={renderOption}
             renderInput={(params) => {
               return (
                 <TextField
