@@ -118,7 +118,7 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
     <div className="flex flex-col px-8 py-1   transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[300px]">
       <div className="flex flex-col pt-6 items-center justify-center space-y-2 mb-5">
         <div className="h-[100px] w-[100px] rounded-full overflow-hidden">
-          <ImageRenderer src="/images/icon.png" />
+          <ImageRenderer src="/favicon.ico" />
         </div>
         <p className=" font-bold">Offline Pass</p>
       </div>
