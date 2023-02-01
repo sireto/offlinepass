@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistStore } from "redux-persist";
-import passwordSlice from "./password/passwordSlice";
+import passwordSlice from "@app/store/password/passwordSlice";
 
 const reducers = {
   [passwordSlice.reducerPath]: passwordSlice.reducer,

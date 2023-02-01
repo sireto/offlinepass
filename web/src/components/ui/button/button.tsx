@@ -15,7 +15,7 @@ type VariantNames = "ghost" | "solid" | "transparent";
 type SizeNames = "large" | "medium" | "small" | "mini";
 
 const shapes: Record<ShapeNames, string[]> = {
-  rounded: ["rounded-md sm:rounded-lg"],
+  rounded: ["rounded-md"],
   pill: ["rounded-full"],
   square: ["rounded-none"],
   circle: ["rounded-full"],
@@ -24,23 +24,23 @@ const shapes: Record<ShapeNames, string[]> = {
 const variants: Record<VariantNames, string[]> = {
   ghost: ["bg-transparent"],
   solid: ["text-white"],
-  transparent: ["bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800"],
+  transparent: ["bg-transparent"],
 };
 
 const colors: Record<ColorNames, string[]> = {
-  primary: ["text-white", "bg-brand", "border-brand"],
+  primary: ["text-white", "bg-buttonColor", "border-buttonColor"],
   white: ["text-gray-900", "bg-white", "border-white"],
   gray: ["text-gray-900", "bg-gray-100", "border-gray-100"],
-  success: ["text-green-500", "bg-green-500", "border-green-500"],
+  success: ["text-white", "bg-green-500", "border-green-500"],
   info: ["text-blue-500", "bg-blue-500", "border-blue-500"],
   warning: ["text-yellow-500", "bg-yellow-500", "border-yellow-500"],
-  danger: ["text-red-500", "bg-red-500", "border-red-500"],
+  danger: ["text-red-500", "bg-white-500", "border-red-500"],
 };
 const sizes: Record<SizeNames, string[]> = {
   large: ["px-7 sm:px-9 h-11 sm:h-13"],
-  medium: ["px-5 sm:px-8 h-10 sm:h-12"],
+  medium: ["px-5 sm:px-4"],
   small: ["px-7 h-10", "w-10 h-10"],
-  mini: ["px-4 h-8", "w-8 h-8"],
+  mini: ["px-3 h-6", "w-8 h-8"],
 };
 
 export interface ButtonProps
@@ -109,7 +109,11 @@ const Button: React.FC<ButtonProps> = ({
       )}
       {...buttonProps}
     >
-      {isLoading ? <CircularProgress color="inherit" className="p-2" /> : children}
+      {isLoading ? (
+        <CircularProgress color="inherit" className="p-2" />
+      ) : (
+        children
+      )}
     </button>
   );
 };
