@@ -46,7 +46,12 @@ const PinInputs: React.FC<IPinInputsProps> = ({
         inputStyle={inputStyle}
       />
 
-      <p className={cn("text-danger pl-2  text-xs ", error ? "pt-3" : "pt-7")}>
+      <p
+        className={cn(
+          "text-danger pl-2  text-xs ",
+          error ? "pt-2 pb-1" : "pt-7"
+        )}
+      >
         {error}
       </p>
     </div>

@@ -268,7 +268,6 @@ export default function GeneratePasswordView() {
         showStoreOption={false}
         value={generatePswState.retries}
         toolTipTitle={numOfPasswordChangesTP}
-        showTooltip
         inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
       />
     </>
@@ -276,22 +275,16 @@ export default function GeneratePasswordView() {
 
   const getInitialMskRenderer = () => {
     if (visitorId === "") {
-      const savedUsernameEmailsLength = passwordProvider.usernameEmails.length;
-      const savedHostsLength = passwordProvider.hosts.length;
+      // const savedUsernameEmailsLength = passwordProvider.usernameEmails.length;
+      // const savedHostsLength = passwordProvider.hosts.length;
       visitorIdentity().then((visitorIdentification) => {
         // set GeneratePswState hooks for display saved value in textfield
         setVisitorId(visitorIdentification);
         setGeneratePswState({
           ...generatePswState,
           msk: decrypt(passwordProvider.msk, visitorIdentification),
-          host:
-            savedHostsLength !== 0
-              ? passwordProvider.hosts[savedHostsLength - 1]
-              : "",
-          usernameEmail:
-            savedUsernameEmailsLength !== 0
-              ? passwordProvider.usernameEmails[savedUsernameEmailsLength - 1]
-              : "",
+          host: "",
+          usernameEmail: "",
         });
       });
     }
@@ -307,7 +300,7 @@ export default function GeneratePasswordView() {
   }, [generatePswState]);
 
   return (
-    <div className="lg:w-[400px] w-full h-full lg:px-0 px-4 lg:py-0 py-2 ">
+    <div className="lg:w-[430px] w-full h-full lg:px-0 px-4 lg:py-0 py-2 ">
       {!isEmptyString(generatePasswordHash) &&
         showPasswordToast(generatePswState.host, generatePasswordHash)}
       <div className="px-8 pt-8 pb-4 shadow-md rounded-lg bg-white">

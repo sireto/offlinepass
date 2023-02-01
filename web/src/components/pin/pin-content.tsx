@@ -62,23 +62,6 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
     setPincodehandler();
   }, [repeatPin, pin]);
 
-  const skipButtonClickHandler = () => {
-    dispatch(
-      setPasswordProvider({
-        ...passwordProvider,
-        msk: encrypt(pincodeProps.generatePswState.msk, pincodeProps.visitorId),
-        hashMsk: stringTosha256(pincodeProps.generatePswState.msk),
-        pinHash: "",
-      })
-    );
-    closeModal();
-    showSweetAlertModal(
-      "Warning!!",
-      "Your Master Password is not secure",
-      "warning"
-    );
-  };
-
   const onChangeHandler = (
     value: string | string[],
     index: number,
@@ -113,16 +96,6 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
           }}
           values={repeatPin}
         />
-        <div className="flex  justify-center">
-          <Button
-            color="danger"
-            className="w-min  -mt-3 h-10 border-none"
-            onClick={skipButtonClickHandler}
-            variant="ghost"
-          >
-            Skip
-          </Button>
-        </div>
       </>
     );
   };

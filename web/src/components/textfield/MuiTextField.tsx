@@ -50,6 +50,7 @@ const customRenderOption = (
       style={{
         fontSize: inputPropsStyle.fontSize,
         color: "brand",
+        height: inputPropsStyle.height,
       }}
     >
       {option}
@@ -61,13 +62,11 @@ interface MuiTextFieldProps extends Omit<OutlinedTextFieldProps, "variant"> {
   shape?: string;
   showStoreOption?: boolean;
   toolTipTitle?: string;
-  showTooltip?: boolean;
   onSave?: React.MouseEventHandler<HTMLButtonElement>;
   label: string;
   bgColor?: string;
   textfieldTypes?: TextFieldTypes;
   options?: string[];
-  showTitleToolTip?: boolean;
   isSave?: boolean;
   renderOption?: (
     props: React.HTMLAttributes<HTMLLIElement>,
@@ -95,7 +94,6 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   shape = shapes.pill,
   bgColor = colors.white,
   textfieldTypes = "normal",
-  showTooltip = false,
   isSave = false,
   InputProps = { style: inputPropsStyle },
   options = [],
@@ -104,14 +102,10 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
 }) => {
   const getTextFieldTitle = (
     <div className="flex  justify-between pb-2 items-center text-sm text-textfield_label font-medium">
-      <div className="flex items-center font-medium">
-        {label}
-        {showTooltip && <MuiTooltip title={toolTipTitle} className="ml-2" />}
-      </div>
+      <div className="flex items-center font-medium">{label}</div>
       {showStoreOption && (
         <div className="flex items-center space-x-1 text-[10px]">
           <p className=" text-lightGray">Do you want to save?</p>
-
           <MuiTooltip title={toolTipTitle} className="ml-2" />
         </div>
       )}

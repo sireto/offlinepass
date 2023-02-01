@@ -5,11 +5,13 @@ export default function FormContainer({ className }) {
   return (
     <div
       className={cn(
-        "flex flex-col  justify-center h-full lg:w-auto w-full items-end",
+        "flex flex-col justify-center h-full lg:w-auto w-full lg:items-end items-center",
         className
       )}
     >
-      <GeneratePasswordView />
+      <div>
+        <GeneratePasswordView />
+      </div>
     </div>
   );
 }

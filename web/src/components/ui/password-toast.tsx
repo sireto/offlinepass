@@ -37,7 +37,7 @@ const PasswordToast = ({
     <VariantsAnimation
       startingPosition={-20}
       endingPostion={0}
-      className={`flex z-20 fixed lg:static lg:my-2 my-0 lg:py-7 py-4 lg:rounded-lg rounded-none top-16 left-0 w-full h-[46px] bg-buttonColor overflow-hidden  lg:w-[400px]  text-sm xl:text-base items-center justify-between`}
+      className={`flex z-20 fixed lg:static lg:my-2 my-0 lg:py-7 py-4 lg:rounded-lg rounded-none top-16 left-0 w-full h-[46px] bg-buttonColor overflow-hidden  lg:w-[430px]  text-sm xl:text-base items-center justify-between`}
     >
       <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
         <Identicon string={generatedPasswordHash} size={24} fg="white" />

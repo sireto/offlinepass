@@ -1,5 +1,3 @@
-import { passwordState } from "@app/components/textfield/MuiTextField";
-
 export const generateMskViewConstants = {
   title: "Generate Master Password",
   description:
