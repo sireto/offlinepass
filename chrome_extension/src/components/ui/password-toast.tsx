@@ -29,7 +29,7 @@ const PasswordToast = ({
     });
   };
 
-  const iconClassName = "h-6 w-6 cursor-pointer text-white";
+  const iconClassName = "h-5 w-5 cursor-pointer text-white";
 
   // console.log(animalIdenticon("camelmasa").toSvg(64));
   return isEmptyString(generatedPasswordHash) ? (
@@ -42,7 +42,7 @@ const PasswordToast = ({
     >
       <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
         <Identicon string={generatedPasswordHash} size={24} fg="white" />
-        <p className="text-center font-bold p-3 text-white ">
+        <p className="text-center text-xl font-bold p-3 text-white ">
           {generatedPasswordHash.substring(0, 2) +
             hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>
