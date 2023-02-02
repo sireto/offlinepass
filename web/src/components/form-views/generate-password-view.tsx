@@ -217,7 +217,7 @@ export default function GeneratePasswordView() {
         }}
       />
       {generatePswState.host !== "" && (
-        <p className="text-[10px] text-danger -mt-2 pb-3">
+        <p className="text-[10px] text-danger -mt-3 pb-4">
           Hostname: <span>{getHostName(generatePswState.host)}</span>
         </p>
       )}
