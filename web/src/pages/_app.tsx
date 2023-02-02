@@ -11,9 +11,13 @@ import store, { persistor } from "@app/store/store";
 import Script from "next/script";
 import ModalContainer from "@app/components/modal-views/container";
 import Cookie from "@app/components/cookie";
+import Head from "next/head";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Head>
+        <title>OfflinePass</title>
+      </Head>
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
         strategy="afterInteractive"
