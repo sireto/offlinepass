@@ -298,7 +298,7 @@ export default function GeneratePasswordView() {
     <div className="lg:w-[430px] w-full h-full lg:px-0 px-4 lg:py-0 py-2 ">
       {!isEmptyString(generatePasswordHash) &&
         showPasswordToast(generatePswState.host, generatePasswordHash)}
-      <div className="px-8 pt-8 pb-4 shadow-lg rounded-lg bg-white">
+      <div className="lg:px-10 px-6 pt-8 pb-4 shadow-lg rounded-xl bg-white">
         {generatePasswordFormComponent}
       </div>
     </div>
