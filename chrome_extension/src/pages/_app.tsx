@@ -12,10 +12,6 @@ import ModalContainer from "@app/components/modal-views/container";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>Offline Pass</title>
-        <link rel="shortcut icon" href="/favicon.ico" />
-      </Head>
       <ToastContainer
         theme="colored"
         className="text-xs"

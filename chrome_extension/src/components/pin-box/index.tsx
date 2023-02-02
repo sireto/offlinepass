@@ -2,15 +2,6 @@ import { PinInput } from "react-input-pin-code";
 import { PinInputProps } from "react-input-pin-code/dist/types/PinInput";
 import cn from "classnames";
 
-// type SizeNames = "large" | "medium" | "small" | "mini";
-// type size = "lg" | "md" | "sm" | "xs";
-// const sizes: Record<SizeNames, size> = {
-//   large: "lg",
-//   medium: "md",
-//   small: "sm",
-//   mini: "xs",
-// };
-
 interface IPinInputsProps extends PinInputProps {
   label: string;
   error?: string;
@@ -22,17 +13,17 @@ const PinInputs: React.FC<IPinInputsProps> = ({
   values,
   label,
   error,
-  size = "md",
+  size = "sm",
   mask = false,
   type = "number",
   inputClassName = "text-black",
   placeholder = "",
-  inputStyle = { marginLeft: 12 },
+  inputStyle = { marginLeft: 2 },
   showState = false,
 }) => {
   return (
     <div>
-      <p className="ml-3 font-medium pb-2 text-black">{label}</p>
+      <p className="font-medium pb-3 text-sm text-black">{label}</p>
       <PinInput
         autoFocus={autoFocus}
         type={type}
@@ -48,8 +39,8 @@ const PinInputs: React.FC<IPinInputsProps> = ({
 
       <p
         className={cn(
-          "text-danger pl-2  text-xs ",
-          error ? "pt-2 pb-1" : "pt-7"
+          "text-danger  text-[10px] ",
+          error ? "pt-3" : "pt-[27px]"
         )}
       >
         {error}

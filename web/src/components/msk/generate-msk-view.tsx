@@ -13,7 +13,7 @@ import { showSweetAlertModal } from "@app/lib/modals/showModals";
 import { useRouter } from "next/router";
 
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
-import useFormContext from "../form-views/form-context";
+import useFormContext from "../form-views/context";
 
 interface MskState {
   mnemonicWordList: string[];
@@ -23,7 +23,6 @@ interface MskState {
 export default function GenerateMskView() {
   const [isNextClicked, setIsNextClicked] = useState(false);
   const [selectedSeeds, setSelectedSeeds] = useState<string[]>([]);
-  const { formContext, setFormContext } = useFormContext();
   const [_, copyToClipboard] = useCopyToClipboard();
   const [titleDescriptionState, setTitleDescriptionState] = useState({
     title: generateMskViewConstants.title,
@@ -85,13 +84,13 @@ export default function GenerateMskView() {
       if (selectedSeeds.length === mskState.mnemonicWordList.length) {
         const result = validateMnemonic(selectedSeeds, mskState.msk);
         if (result) {
-          setFormContext({
-            ...formContext,
-            generatePswState: {
-              ...formContext.generatePswState,
-              msk: mskState.msk,
-            },
-          });
+          // setFormContext({
+          //   ...formContext,
+          //   generatePswState: {
+          //     ...formContext.generatePswState,
+          //     msk: mskState.msk,
+          //   },
+          // });
           showSweetAlertModal(
             "Master Password generated",
             mskState.msk,

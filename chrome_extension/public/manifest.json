@@ -9,9 +9,9 @@
   "short_name": "Offline Pass",
   "description": "Self Service Password Manager",
   "icons": {
-    "16": "/favicon.ico",
-    "32": "/favicon.ico",
-    "150": "/favicon.ico"
+    "16": "/icon.png",
+    "32": "/icon.png",
+    "150": "/icon.png"
   },
   "commands": {
     "_execute_action": {

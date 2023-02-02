@@ -124,14 +124,6 @@ a {
 }
 
 @font-face {
-  font-family: "Chau_Philomene_One";
-  src: url("../src/assets/fonts/Chau_Philomene_One/ChauPhilomeneOne-Regular.ttf");
-  src: url("../src/assets/fonts/Chau_Philomene_One/ChauPhilomeneOne-Regular.ttf");
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
   font-family: "Inter";
   src: url("../src/assets/fonts/inter/Inter-Light.ttf");
   font-weight: 300;

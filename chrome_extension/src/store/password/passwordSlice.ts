@@ -4,7 +4,6 @@ import storage from "redux-persist/lib/storage";
 
 export interface IPasswordState {
   msk: string;
-  hosts: string[];
   usernameEmails: string[];
   hashMsk: string;
   pinHash: string;
@@ -12,7 +11,6 @@ export interface IPasswordState {
 
 const initialState: IPasswordState = {
   msk: "",
-  hosts: [],
   usernameEmails: [],
   hashMsk: "",
   pinHash: "",

@@ -1,17 +1,10 @@
 import hmac from "js-crypto-hmac";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import { isValidUrl } from "@app/utils/validationUtils";
+import { GeneratePswStateDto } from "@app/models/dtos/generate-psw-form-dtos";
 const bs58 = require("bs58");
 
-interface GeneratePswStateDtos {
-  msk: string;
-  host: string;
-  usernameEmail: string;
-  date: string;
-  retries: string;
-}
-
-export const hmacSha256 = async (generatePswState: GeneratePswStateDtos) => {
+export const hmacSha256 = async (generatePswState: GeneratePswStateDto) => {
   const msg = `${getHostName(
     generatePswState.host
   ).toLowerCase()}|${generatePswState.usernameEmail.toLowerCase()}|${

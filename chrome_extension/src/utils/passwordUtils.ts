@@ -1,4 +1,3 @@
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { MskErrorEnums } from "@app/models/enums/errorEnums";
 import * as CryptoJS from "crypto-js";
 import {
@@ -7,11 +6,9 @@ import {
   isContainSpecialCharacter,
   isContainUppercase,
   isMinimumCharacter,
-} from "@app/utils/validationUtils";
+} from "./validationUtils";
 import { IPasswordState } from "@app/store/password/passwordSlice";
-import { pincodeDetailsDtos } from "@app/models/dtos/pin";
-
-const fpPromise = FingerprintJS.load({ monitoring: false });
+import { IPincodeProps } from "@app/components/pin";
 
 export const checkMskValidation = (error: MskErrorEnums, msk: string) => {
   switch (error) {
@@ -31,12 +28,15 @@ export const checkMskValidation = (error: MskErrorEnums, msk: string) => {
 };
 
 export const visitorIdentity = async () => {
+  const fpPromise = import("@fingerprintjs/fingerprintjs").then(
+    (FingerprintJS) => FingerprintJS.load()
+  );
   const fp = await fpPromise;
   const result = await fp.get();
   return result.visitorId;
 };
 
-export const encrypt = (password: string, visitorId: string) => {
+export const encrypt = (password: string, visitorId) => {
   return CryptoJS.AES.encrypt(password, visitorId).toString();
 };
 
@@ -56,25 +56,11 @@ export const stringTosha256 = (data: string) => {
   return CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex);
 };
 
-// export const sha256ToString = (hash: string) => {
-//   return CryptoJS.sha256;
-// };
-
-// export const isEncryptedData = (data, visitorId) => {
-//   if (decrypt(data, visitorId) === false) {
-//     return false;
-//   }
-//   return true;
-// };
 export const repeatPinError = (
   pin: Array<string>,
   repeatPin: Array<string>
 ) => {
-  if (
-    pin.toString() === repeatPin.toString() ||
-    repeatPin.toString() === ["", "", "", ""].toString() ||
-    repeatPin[3] === ""
-  )
+  if (pin.toString() === repeatPin.toString() || repeatPin.includes(""))
     return "";
   return "Pin Mismatch";
 };
@@ -82,13 +68,12 @@ export const repeatPinError = (
 export const pinError = (
   pin: Array<string>,
   passwordProvider: IPasswordState,
-  pincodeDetails: pincodeDetailsDtos
+  pincodeProps: IPincodeProps
 ) => {
   if (
     stringTosha256(pin.toString()) === passwordProvider.pinHash ||
-    pincodeDetails.isSave ||
-    pin.toString() === ["", "", "", ""].toString() ||
-    pin[3] === ""
+    pincodeProps.isSave ||
+    pin.includes("")
   )
     return "";
   return "Wrong Pin";
