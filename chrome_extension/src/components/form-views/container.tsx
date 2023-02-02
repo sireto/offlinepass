@@ -1,6 +1,5 @@
 import GeneratePasswordView from "@app/components/form-views/generate-password-view";
 import cn from "classnames";
-
 export default function FormContainer({ className }) {
   return (
     <div

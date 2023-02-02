@@ -64,11 +64,11 @@ export default function GeneratePasswordView() {
     );
   };
 
+
   const isFormFieldsValid =
     !isEmptyString(generatePswState.host) &&
     !isEmptyString(generatePswState.usernameEmail) &&
     isMskValid(generatePswState.msk);
-
   const isPasswordHashMatch =
     passwordProvider.hashMsk === stringTosha256(generatePswState.msk);
 
@@ -136,7 +136,6 @@ export default function GeneratePasswordView() {
       ...generatePswState,
       [event.target["id"]]: event.target["value"],
     });
-
   const getCurrentTab = async () => {
     let queryOptions = { active: true, lastFocusedWindow: true };
     // `tab` will either be a `tabs.Tab` instance or `undefined`.
@@ -144,7 +143,6 @@ export default function GeneratePasswordView() {
     if (tab.url === "chrome://newtab/") return "";
     return getHostName(tab.url!);
   };
-
   const generatePasswordFormComponent = (
     <>
       <MuiTextField

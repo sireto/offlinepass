@@ -10,7 +10,6 @@ export function removeElementFromArray(array: any[], element: any) {
 export const toLowerCaseAllElement = (array: string[]) => {
   return array.map((value) => value.toLowerCase());
 };
-
 export const hideString = (val: string, isVisible: boolean) => {
   if (!isVisible) return "*".repeat(val.length);
   return val;
