@@ -17,7 +17,7 @@ export default function TextFieldErrorList({ value }: ITextFieldErrorList) {
     MskErrorEnums.NUMBER,
   ];
   return (
-    <div className="flex flex-col text-xs text-textfield_label  -mt-2 mb-2 space-y-2">
+    <div className="flex flex-col text-xs text-textfield_label  -mt-3 mb-4 space-y-2">
       <p className=" font-semibold">Password Must contain the following :</p>
       {mskErrors.map((errorText) => {
         return (

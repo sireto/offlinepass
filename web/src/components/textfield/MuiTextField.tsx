@@ -31,7 +31,7 @@ const colors: Record<ColorNames, string> = {
 };
 
 const MuiStyledTextField = styled.div`
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 `;
 
 export const inputPropsStyle = {
