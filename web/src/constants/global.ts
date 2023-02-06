@@ -2,8 +2,6 @@ const globalConstants = {
   appName: "Offline Pass",
   appDesc: "Self service password manager",
   title: "OfflinePass - Offline Password Manager",
-  favIcon: "favIcon",
-  titleImg: "titleImg",
   twitterHandle: "",
   url: "https://offlinepass.com/",
   socialPreview: {

@@ -11,15 +11,11 @@ import store, { persistor } from "@app/store/store";
 import Script from "next/script";
 import ModalContainer from "@app/components/modal-views/container";
 import Cookie from "@app/components/cookie";
-import Head from "next/head";
 import { NextSeo } from "next-seo";
 import globalConstants from "@app/constants/global";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>OfflinePass - Offline Password Manager</title>
-      </Head>
       <NextSeo
         title={globalConstants.title}
         description={globalConstants.appDesc}
@@ -30,11 +26,22 @@ export default function App({ Component, pageProps }: AppProps) {
           site_name: "OfflinePass",
           description: "Self service password manager",
           title: globalConstants.title,
+          images: [
+            {
+              url: "/favicon.ico",
+              width: 800,
+              height: 600,
+              alt: "Og Image Alt",
+            },
+          ],
         }}
         twitter={{
           handle: globalConstants.twitterHandle,
           site: globalConstants.url,
           cardType: "summary_large_image",
+        }}
+        facebook={{
+          appId: "1234567890",
         }}
       />
 

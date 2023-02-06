@@ -25,7 +25,6 @@ export const hmacSha256 = async (generatePswState: GeneratePswStateDto) => {
 };
 
 const checkRetries = (retries: number | string) => {
-  debugger;
   if (Number.isNaN(retries) || isEmptyString(retries.toString())) {
     return 0;
   } else {

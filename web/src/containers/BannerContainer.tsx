@@ -1,4 +1,3 @@
-import GithubButton from "@app/components/ui/button/github-button";
 import React from "react";
 import cn from "classnames";
 import { bannerConstants } from "@app/constants/banner-constants";
