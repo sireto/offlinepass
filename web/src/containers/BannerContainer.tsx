@@ -1,7 +1,7 @@
-import GithubButton from "@app/components/ui/button/github-button";
 import React from "react";
 import cn from "classnames";
 import { bannerConstants } from "@app/constants/banner-constants";
+import AnchorLink from "@app/components/ui/links/anchor-link";
 
 export default function BannerContainer({ className }) {
   return (
@@ -15,10 +15,13 @@ export default function BannerContainer({ className }) {
         {bannerConstants.title}
       </p>
       <p className="text-lg lg:text-2xl">{bannerConstants.description}</p>
-      <GithubButton
-        className="bg-buttonColor hover:bg-brand px-4 py-3 text-white w-[125px]"
-        iconColor="#ffffff"
-      />
+      <AnchorLink
+        target="_blank"
+        href="https://chrome.google.com/webstore/detail/offline-pass/dohnghdcmkckopegdlbjagkpdcadapmd"
+        className="bg-buttonColor hover:bg-brand px-4 py-3 text-white w-[140px]"
+      >
+        Try Extension
+      </AnchorLink>
     </div>
   );
 }

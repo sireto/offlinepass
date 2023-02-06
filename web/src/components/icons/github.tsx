@@ -4,7 +4,6 @@ export const Github = (props: React.SVGAttributes<{}>) => {
       viewBox="0 -3.5 256 256"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMinYMin meet"
-      fill="#000000"
       {...props}
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
