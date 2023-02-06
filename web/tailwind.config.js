@@ -20,7 +20,7 @@ module.exports = {
         brand: "#003E6B",
         buttonColor: "#5c75f6",
         body: "#ffffff",
-
+        blueGray: "#6699CC",
         lightBackground: "#F6F8FB",
         lightGray: "#808080",
 

@@ -41,7 +41,7 @@ const PasswordToast = ({
     >
       <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
         <Identicon string={generatedPasswordHash} size={22} fg="white" />
-        <p className="text-center text-md lg:text-xl font-bold p-3 text-white ">
+        <p className="text-md lg:text-xl font-bold py-3 text-white lg:w-[250px] w-[180px]  ">
           {generatedPasswordHash.substring(0, 2) +
             hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>

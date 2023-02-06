@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "@app/components/ui/logo";
 
 import { useIsMounted } from "@app/lib/hooks/use-is-mounted";
 import { useWindowScroll } from "@app/lib/hooks/use-window-scroll";
 import GithubButton from "@app/components/ui/button/github-button";
+import { getGithubStars } from "@app/lib/api/get-github-stars";
 
 export function Header() {
   const windowScroll = useWindowScroll();
   const isMounted = useIsMounted();
+  const [githubStars, setGithubStars] = useState(0);
+  useEffect(() => {
+    const githubStars = async () => {
+      await getGithubStars().then((stars) => {
+        setGithubStars(stars);
+      });
+    };
+    githubStars();
+  }, [githubStars]);
 
   return (
     <nav
@@ -19,7 +29,7 @@ export function Header() {
     >
       <main className="flex items-center justify-between w-full">
         <Logo />
-        <GithubButton />
+        <GithubButton githubStars={githubStars} />
       </main>
     </nav>
   );

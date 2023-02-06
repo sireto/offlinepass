@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CheckCircle = (props:React.SVGAttributes<{}>) => {
+export const CheckCircle = (props: React.SVGAttributes<{}>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
