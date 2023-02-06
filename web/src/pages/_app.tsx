@@ -12,12 +12,32 @@ import Script from "next/script";
 import ModalContainer from "@app/components/modal-views/container";
 import Cookie from "@app/components/cookie";
 import Head from "next/head";
+import { NextSeo } from "next-seo";
+import globalConstants from "@app/constants/global";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>OfflinePass</title>
+        <title>OfflinePass - Offline Password Manager</title>
       </Head>
+      <NextSeo
+        title={globalConstants.title}
+        description={globalConstants.appDesc}
+        openGraph={{
+          type: "website",
+          locale: "en_IE",
+          url: "https://offlinepass.com/",
+          site_name: "OfflinePass",
+          description: "Self service password manager",
+          title: globalConstants.title,
+        }}
+        twitter={{
+          handle: globalConstants.twitterHandle,
+          site: globalConstants.url,
+          cardType: "summary_large_image",
+        }}
+      />
+
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
         strategy="afterInteractive"

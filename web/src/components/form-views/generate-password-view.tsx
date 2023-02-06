@@ -216,11 +216,13 @@ export default function GeneratePasswordView() {
           );
         }}
       />
-      {generatePswState.host !== "" && (
-        <p className="text-[10px] text-danger -mt-3 pb-4">
-          Hostname: <span>{getHostName(generatePswState.host)}</span>
-        </p>
-      )}
+
+      <p className="text-[10px] text-buttonColor -mt-3 pb-4">
+        Hostname:
+        {generatePswState.host !== "" && (
+          <span>{getHostName(generatePswState.host)}</span>
+        )}
+      </p>
 
       <MuiTextField
         id={formIds.USERNAME_EMAIL}
@@ -296,8 +298,11 @@ export default function GeneratePasswordView() {
 
   return (
     <div className="lg:w-[430px] w-full h-full lg:px-0 px-4 lg:py-0 py-2 ">
-      {!isEmptyString(generatePasswordHash) &&
-        showPasswordToast(generatePswState.host, generatePasswordHash)}
+      {!isEmptyString(generatePasswordHash) ? (
+        showPasswordToast(generatePswState.host, generatePasswordHash)
+      ) : (
+        <div className="h-[72px]"></div>
+      )}
       <div className="lg:px-10 px-6 pt-8 pb-4 shadow-lg rounded-xl bg-white">
         {generatePasswordFormComponent}
       </div>
