@@ -35,7 +35,6 @@ jobs:
         with:
           node-version: "16"
           cache: yarn
-          cache-dependency-path: "./web/yarn.lock"
       - name: Setup Pages
         uses: actions/configure-pages@v2
         with:
