@@ -40,9 +40,9 @@ const PasswordToast = ({
       endingPostion={0}
       className={`flex z-20 fixed top-0 left-0 w-[400px] h-[46px] bg-buttonColor overflow-hidden  text-sm items-center justify-between`}
     >
-      <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
+      <div className="flex items-center justify-center px-6 w-full h-full space-x-2  ">
         <Identicon string={generatedPasswordHash} size={24} fg="white" />
-        <p className="text-center text-xl font-bold p-3 text-white ">
+        <p className="px-2 text-xl font-bold py-3 text-white w-[260px] ">
           {generatedPasswordHash.substring(0, 2) +
             hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>

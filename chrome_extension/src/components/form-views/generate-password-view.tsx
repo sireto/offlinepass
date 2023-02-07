@@ -33,6 +33,7 @@ import moment from "moment";
 import PasswordToast from "@app/components/ui/password-toast";
 import MuiSelect from "@app/components/select/MuiSelect";
 import cn from "classnames";
+import Logo from "../ui/logo";
 
 export default function GeneratePasswordView() {
   const { openModal } = useModal();
@@ -281,12 +282,7 @@ export default function GeneratePasswordView() {
       {!isEmptyString(generatePasswordHash) &&
         showPasswordToast(generatePswState.host, generatePasswordHash)}
       <div className={cn("px-8 pb-4", isFormFieldsValid ? "pt-8" : "pt-2")}>
-        <div className="flex flex-col pb-4 font-Chau_Philomene_One ">
-          <p className="font-medium text-3xl text-black">
-            Offline<span className="text-brand">Pass</span>
-          </p>
-          <p className="text-xs">Self Service Password Manager</p>
-        </div>
+        <Logo className="pb-2" />
         {generatePasswordFormComponent}
       </div>
     </div>
