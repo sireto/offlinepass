@@ -35,6 +35,7 @@ jobs:
         with:
           node-version: "16"
           cache: yarn
+          cache-dependency-path: "./web/yarn.lock"
       - name: Setup Pages
         uses: actions/configure-pages@v2
         with:
@@ -43,23 +44,25 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
+
       - name: Restore cache
+        id: cache-step
         uses: actions/cache@v3
         with:
-          path: |
-            web/.next/cache
+          path: web/.next/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/web/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/web/yarn.lock') }}-
 
-      - name: Install dependencies
+      - name: install dependencies
+        if: steps.cache-step.outputs.cache-hit != 'true'
         run: cd web && yarn install --frozen-lockfile
       - name: Build with Next.js
-        run: cd web && yarn build
+        run: cd web && yarn next build
       - name: Static HTML export with Next.js
-        run: cd web && yarn export
+        run: cd web && yarn next export
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
