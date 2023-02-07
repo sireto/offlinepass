@@ -39,7 +39,8 @@ export function isNetherUndefinedNorNull(data: unknown): boolean {
   return !isUndefined(data) && !isNull(data);
 }
 
-export const isEmpty = (value: string | any[]) => value.length === 0;
+export const isEmptyString = (value: string | any[]) => value.length === 0;
+
 export const isMskValid = (value: string) => {
   if (
     isContainLowercase(value) &&

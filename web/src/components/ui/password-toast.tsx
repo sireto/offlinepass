@@ -4,70 +4,64 @@ import { EyeSlash } from "@app/components/icons/eyeslash";
 import { hideString } from "@app/utils/helperUtils";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { motion } from "framer-motion";
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
-import { usePassword } from "@app/lib/hooks/use-password";
 import Identicon from "react-identicons";
 import VariantsAnimation from "@app/animation/variants-animation";
-import { useSelector } from "react-redux";
-import { selectPasswordProvider } from "@app/store/password/selectors";
-import { useGeneratePasswordState } from "@app/lib/hooks/use-generate-passwordstate";
-import { getHostName } from "@app/utils/hmac";
+import { getHostName } from "@app/utils/hmacUtils";
+import Button from "@app/components/ui/button/button";
+import { isEmptyString } from "@app/utils/validationUtils";
 
-const PasswordToast = () => {
+interface IPasswordToastProps {
+  host: string;
+  generatedPasswordHash: string;
+}
+
+const PasswordToast = ({
+  host,
+  generatedPasswordHash,
+}: IPasswordToastProps) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const { passwordHash } = usePassword();
-  const {generatePswState} = useGeneratePasswordState();
   const [_, copyToClipboard] = useCopyToClipboard();
 
   const handleCopyPassword = () => {
-    copyToClipboard(passwordHash!);
-    toast.success(`Password copied for ${getHostName(generatePswState.host)}`, {
+    copyToClipboard(generatedPasswordHash);
+    toast.success(`Password copied for ${getHostName(host)}`, {
       autoClose: 1000,
     });
   };
 
-  // console.log(animalIdenticon("camelmasa").toSvg(64));
-  return passwordHash === "" ? (
+  const iconClassName = "h-5 w-5 lg:w-6 lg:h-6 cursor-pointer text-white";
+  return isEmptyString(generatedPasswordHash) ? (
     <></>
   ) : (
     <VariantsAnimation
       startingPosition={-20}
       endingPostion={0}
-      className={`flex z-20 fixed top-20 sm:top-24 right-0 w-screen  lg:w-1/2 xl:w-3/5 text-sm xl:text-base items-center`}
+      className={`flex z-20 fixed lg:static lg:my-2 my-0 lg:py-7 py-4 lg:rounded-xl rounded-none top-16 left-0 w-full h-[46px] bg-buttonColor overflow-hidden  lg:w-[430px]  text-sm xl:text-base items-center justify-between`}
     >
-      <div className="flex items-center px-6  w-full h-full space-x-2 bg-[#CDFFD8] justify-start lg:justify-center xl:justify-center xl:space-x-3 ">
-        <p className="hidden md:block  lg:hidden xl:block font-medium text-[#555555] ">
-          Your password has been generated:
-        </p>
-        <Identicon string={passwordHash} size={24} />
-        <p className="text-center font-bold px-3 my-2 text-[#353535] py-1  rounded-lg">
-          {passwordHash.substring(0, 2) +
-            hideString(passwordHash.substring(2), isPasswordVisible)}
+      <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
+        <Identicon string={generatedPasswordHash} size={22} fg="white" />
+        <p className="text-md lg:text-xl font-bold py-3 text-white lg:w-[250px] w-[180px]  ">
+          {generatedPasswordHash.substring(0, 2) +
+            hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
         </p>
         {isPasswordVisible ? (
           <Eye
             onClick={() => {
               setPasswordVisibility(false);
             }}
-            className="h-6 w-6 cursor-pointer"
+            className={iconClassName}
           />
         ) : (
           <EyeSlash
             onClick={() => {
               setPasswordVisibility(true);
             }}
-            className="h-6 w-6 cursor-pointer"
+            className={iconClassName}
           />
         )}
-          <button
-        onClick={handleCopyPassword}
-        className="h-full px-3 py-3 "
-      >
-        <Copy className="h-6 w-6" />
-      </button>
+        <Copy onClick={handleCopyPassword} className={iconClassName} />
       </div>
-    
     </VariantsAnimation>
   );
 };

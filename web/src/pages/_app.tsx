@@ -1,26 +1,50 @@
 import "../../styles/globals.css";
 import "../../styles/tailwind.css";
-import "../../styles/swiper.css";
+import "swiper/css/bundle";
 import type { AppProps } from "next/app";
 import Layout from "@app/layouts/_layout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import Head from "next/head";
 import store, { persistor } from "@app/store/store";
 import Script from "next/script";
-import Link from "next/link";
-import CookieConsent from "react-cookie-consent";
-import { disableLogInProduction } from "@app/utils/disableConsoleUtils";
-
-disableLogInProduction();
+import ModalContainer from "@app/components/modal-views/container";
+import Cookie from "@app/components/cookie";
+import { NextSeo } from "next-seo";
+import globalConstants from "@app/constants/global";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>OfflinePass</title>
-      </Head>
+      <NextSeo
+        title={globalConstants.title}
+        description={globalConstants.appDesc}
+        openGraph={{
+          type: "website",
+          locale: "en_IE",
+          url: "https://offlinepass.com/",
+          site_name: "OfflinePass",
+          description: "Self service password manager",
+          title: globalConstants.title,
+          images: [
+            {
+              url: "/favicon.ico",
+              width: 800,
+              height: 600,
+              alt: "Og Image Alt",
+            },
+          ],
+        }}
+        twitter={{
+          handle: globalConstants.twitterHandle,
+          site: globalConstants.url,
+          cardType: "summary_large_image",
+        }}
+        facebook={{
+          appId: "1234567890",
+        }}
+      />
+
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
         strategy="afterInteractive"
@@ -40,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
         `,
         }}
       />
+      <Cookie />
       <ToastContainer
         theme="colored"
         position="bottom-right"
@@ -56,24 +81,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <Component {...pageProps} />
+            <ModalContainer />
           </PersistGate>
         </Provider>
       </Layout>
-      <CookieConsent
-        location="bottom"
-        cookieName="OfflinePassCookies"
-        expires={999}
-        buttonStyle={{
-          marginRight: 90,
-        }}
-      >
-        This website uses cookies to enhance the user experience.
-        <Link href="https://www.termsfeed.com/blog/cookies/">
-          <a className=" text-blue-500 pl-3  " target="_blank">
-            Learn More
-          </a>
-        </Link>
-      </CookieConsent>
     </>
   );
 }

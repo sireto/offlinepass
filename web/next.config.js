@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   experimental: {
     newNextLinkBehavior: false,
   },
-  images: {
-    loader: "custom",
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
 };
 

@@ -28,7 +28,8 @@
     "src/**/*.js",
     "src/**/*.jsx",
     "src/**/*.ts",
-    "src/**/*.tsx"
-, "src/lib/hooks"  ],
+    "src/**/*.tsx",
+    "src/lib/hooks"
+  ],
   "exclude": ["node_modules"]
 }

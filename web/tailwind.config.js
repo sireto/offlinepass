@@ -13,14 +13,14 @@ module.exports = {
       "4xl": "2160px", // only need to control product grid mode in ultra 4k device
     },
     fontFamily: {
-      Chau_Philomene_One: ["Chau_Philomene_One", "sans-serif"],
       inter: ["Inter"],
     },
     extend: {
       colors: {
         brand: "#003E6B",
+        buttonColor: "#5c75f6",
         body: "#ffffff",
-
+        blueGray: "#6699CC",
         lightBackground: "#F6F8FB",
         lightGray: "#808080",
 
