@@ -58,7 +58,6 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/web/yarn.lock') }}-
 
       - name: install dependencies
-        if: steps.cache-step.outputs.cache-hit != 'true'
         run: cd web && yarn install --frozen-lockfile
       - name: Build with Next.js
         run: cd web && yarn build
