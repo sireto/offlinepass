@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
         openGraph={{
           type: "website",
           locale: "en_IE",
-          url: "https://offlinepass.com/",
+          url: globalConstants.url,
           site_name: "OfflinePass",
           description: "Self service password manager",
           title: globalConstants.title,
