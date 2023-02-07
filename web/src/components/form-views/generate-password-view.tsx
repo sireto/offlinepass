@@ -218,9 +218,9 @@ export default function GeneratePasswordView() {
       />
 
       <p className="text-[10px] text-buttonColor -mt-3 pb-4">
-        Hostname:
+        Hostname :
         {generatePswState.host !== "" && (
-          <span>{getHostName(generatePswState.host)}</span>
+          <span className="px-1">{getHostName(generatePswState.host)}</span>
         )}
       </p>
 
