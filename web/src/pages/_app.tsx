@@ -23,12 +23,12 @@ export default function App({ Component, pageProps }: AppProps) {
           type: "website",
           locale: "en_IE",
           url: globalConstants.socialPreview.url,
-          site_name: "OfflinePass",
-          description: "Self service password manager",
+          site_name: globalConstants.appName,
+          description: globalConstants.socialPreview.desc,
           title: globalConstants.title,
           images: [
             {
-              url: "/favicon.ico",
+              url: globalConstants.socialPreview.image,
               width: 800,
               height: 600,
               alt: "Og Image Alt",
