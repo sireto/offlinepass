@@ -7,8 +7,8 @@ const globalConstants = {
   socialPreview: {
     url: "https://offlinepass.com/",
     title: "OfflinePass - Offline Password Manager",
-    desc: "Self service password manager",
-    image: "imageUrl",
+    desc: "Forget all you know about passwords, now you have the master key.",
+    image: "/ogimage.png",
   },
 };
 

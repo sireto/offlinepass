@@ -1,0 +1,12 @@
+### NextJS ###
+# web
+/web/node_modules
+/web/coverage
+/web/.next/
+/web/out/
+
+# chrome-extension
+/chrome_extension/node_modules
+/chrome_extension/coverage
+/chrome_extension/.next/
+/chrome_extension/out/
