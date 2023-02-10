@@ -29,8 +29,8 @@ export default function App({ Component, pageProps }: AppProps) {
           images: [
             {
               url: globalConstants.socialPreview.image,
-              width: 800,
-              height: 600,
+              width: 1200,
+              height: 630,
               alt: "Og Image Alt",
             },
           ],
