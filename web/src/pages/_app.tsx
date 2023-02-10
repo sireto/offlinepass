@@ -8,62 +8,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "@app/store/store";
-import Script from "next/script";
 import ModalContainer from "@app/components/modal-views/container";
 import Cookie from "@app/components/cookie";
-import { NextSeo } from "next-seo";
-import globalConstants from "@app/constants/global";
+import Seo from "@app/components/seo";
+import NextScript from "@app/components/script";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <NextSeo
-        title={globalConstants.title}
-        description={globalConstants.appDesc}
-        openGraph={{
-          type: "website",
-          locale: "en_IE",
-          url: globalConstants.socialPreview.url,
-          site_name: globalConstants.appName,
-          description: globalConstants.socialPreview.desc,
-          title: globalConstants.title,
-          images: [
-            {
-              url: globalConstants.socialPreview.image,
-              width: 1200,
-              height: 630,
-              alt: "Og Image Alt",
-            },
-          ],
-        }}
-        twitter={{
-          handle: globalConstants.twitterHandle,
-          site: globalConstants.url,
-          cardType: "summary_large_image",
-        }}
-        facebook={{
-          appId: "1234567890",
-        }}
-      />
-
-      {/* <!-- Google tag (gtag.js) --> */}
-      <Script
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-FGMGC6TQ6L"
-      ></Script>
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FGMGC6TQ6L', {
-              page_path: window.location.pathname,
-            });
-        `,
-        }}
-      />
+      <Seo />
+      <NextScript />
       <Cookie />
       <ToastContainer
         theme="colored"
