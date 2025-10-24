@@ -31,6 +31,7 @@ import TextFieldErrorList from "@app/components/textfield-error-list";
 import moment from "moment";
 import PasswordToast from "@app/components/ui/password-toast";
 import MuiSelect from "@app/components/select/MuiSelect";
+import { useYearOptions } from "@app/lib/hooks/use-year-options";
 
 export default function GeneratePasswordView() {
   const { openModal } = useModal();
@@ -46,6 +47,7 @@ export default function GeneratePasswordView() {
     date: moment(Date.now()).format("YYYY"),
     retries: 0,
   });
+  const yearOptions = useYearOptions();
 
   const handleGeneratePassword = async () => {
     await hmacSha256(generatePswState).then((passwordhash) => {
@@ -256,7 +258,7 @@ export default function GeneratePasswordView() {
       </div>
       <MuiSelect
         className="w-full mb-4"
-        options={["2022", "2023", "2024"]}
+        options={yearOptions}
         onChange={handleDate}
         value={generatePswState.date}
       />
