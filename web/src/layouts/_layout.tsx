@@ -19,29 +19,28 @@ export function Header() {
     githubStars();
   }, [githubStars]);
 
+  const isScrolled = isMounted && windowScroll.y > 10;
   return (
     <nav
-      className={`fixed top-0 z-30 flex w-full items-center justify-between px-4 transition-all duration-300  lg:px-14 ${
-        isMounted && windowScroll.y > 10
-          ? "h-16 lg:h-20 shadow-card backdrop-blur"
-          : "h-16 lg:h-20  "
+      className={`fixed top-0 z-30 flex w-full items-center justify-between px-4 lg:px-8 transition-all duration-300 h-16 lg:h-20 ${
+        isScrolled
+          ? "bg-white/80 backdrop-blur border-b border-textfield_stroke"
+          : "bg-transparent"
       }`}
     >
-      <main className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full max-w-6xl mx-auto">
         <Logo />
         <GithubButton githubStars={githubStars} />
-      </main>
+      </div>
     </nav>
   );
 }
 
 export default function Layout({ children }: React.PropsWithChildren) {
   return (
-    <div className="flex flex-col font-inter min-h-screen bg-gradient-to-b from-white via-blue-300 to-white dark:bg-dark">
+    <div className="flex flex-col font-inter min-h-screen bg-white text-brand">
       <Header />
-      <main className={`lg:h-screen w-screen pt-20 cursor-default`}>
-        {children}
-      </main>
+      <main className="w-full pt-16 lg:pt-20 cursor-default">{children}</main>
     </div>
   );
 }
