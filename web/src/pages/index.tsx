@@ -64,7 +64,7 @@ function SectionHeading({
       <span className="text-xs font-semibold tracking-[0.2em] uppercase text-buttonColor">
         {eyebrow}
       </span>
-      <h2 className="mt-3 text-3xl lg:text-4xl font-semibold text-brand">
+      <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-semibold text-brand">
         {title}
       </h2>
       {description && (
@@ -89,9 +89,8 @@ function Hero() {
             <span className="h-2 w-2 rounded-full bg-success" />
             100% client-side · open source · Apache 2.0
           </div>
-          <h1 className="mt-6 text-4xl lg:text-6xl font-semibold tracking-tight text-brand leading-[1.05]">
-            One Master Key.
-            <br />
+          <h1 className="mt-6 text-[2rem] sm:text-5xl lg:text-6xl font-semibold tracking-tight text-brand leading-[1.1]">
+            One Master Key.{" "}
             <span className="bg-gradient-to-r from-brand to-buttonColor bg-clip-text text-transparent">
               Every password, derived.
             </span>
