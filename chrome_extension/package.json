@@ -12,7 +12,6 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@fingerprintjs/fingerprintjs": "^3.3.6",
     "@headlessui/react": "^1.7.7",
     "@mui/material": "^5.11.3",
     "@next/font": "13.1.1",

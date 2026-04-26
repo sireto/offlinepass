@@ -5,9 +5,9 @@ import { GeneratePswStateDto } from "@app/models/dtos/generate-psw-form-dtos";
 
 export interface IPincodeProps {
   isSave: boolean;
-  setMskVisiblity: any;
+  setMskVisiblity: (visible: boolean) => void;
   generatePswState: GeneratePswStateDto;
-  visitorId: string;
+  onUnlock?: (plaintextMsk: string) => void;
 }
 
 export default function PincodeView({ ...props }) {

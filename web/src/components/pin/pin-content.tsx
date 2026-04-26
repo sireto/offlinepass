@@ -3,15 +3,15 @@ import { useAppDispatch, useAppSelector } from "@app/store/hooks";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
 import { selectPasswordProvider } from "@app/store/password/selectors";
 import {
-  encrypt,
+  encryptMsk,
+  decryptMsk,
   stringTosha256,
   repeatPinError,
   pinError,
 } from "@app/utils/passwordUtils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useModal } from "@app/components/modal-views/context";
 import PinInputs from "@app/components/pin-box";
-import Button from "@app/components/ui/button/button";
 import ImageRenderer from "@app/components/media-renderer/image-renderer";
 import { IPincodeProps } from "@app/components/pin";
 
@@ -23,50 +23,67 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
   const { closeModal } = useModal();
   const [pin, setPin] = useState(["", "", "", ""]);
   const [repeatPin, setRepeatPin] = useState(["", "", "", ""]);
+  const [wrongPin, setWrongPin] = useState(false);
+  const [busy, setBusy] = useState(false);
   const dispatch = useAppDispatch();
   const passwordProvider = useAppSelector(selectPasswordProvider);
+  const lastTriedPinRef = useRef<string>("");
 
-  const pinCodeValidationHandler = () => {
-    if (
-      stringTosha256(pin.toString()) === passwordProvider.pinHash &&
-      !pincodeProps.isSave
-    ) {
-      closeModal();
-      pincodeProps.setMskVisiblity(true);
+  const verifyAndUnlock = async () => {
+    const pinStr = pin.join("");
+    if (pinStr.length < pin.length || busy) return;
+    if (pinStr === lastTriedPinRef.current) return;
+    lastTriedPinRef.current = pinStr;
+    setBusy(true);
+    const plaintext = await decryptMsk(passwordProvider.msk, pinStr);
+    setBusy(false);
+    if (plaintext === null) {
+      setWrongPin(true);
+      return;
     }
+    setWrongPin(false);
+    pincodeProps.onUnlock?.(plaintext);
+    pincodeProps.setMskVisiblity(true);
+    closeModal();
   };
 
-  const setPincodehandler = () => {
-    if (pin.toString() === repeatPin.toString() && !pin.includes("")) {
-      dispatch(
-        setPasswordProvider({
-          ...passwordProvider,
-          msk: encrypt(
-            pincodeProps.generatePswState.msk,
-            pincodeProps.visitorId
-          ),
-          hashMsk: stringTosha256(pincodeProps.generatePswState.msk),
-          pinHash: stringTosha256(pin.toString()),
-        })
-      );
-      closeModal();
-      pincodeProps.setMskVisiblity(false);
-      showSweetAlertModal("Pin Set Successfully", "", "success");
-    }
+  const setPincodeAndEncrypt = async () => {
+    const pinStr = pin.join("");
+    if (busy) return;
+    if (pin.join("") !== repeatPin.join("") || pin.includes("")) return;
+    setBusy(true);
+    const ciphertext = await encryptMsk(
+      pincodeProps.generatePswState.msk,
+      pinStr
+    );
+    setBusy(false);
+    dispatch(
+      setPasswordProvider({
+        ...passwordProvider,
+        msk: ciphertext,
+        hashMsk: stringTosha256(pincodeProps.generatePswState.msk),
+      })
+    );
+    closeModal();
+    pincodeProps.setMskVisiblity(false);
+    showSweetAlertModal("Pin Set Successfully", "", "success");
   };
 
   useEffect(() => {
-    // pincode validation
-    pinCodeValidationHandler();
-    // set pincode
-    setPincodehandler();
+    if (pincodeProps.isSave) {
+      setPincodeAndEncrypt();
+    } else {
+      verifyAndUnlock();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repeatPin, pin]);
 
   const onChangeHandler = (
-    value: string | string[],
-    index: number,
+    _value: string | string[],
+    _index: number,
     values: string[]
   ) => {
+    if (wrongPin) setWrongPin(false);
     setPin(values);
   };
 
@@ -78,7 +95,7 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
           label={"Enter pin to Secure Master Password"}
           autoFocus
           mask
-          error={pinError(pin, passwordProvider, pincodeProps)}
+          error={pinError(pin, pincodeProps.isSave, wrongPin)}
           onChange={onChangeHandler}
           values={pin}
         />
@@ -88,8 +105,8 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
           error={repeatPinError(pin, repeatPin)}
           mask
           onChange={(
-            value: string | string[],
-            index: number,
+            _value: string | string[],
+            _index: number,
             values: string[]
           ) => {
             setRepeatPin(values);
@@ -104,10 +121,10 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
     return (
       <PinInputs
         name="pin"
-        label={"Enter pin to View Master Password"}
+        label={"Enter pin to Unlock Master Password"}
         autoFocus
         mask
-        error={pinError(pin, passwordProvider, pincodeProps)}
+        error={pinError(pin, pincodeProps.isSave, wrongPin)}
         onChange={onChangeHandler}
         values={pin}
       />

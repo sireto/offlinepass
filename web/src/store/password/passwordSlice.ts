@@ -7,7 +7,6 @@ export interface IPasswordState {
   hosts: string[];
   usernameEmails: string[];
   hashMsk: string;
-  pinHash: string;
 }
 
 const initialState: IPasswordState = {
@@ -15,7 +14,6 @@ const initialState: IPasswordState = {
   hosts: [],
   usernameEmails: [],
   hashMsk: "",
-  pinHash: "",
 };
 
 const passwordSlice = createSlice({

@@ -19,9 +19,11 @@ Users and reviewers should be aware of the following:
 
 ### MSK persistence (web & extension)
 
-The web and chrome_extension implementations persist the MSK in the browser's `localStorage` via `redux-persist`. Before storage it is encrypted with AES using a device fingerprint (via `@fingerprintjs/fingerprintjs`) as the key.
+The web and chrome_extension implementations persist the MSK in the browser's `localStorage` via `redux-persist`. The stored value is **AES-GCM ciphertext encrypted with a key derived from the user's PIN** via PBKDF2-HMAC-SHA256 (250,000 iterations, 16-byte random per-MSK salt, 12-byte random IV, 256-bit key).
 
-**This is a convenience feature, not a strong defense.** A device fingerprint is low-entropy and can be re-derived by any code running in the same browser/OS. An attacker with access to the localStorage contents and the ability to run scripts on a sufficiently similar environment may be able to recover the MSK. We are tracking removal of this persistence (or replacement with a user-supplied PIN-derived key) as an open issue.
+**The PIN is the only secret that unlocks the stored MSK.** Without the correct PIN, the ciphertext in `localStorage` is not decryptable. AES-GCM's authentication tag is what tells us a wrong PIN was entered — there is no separate `pinHash` to crib against.
+
+**However, a 4-digit numeric PIN is low-entropy** (~10,000 candidates). An attacker with offline access to your `localStorage` can mount an offline brute-force attack at roughly the rate of one PBKDF2 derivation per attempt. 250k iterations slow this down considerably (seconds per guess on commodity hardware) but do not make it infeasible against a short PIN. **Choose a long, non-trivial PIN if you save your MSK.** Better yet, do not save the MSK at all and re-enter it each session.
 
 If your threat model includes adversaries with access to your browser storage, prefer the Flutter app (which uses OS-level encrypted storage) and clear the MSK after each session on the web/extension.
 

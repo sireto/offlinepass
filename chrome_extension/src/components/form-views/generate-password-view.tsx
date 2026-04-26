@@ -17,9 +17,8 @@ import { EyeSlash } from "@app/components/icons/eyeslash";
 import { selectPasswordProvider } from "@app/store/password/selectors";
 import { setPasswordProvider } from "@app/store/password/passwordSlice";
 import {
-  decrypt,
+  isLegacyEncryptedMsk,
   stringTosha256,
-  visitorIdentity,
 } from "@app/utils/passwordUtils";
 import MuiTextField, {
   inputPropsStyle,
@@ -42,7 +41,6 @@ export default function GeneratePasswordView() {
   const passwordProvider = useAppSelector(selectPasswordProvider);
   const [generatePasswordHash, setGeneratePasswordHash] = useState("");
   const [isMskVisible, setMskVisibility] = useState(false);
-  const [visitorId, setVisitorId] = useState("");
   const [generatePswState, setGeneratePswState] = useState({
     msk: "",
     host: "",
@@ -73,6 +71,11 @@ export default function GeneratePasswordView() {
     isMskValid(generatePswState.msk);
   const isPasswordHashMatch =
     passwordProvider.hashMsk === stringTosha256(generatePswState.msk);
+  const hasStoredMsk = !isEmptyString(passwordProvider.msk);
+
+  const handleUnlockedMsk = (plaintextMsk: string) => {
+    setGeneratePswState((prev) => ({ ...prev, msk: plaintextMsk }));
+  };
 
   const getMskInputProps = (
     <div className="flex space-x-4 items-center">
@@ -86,24 +89,21 @@ export default function GeneratePasswordView() {
       ) : (
         <EyeSlash
           onClick={() => {
-            if (
-              isEmptyString(passwordProvider.msk) ||
-              !isPasswordHashMatch ||
-              isEmptyString(passwordProvider.pinHash)
-            ) {
+            if (isEmptyString(passwordProvider.msk) || !isPasswordHashMatch) {
               setMskVisibility(true);
             } else {
               openModal("PINCODE_VIEW", {
+                isSave: false,
                 setMskVisiblity: setMskVisibility,
-                visitorId: visitorId,
                 generatePswState: generatePswState,
+                onUnlock: handleUnlockedMsk,
               });
             }
           }}
           className="h-4 w-4 cursor-pointer"
         />
       )}
-      {isPasswordHashMatch && !isEmptyString(passwordProvider.pinHash) && (
+      {isPasswordHashMatch && hasStoredMsk && (
         <Close
           onClick={() => {
             setGeneratePswState({
@@ -151,17 +151,13 @@ export default function GeneratePasswordView() {
         id={formIds.MSK}
         isSave={
           isMskValid(generatePswState.msk) &&
-          (!isPasswordHashMatch || isEmptyString(passwordProvider.pinHash))
+          (!isPasswordHashMatch || !hasStoredMsk)
         }
         label={formTitleConstants.SECURITY_KEY}
         value={generatePswState.msk}
         onChange={handleOnChange}
         toolTipTitle={storeOptionToolTipConstants.SECURITY_KEY}
-        disabled={
-          isPasswordHashMatch &&
-          !isMskVisible &&
-          !isEmptyString(passwordProvider.pinHash)
-        }
+        disabled={isPasswordHashMatch && !isMskVisible && hasStoredMsk}
         type={isMskVisible ? "text" : "password"}
         InputProps={{
           style: inputPropsStyle,
@@ -180,7 +176,6 @@ export default function GeneratePasswordView() {
           openModal("PINCODE_VIEW", {
             isSave: true,
             setMskVisiblity: setMskVisibility,
-            visitorId: visitorId,
             generatePswState: generatePswState,
           });
         }}
@@ -250,33 +245,52 @@ export default function GeneratePasswordView() {
     </>
   );
 
-  const getInitialMskRenderer = () => {
-    if (visitorId === "") {
-      const savedUsernameEmailsLength = passwordProvider.usernameEmails.length;
-      visitorIdentity().then(async (visitorIdentification) => {
-        // set GeneratePswState hooks for display saved value in textfield
-        setVisitorId(visitorIdentification);
-        setGeneratePswState({
-          ...generatePswState,
-          msk: decrypt(passwordProvider.msk, visitorIdentification),
-          host: await getCurrentTab(),
-          usernameEmail:
-            savedUsernameEmailsLength !== 0
-              ? passwordProvider.usernameEmails[savedUsernameEmailsLength - 1]
-              : "",
-        });
-      });
-    }
-  };
-
   useEffect(() => {
-    getInitialMskRenderer();
     if (isFormFieldsValid) {
       handleGeneratePassword();
     } else {
       setGeneratePasswordHash("");
     }
   }, [generatePswState]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const init = async () => {
+      const savedUsernameEmailsLength = passwordProvider.usernameEmails.length;
+      const host = await getCurrentTab();
+      if (cancelled) return;
+      setGeneratePswState((prev) => ({
+        ...prev,
+        host,
+        usernameEmail:
+          savedUsernameEmailsLength !== 0
+            ? passwordProvider.usernameEmails[savedUsernameEmailsLength - 1]
+            : "",
+      }));
+      if (hasStoredMsk && isLegacyEncryptedMsk(passwordProvider.msk)) {
+        dispatch(
+          setPasswordProvider({
+            ...passwordProvider,
+            msk: "",
+            hashMsk: "",
+          })
+        );
+        return;
+      }
+      if (hasStoredMsk) {
+        openModal("PINCODE_VIEW", {
+          isSave: false,
+          setMskVisiblity: setMskVisibility,
+          generatePswState: generatePswState,
+          onUnlock: handleUnlockedMsk,
+        });
+      }
+    };
+    init();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="lg:w-[400px] w-full h-full">
