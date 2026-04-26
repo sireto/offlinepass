@@ -21,15 +21,15 @@
     "@types/react-dom": "18.0.10",
     "bs58": "^5.0.0",
     "classnames": "^2.3.2",
-    "crypto-js": "^4.1.1",
-    "eslint": "8.31.0",
-    "eslint-config-next": "13.1.1",
+    "crypto-js": "^4.2.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^13.5.6",
     "framer-motion": "^8.1.8",
     "jotai": "^1.12.1",
     "js-crypto-hmac": "^1.0.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "13.1.1",
+    "next": "^13.5.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-identicons": "^1.2.5",
@@ -49,5 +49,8 @@
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
     "tailwindcss": "^3.2.4"
+  },
+  "resolutions": {
+    "@babel/traverse": "^7.23.2"
   }
 }
