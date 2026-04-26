@@ -37,7 +37,6 @@ class _ConfirmvaultState extends State<Confirmvault> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.msk);
     return Scaffold(
       appBar: AppBar(
         // iconTheme: const IconThemeData(color: Colors.black),

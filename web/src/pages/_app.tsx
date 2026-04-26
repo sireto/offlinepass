@@ -11,12 +11,10 @@ import store, { persistor } from "@app/store/store";
 import ModalContainer from "@app/components/modal-views/container";
 import Cookie from "@app/components/cookie";
 import Seo from "@app/components/seo";
-import NextScript from "@app/components/script";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Seo />
-      <NextScript />
       <Cookie />
       <ToastContainer
         theme="colored"

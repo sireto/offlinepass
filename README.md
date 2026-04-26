@@ -50,7 +50,10 @@ base58 encoding is used after using hmac to get shorter length eg. 16 characters
 
 
 # License
-Apache v2 License.
+Apache v2 License. See [LICENSE](./LICENSE).
 
 # Contributing
-If you're interested in contributing, you can do so by creating an issue (bug report, feature requests, questions, ...) or submitting a Pull Request.
+If you're interested in contributing, please read [CONTRIBUTING.md](./CONTRIBUTING.md) and open an issue or pull request.
+
+# Security
+For the threat model, known limitations, and how to report a vulnerability, see [SECURITY.md](./SECURITY.md).

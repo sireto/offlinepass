@@ -1,5 +1,4 @@
 import hmac from "js-crypto-hmac";
-import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import { isValidUrl } from "@app/utils/validationUtils";
 import { GeneratePswStateDto } from "@app/models/dtos/generate-psw-form-dtos";
 const bs58 = require("bs58");
@@ -39,5 +38,5 @@ export const getHostName = (host: string) => {
     removeWWW.includes("https://") || removeWWW.includes("http://")
       ? removeWWW
       : "http://".concat(removeWWW);
-  return parseUrl(addProtocol).hostname!;
+  return new URL(addProtocol).hostname;
 };

@@ -4,13 +4,41 @@ import 'package:crypto/crypto.dart';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:offlinepass/models/pass_model.dart';
-import 'package:sembast/timestamp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PasswordManager {
   static String? msk;
   static late final SharedPreferences preferences;
   static int passwordValidity = 86400 * 90;
+
+  static String _hostName(String? url) {
+    if (url == null || url.isEmpty) return '';
+    final lower = url.toLowerCase().replaceFirst('www.', '');
+    final withScheme = lower.startsWith('http://') || lower.startsWith('https://')
+        ? lower
+        : 'http://$lower';
+    final parsed = Uri.tryParse(withScheme);
+    final host = parsed?.host ?? '';
+    return host.isEmpty ? lower : host;
+  }
+
+  static String _hmacPassword({
+    required String key,
+    required String? url,
+    required String? user,
+    required String date,
+    required int retries,
+  }) {
+    final keyBytes = utf8.encode(key);
+    final msg = utf8.encode(
+      '${_hostName(url)}|${(user ?? '').toLowerCase()}|$date|$retries',
+    );
+    final mac = Hmac(sha256, keyBytes).convert(msg);
+    final encoded = Base58Encode(mac.bytes);
+    final truncated = encoded.length >= 16 ? encoded.substring(0, 16) : encoded;
+    return '$retries\$$truncated';
+  }
+
   String generatePassword({
     required PassModel passModel,
     bool newPass = false,
@@ -19,42 +47,29 @@ class PasswordManager {
     required int currentTimeStamp,
     int? timeStamp,
   }) {
-    if (timeStamp == null) {
-      //  int currentTimeStamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
-    }
+    timeStamp ??= (currentTimeStamp ~/ passwordValidity) * passwordValidity;
 
     var data = passModel.toMap(passModel: passModel);
     int? storedTimestamp = preferences.getInt('timestamp$data');
     int? mainTimeStamp = preferences.getInt('maintimestamp');
-    print("storrdTimeStamp: $storedTimestamp!");
 
     if (mainTimeStamp == null) {
       preferences.setInt('maintimestamp', timeStamp);
     }
-    // ignore: prefer_conditional_assignment
-    if (index == null) {
-      index = preferences.getInt('$data');
-      print("index $index");
-    }
+    index ??= preferences.getInt('$data');
     if (newPass) {
       index = index! + 1;
       if (storedTimestamp != timeStamp && storedTimestamp != null) {
         preferences.setInt('timestamp$data', timeStamp);
         index = 0;
-        print("reset");
       }
 
       preferences.setInt('$data', index);
     } else if (generate) {
       int? startTimeStamp = preferences.getInt('starttimestamp$data');
-      // print("starttimestamp: $startTimeStamp");
       if (startTimeStamp == null) {
-        print("starttimeset");
-
         preferences.setInt('starttimestamp$data', timeStamp);
       }
-      print("timestamp: $timeStamp");
       preferences.setInt('timestamp$data', timeStamp);
       preferences.setInt('$data', index!);
     }
@@ -63,13 +78,13 @@ class PasswordManager {
       timeStamp = storedTimestamp;
     }
 
-    var bytes =
-        utf8.encode("$timeStamp$index$msk${passModel.url}${passModel.user}");
-    var digest = sha256.convert(bytes);
-    var pass =
-        Base58Encode(utf8.encode(' "$index" + ${Base58Encode(digest.bytes)}'));
-
-    return "$index\$$pass";
+    return _hmacPassword(
+      key: msk ?? '',
+      url: passModel.url,
+      user: passModel.user,
+      date: timeStamp.toString(),
+      retries: index ?? 0,
+    );
   }
 
   String recoverPassword({
@@ -78,19 +93,15 @@ class PasswordManager {
     required String rmsk,
     required int currentTimeStamp,
   }) {
-    var data = passModel.toMap(passModel: passModel);
-
-    print("index $index");
-
     int timeStamp = (currentTimeStamp ~/ passwordValidity) * passwordValidity;
 
-    var bytes =
-        utf8.encode("$timeStamp$index$rmsk${passModel.url}${passModel.user}");
-    var digest = sha256.convert(bytes);
-    var pass =
-        Base58Encode(utf8.encode(' "$index" + ${Base58Encode(digest.bytes)}'));
-
-    return "$index\$$pass";
+    return _hmacPassword(
+      key: rmsk,
+      url: passModel.url,
+      user: passModel.user,
+      date: timeStamp.toString(),
+      retries: index ?? 0,
+    );
   }
 
 // for next version
@@ -145,13 +156,8 @@ class PasswordManager {
     int? startTimeStamp = preferences.getInt('starttimestamp$data');
     int? storedtimeStamp = preferences.getInt('timestamp$data');
     int currentTimeStamp = getCurrentTimeStamp();
-    print("startTimeStamp: $startTimeStamp");
-    print("storedTimeStamp: $storedtimeStamp");
-    print("currrentTimeStamp: $currentTimeStamp");
     if (currentTimeStamp == storedtimeStamp) {
-      print("same");
       int diff = (storedtimeStamp! - startTimeStamp!) ~/ 86400;
-      print(diff);
       for (int i = 0; i <= diff; i = i + 90) {
         timeStamp = storedtimeStamp - i * 86400;
         timeStamps.add(timeStamp);
@@ -159,25 +165,19 @@ class PasswordManager {
           break;
         }
       }
-      print(timeStamps);
       return timeStamps;
     } else {
-      print("different");
       int diff = (currentTimeStamp - storedtimeStamp!) ~/ 86400;
-      print(diff);
       if (diff > 270) {
         return timeStamps;
       } else {
         for (int i = 0; i <= 270 - diff; i = i + 90) {
-          //   print(i);
-
           timeStamp = storedtimeStamp - i * 86400;
           timeStamps.add(timeStamp);
           if (timeStamp == startTimeStamp) {
             break;
           }
         }
-        print(timeStamps);
         return timeStamps;
       }
     }
