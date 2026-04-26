@@ -1,9 +1,9 @@
 export const formTitleConstants = {
-  SECURITY_KEY: "Master Password",
-  HOST: "Host or URL",
-  USERNAME_EMAIL: "Username or Email Address",
+  SECURITY_KEY: "Master Key",
+  HOST: "Host",
+  USERNAME_EMAIL: "Username or email",
   YEAR: "Year",
-  RETRIES: "No of password changes in ",
+  RETRIES: "Rotation # for ",
 };
 
 export const formIds = {
@@ -15,7 +15,7 @@ export const formIds = {
 };
 
 export const storeOptionToolTipConstants = {
-  SECURITY_KEY: "Save encrypted password on localstorage",
-  HOST: "Save host or URL on localstorage",
-  USERNAME_EMAIL: "Save username or email on localstorage ",
+  SECURITY_KEY: "Encrypt and save your Master Key locally with a PIN",
+  HOST: "Detected automatically from the active tab",
+  USERNAME_EMAIL: "Save this identity for autocomplete next time",
 };

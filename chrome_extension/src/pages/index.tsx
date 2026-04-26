@@ -1,14 +1,10 @@
-import FormContainer from "@app/components/form-views/container";
 import type { NextPage } from "next";
-import PasswordToast from "@app/components/ui/password-toast";
-const Home: NextPage = () => {
-  return (
-    <main className="py-4 bg-white h-full">
-      <section>
-        <FormContainer className="w-full h-full" />
-      </section>
-    </main>
-  );
-};
+import GeneratePasswordView from "@app/components/form-views/generate-password-view";
+
+const Home: NextPage = () => (
+  <main className="bg-white font-inter">
+    <GeneratePasswordView />
+  </main>
+);
 
 export default Home;
