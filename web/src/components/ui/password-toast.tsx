@@ -1,14 +1,12 @@
 import { Copy } from "@app/components/icons/copy";
 import { Eye } from "@app/components/icons/eye";
 import { EyeSlash } from "@app/components/icons/eyeslash";
-import { hideString } from "@app/utils/helperUtils";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import useCopyToClipboard from "react-use/lib/useCopyToClipboard";
 import Identicon from "react-identicons";
 import VariantsAnimation from "@app/animation/variants-animation";
 import { getHostName } from "@app/utils/hmacUtils";
-import Button from "@app/components/ui/button/button";
 import { isEmptyString } from "@app/utils/validationUtils";
 
 interface IPasswordToastProps {
@@ -23,44 +21,72 @@ const PasswordToast = ({
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [_, copyToClipboard] = useCopyToClipboard();
 
-  const handleCopyPassword = () => {
+  const handleCopy = () => {
     copyToClipboard(generatedPasswordHash);
     toast.success(`Password copied for ${getHostName(host)}`, {
-      autoClose: 1000,
+      autoClose: 1200,
     });
   };
 
-  const iconClassName = "h-5 w-5 lg:w-6 lg:h-6 cursor-pointer text-white";
-  return isEmptyString(generatedPasswordHash) ? (
-    <></>
-  ) : (
+  if (isEmptyString(generatedPasswordHash)) return <></>;
+
+  const masked = "•".repeat(Math.max(generatedPasswordHash.length - 2, 0));
+  const displayed = isPasswordVisible
+    ? generatedPasswordHash
+    : generatedPasswordHash.substring(0, 2) + masked;
+
+  return (
     <VariantsAnimation
-      startingPosition={-20}
+      startingPosition={-12}
       endingPostion={0}
-      className={`flex z-20 fixed lg:static lg:my-2 my-0 lg:py-7 py-4 lg:rounded-xl rounded-none top-16 left-0 w-full h-[46px] bg-buttonColor overflow-hidden  lg:w-[430px]  text-sm xl:text-base items-center justify-between`}
+      className="w-full mb-4"
     >
-      <div className="flex items-center justify-center px-6 w-full h-full space-x-2  xl:space-x-3 ">
-        <Identicon string={generatedPasswordHash} size={22} fg="white" />
-        <p className="text-md lg:text-xl font-bold py-3 text-white lg:w-[250px] w-[180px]  ">
-          {generatedPasswordHash.substring(0, 2) +
-            hideString(generatedPasswordHash.substring(2), isPasswordVisible)}
-        </p>
-        {isPasswordVisible ? (
-          <Eye
-            onClick={() => {
-              setPasswordVisibility(false);
-            }}
-            className={iconClassName}
-          />
-        ) : (
-          <EyeSlash
-            onClick={() => {
-              setPasswordVisibility(true);
-            }}
-            className={iconClassName}
-          />
-        )}
-        <Copy onClick={handleCopyPassword} className={iconClassName} />
+      <div className="rounded-2xl border border-buttonColor/30 bg-gradient-to-br from-brand to-buttonColor text-white shadow-lg shadow-buttonColor/20 overflow-hidden">
+        <div className="flex items-center justify-between px-4 pt-3 pb-2">
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/70">
+            <span className="h-1.5 w-1.5 rounded-full bg-success" />
+            Generated for{" "}
+            <span className="text-white font-medium normal-case tracking-normal">
+              {getHostName(host) || "—"}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 px-4 pb-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
+            <Identicon
+              string={generatedPasswordHash}
+              size={26}
+              fg="white"
+              bg="transparent"
+            />
+          </div>
+          <p
+            className="flex-1 font-mono text-base lg:text-lg tracking-wide select-all break-all"
+            aria-label="generated password"
+          >
+            {displayed}
+          </p>
+          <button
+            type="button"
+            onClick={() => setPasswordVisibility((v) => !v)}
+            aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+            className="rounded-lg p-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            {isPasswordVisible ? (
+              <Eye className="h-5 w-5" />
+            ) : (
+              <EyeSlash className="h-5 w-5" />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={handleCopy}
+            aria-label="Copy password"
+            className="rounded-lg p-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <Copy className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </VariantsAnimation>
   );

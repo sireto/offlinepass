@@ -7,7 +7,6 @@ import Autocomplete, {
 } from "@mui/material/Autocomplete";
 import MuiTooltip from "@app/components/ui/tooltip/mui-tooltip";
 import styled from "@emotion/styled";
-import Button from "@app/components/ui/button/button";
 
 type TextFieldTypes = "normal" | "autocomplete";
 
@@ -31,13 +30,13 @@ const colors: Record<ColorNames, string> = {
 };
 
 const MuiStyledTextField = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 `;
 
 export const inputPropsStyle = {
-  fontSize: 12,
-  borderRadius: 4,
-  height: 40,
+  fontSize: 14,
+  borderRadius: 8,
+  height: 44,
 };
 
 const customRenderOption = (
@@ -101,13 +100,21 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   toolTipTitle = "",
 }) => {
   const getTextFieldTitle = (
-    <div className="flex  justify-between pb-2 items-center text-sm text-textfield_label font-medium">
-      <div className="flex items-center font-medium">{label}</div>
-      {showStoreOption && (
-        <div className="flex items-center space-x-1 text-[10px]">
-          <p className=" text-lightGray">Do you want to save?</p>
-          <MuiTooltip title={toolTipTitle} className="ml-2" />
-        </div>
+    <div className="flex justify-between pb-2 items-center text-sm text-textfield_label font-medium">
+      <div className="flex items-center gap-1.5">
+        <span>{label}</span>
+        {showStoreOption && toolTipTitle && (
+          <MuiTooltip title={toolTipTitle} />
+        )}
+      </div>
+      {showStoreOption && isSave && !isEmptyString(typeof value === "string" ? value : "") && (
+        <button
+          type="button"
+          onClick={onSave}
+          className="text-[11px] font-semibold uppercase tracking-wider text-buttonColor hover:text-brand transition-colors"
+        >
+          + Save
+        </button>
       )}
     </div>
   );
@@ -182,25 +189,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   return (
     <>
       {getTextFieldTitle}
-      <MuiStyledTextField className="w-full flex space-x-2 items-center justify-between ">
-        {getTextfield()}
-        {showStoreOption && (
-          <Button
-            onClick={onSave}
-            disabled={!isSave}
-            shape="rounded"
-            className={cn(
-              "text-xs  h-full  text-white py-2",
-              isSave && !isEmptyString(typeof value === "string" ? value : "")
-                ? "bg-buttonColor hover:bg-brand"
-                : " bg-gray-200 cursor-not-allowed"
-            )}
-          >
-            Yes
-          </Button>
-        )}
-      </MuiStyledTextField>
-      {/* {label === formTitleConstants.SECURITY_KEY && getGeneratePassword()} */}
+      <MuiStyledTextField className="w-full">{getTextfield()}</MuiStyledTextField>
     </>
   );
 };
