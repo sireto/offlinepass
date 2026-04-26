@@ -1,17 +1,24 @@
 {
-  "name": "Offline Pass",
+  "name": "OfflinePass",
   "version": "1.0.0",
   "manifest_version": 3,
   "action": {
-    "default_title": "Offline Pass",
-    "default_popup": "index.html"
+    "default_title": "OfflinePass",
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "/icon-16.png",
+      "32": "/icon-32.png",
+      "48": "/icon-48.png",
+      "128": "/icon-128.png"
+    }
   },
-  "short_name": "Offline Pass",
-  "description": "Self Service Password Manager",
+  "short_name": "OfflinePass",
+  "description": "Deterministic, client-side password manager. One Master Key — every password derived.",
   "icons": {
-    "16": "/icon.png",
-    "32": "/icon.png",
-    "150": "/icon.png"
+    "16": "/icon-16.png",
+    "32": "/icon-32.png",
+    "48": "/icon-48.png",
+    "128": "/icon-128.png"
   },
   "commands": {
     "_execute_action": {
@@ -19,10 +26,8 @@
         "default": "Ctrl+Shift+F",
         "mac": "MacCtrl+Shift+F"
       },
-      "description": "Open Offline Pass"
+      "description": "Open OfflinePass"
     }
   },
-  "permissions": [
-    "activeTab"
-  ]
+  "permissions": ["activeTab"]
 }

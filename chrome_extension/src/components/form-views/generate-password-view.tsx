@@ -199,7 +199,7 @@ export default function GeneratePasswordView() {
 
   return (
     <div className="w-[380px] bg-white">
-      <header className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-textfield_stroke">
+      <header className="px-5 h-12 flex items-center justify-between border-b border-textfield_stroke">
         <Logo />
         <a
           href="https://github.com/sireto/offlinepass"
@@ -211,7 +211,7 @@ export default function GeneratePasswordView() {
         </a>
       </header>
 
-      <div className="px-4 py-4 space-y-3">
+      <div className="px-5 pt-4 pb-3 space-y-4">
         <PasswordToast
           host={generatePswState.host}
           generatedPasswordHash={generatePasswordHash}
@@ -221,17 +221,17 @@ export default function GeneratePasswordView() {
           <button
             type="button"
             onClick={openUnlockModal}
-            className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-buttonColor/30 bg-buttonColor/5 hover:bg-buttonColor/10 text-left transition-colors group"
+            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-buttonColor/30 bg-buttonColor/5 hover:bg-buttonColor/10 text-left transition-colors group"
           >
-            <span className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-buttonColor/10 text-buttonColor">
-                <Lock className="h-3.5 w-3.5" />
+            <span className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-buttonColor/10 text-buttonColor">
+                <Lock className="h-4 w-4" />
               </span>
               <span className="flex flex-col">
-                <span className="text-xs font-semibold text-brand">
+                <span className="text-xs font-semibold text-brand leading-tight">
                   Saved Master Key
                 </span>
-                <span className="text-[10px] text-textfield_label">
+                <span className="text-[10px] text-textfield_label leading-tight mt-0.5">
                   Enter your PIN to unlock
                 </span>
               </span>
@@ -282,7 +282,7 @@ export default function GeneratePasswordView() {
           showStoreOption={false}
         />
         {!isEmptyString(generatePswState.host) && (
-          <p className="-mt-2 text-[10px] text-textfield_label">
+          <p className="-mt-3 text-[10px] text-textfield_label">
             <span className="text-lightGray">Hostname →</span>{" "}
             <span className="font-mono text-brand">
               {getHostName(generatePswState.host)}
@@ -320,7 +320,7 @@ export default function GeneratePasswordView() {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <div className="flex items-center pb-2 text-sm text-textfield_label font-medium">
+            <div className="mb-1.5 text-xs text-textfield_label font-medium">
               {formTitleConstants.YEAR}
             </div>
             <MuiSelect
@@ -353,11 +353,11 @@ export default function GeneratePasswordView() {
             Save Master Key with a PIN
           </button>
         )}
-      </div>
 
-      <p className="px-4 pb-3 text-center text-[10px] text-lightGray">
-        Nothing leaves your browser.
-      </p>
+        <p className="text-center text-[10px] text-lightGray pt-1">
+          Nothing leaves your browser.
+        </p>
+      </div>
     </div>
   );
 }

@@ -27,9 +27,7 @@ const colors: Record<ColorNames, string> = {
   white: "white",
 };
 
-const MuiStyledTextField = styled.div`
-  margin-bottom: 14px;
-`;
+const MuiStyledTextField = styled.div``;
 
 export const inputPropsStyle = {
   fontSize: 13,
@@ -115,7 +113,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
   };
 
   const getTextFieldTitle = (
-    <div className="flex justify-between pb-2 items-center text-sm text-textfield_label font-medium">
+    <div className="flex justify-between mb-1.5 items-center text-xs text-textfield_label font-medium">
       <div className="flex items-center gap-1.5">
         <span>{label}</span>
         {showStoreOption && toolTipTitle && (
@@ -128,7 +126,7 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
           <button
             type="button"
             onClick={onSave}
-            className="text-[11px] font-semibold uppercase tracking-wider text-buttonColor hover:text-brand transition-colors"
+            className="text-[10px] font-semibold uppercase tracking-wider text-buttonColor hover:text-brand transition-colors"
           >
             + Save
           </button>
