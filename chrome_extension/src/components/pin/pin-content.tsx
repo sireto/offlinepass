@@ -14,6 +14,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useModal } from "@app/components/modal-views/context";
 import PinInputs from "@app/components/pin-box";
 import { IPincodeProps } from "@app/components/pin";
+import { Lock } from "@app/components/icons/lock";
+import { Close } from "@app/components/icons/close";
 
 interface IpinCodeDetailsProps {
   pincodeProps: IPincodeProps;
@@ -28,6 +30,8 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
   const dispatch = useAppDispatch();
   const passwordProvider = useAppSelector(selectPasswordProvider);
   const lastTriedPinRef = useRef<string>("");
+
+  const isSave = pincodeProps.isSave;
 
   const verifyAndUnlock = async () => {
     const pinStr = pin.join("");
@@ -50,13 +54,12 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
   const setPincodeAndEncrypt = async () => {
     const pinStr = pin.join("");
     if (busy) return;
-    if (pin.join("") !== repeatPin.join("") || pin.includes("")) return;
+    if (pinStr !== repeatPin.join("") || pin.includes("")) return;
     setBusy(true);
     const ciphertext = await encryptMsk(
       pincodeProps.generatePswState.msk,
       pinStr
     );
-    setBusy(false);
     dispatch(
       setPasswordProvider({
         ...passwordProvider,
@@ -64,13 +67,14 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
         hashMsk: stringTosha256(pincodeProps.generatePswState.msk),
       })
     );
+    setBusy(false);
     closeModal();
     pincodeProps.setMskVisiblity(false);
-    showSweetAlertModal("Pin Set Successfully", "", "success");
+    showSweetAlertModal("Master Key saved", "", "success");
   };
 
   useEffect(() => {
-    if (pincodeProps.isSave) {
+    if (isSave) {
       setPincodeAndEncrypt();
     } else {
       verifyAndUnlock();
@@ -86,53 +90,74 @@ export default function PinContent({ pincodeProps }: IpinCodeDetailsProps) {
     setPin(values);
   };
 
-  const getCreatePin = () => {
-    return (
-      <>
+  const headerTitle = isSave ? "Secure your Master Key" : "Unlock your Master Key";
+  const headerSubtitle = isSave
+    ? "Choose a PIN. We use it to encrypt your key locally."
+    : "Enter the PIN you set on this device.";
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="relative w-[280px] rounded-2xl bg-white shadow-2xl border border-textfield_stroke overflow-hidden"
+    >
+      <button
+        type="button"
+        onClick={closeModal}
+        aria-label="Close"
+        className="absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-lg text-textfield_label hover:bg-lightBackground hover:text-brand transition-colors"
+      >
+        <Close className="h-3 w-3" />
+      </button>
+
+      <div className="px-5 pt-5 pb-1 flex flex-col items-center text-center">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
+          <Lock className="h-4 w-4" />
+        </div>
+        <h2 className="mt-3 text-sm font-semibold text-brand">{headerTitle}</h2>
+        <p className="mt-1 text-[11px] leading-relaxed text-textfield_label">
+          {headerSubtitle}
+        </p>
+      </div>
+
+      <div className="px-5 pt-3 pb-3 space-y-2">
         <PinInputs
           name="pin"
-          label={"Enter pin to Secure Master Password"}
+          label={isSave ? "Choose PIN" : "PIN"}
           autoFocus
           mask
-          error={pinError(pin, pincodeProps.isSave, wrongPin)}
+          error={pinError(pin, isSave, wrongPin)}
           onChange={onChangeHandler}
           values={pin}
         />
-        <PinInputs
-          name="confirm pin"
-          label="Confirm your Pin"
-          error={repeatPinError(pin, repeatPin)}
-          mask
-          onChange={(
-            _value: string | string[],
-            _index: number,
-            values: string[]
-          ) => {
-            setRepeatPin(values);
-          }}
-          values={repeatPin}
-        />
-      </>
-    );
-  };
+        {isSave && (
+          <PinInputs
+            name="confirm pin"
+            label="Confirm PIN"
+            error={repeatPinError(pin, repeatPin)}
+            mask
+            onChange={(_v, _i, values: string[]) => setRepeatPin(values)}
+            values={repeatPin}
+          />
+        )}
+      </div>
 
-  const getConfirmPin = () => {
-    return (
-      <PinInputs
-        name="pin"
-        label={"Enter pin to Unlock Master Password"}
-        autoFocus
-        mask
-        error={pinError(pin, pincodeProps.isSave, wrongPin)}
-        onChange={onChangeHandler}
-        values={pin}
-      />
-    );
-  };
+      <div className="border-t border-textfield_stroke bg-lightBackground px-5 py-2 flex items-center justify-end">
+        <button
+          type="button"
+          onClick={closeModal}
+          disabled={busy}
+          className="text-[11px] font-semibold text-textfield_label hover:text-brand disabled:opacity-50 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
 
-  return (
-    <div className="flex flex-col px-5 py-3   transition-opacity rounded-md opacity-100 shadow-lg bg-white w-[200px]">
-      {pincodeProps.isSave ? getCreatePin() : getConfirmPin()}
+      {busy && (
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <div className="h-7 w-7 rounded-full border-2 border-buttonColor/30 border-t-buttonColor animate-spin" />
+        </div>
+      )}
     </div>
   );
 }
