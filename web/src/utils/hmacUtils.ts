@@ -1,7 +1,7 @@
 import hmac from "js-crypto-hmac";
+import bs58 from "bs58";
 import { isEmptyString, isValidUrl } from "@app/utils/validationUtils";
 import { GeneratePswStateDto } from "@app/models/dtos/generate-psw-form-dtos";
-const bs58 = require("bs58");
 
 export const hmacSha256 = async (generatePswState: GeneratePswStateDto) => {
   const msg = `${getHostName(
