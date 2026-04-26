@@ -1,12 +1,15 @@
-import type { LinkProps } from 'next/link';
-import NextLink from 'next/link';
+import NextLink, { LinkProps } from "next/link";
+import React from "react";
 
-const AnchorLink: React.FC<LinkProps & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>> = ({ href, ...props }) => {
-    return (
-        <NextLink href={href} passHref legacyBehavior>
-            <a {...props} />
-        </NextLink>
-    );
+type AnchorLinkProps = LinkProps &
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">;
+
+const AnchorLink: React.FC<AnchorLinkProps> = ({ href, children, ...rest }) => {
+  return (
+    <NextLink href={href} {...rest}>
+      {children}
+    </NextLink>
+  );
 };
 
 export default AnchorLink;

@@ -20,9 +20,7 @@ import {
   isLegacyEncryptedMsk,
   stringTosha256,
 } from "@app/utils/passwordUtils";
-import MuiTextField, {
-  inputPropsStyle,
-} from "@app/components/textfield/MuiTextField";
+import MuiTextField from "@app/components/textfield/MuiTextField";
 import { toLowerCaseAllElement } from "@app/utils/helperUtils";
 import { useModal } from "@app/components/modal-views/context";
 import { useAppSelector, useAppDispatch } from "@app/store/hooks";
@@ -159,10 +157,9 @@ export default function GeneratePasswordView() {
         toolTipTitle={storeOptionToolTipConstants.SECURITY_KEY}
         disabled={isPasswordHashMatch && !isMskVisible && hasStoredMsk}
         type={isMskVisible ? "text" : "password"}
-        InputProps={{
-          style: inputPropsStyle,
+        inputSlotProps={{
           endAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment position="end">
               {!isEmptyString(generatePswState.msk) && getMskInputProps}
             </InputAdornment>
           ),
@@ -240,7 +237,7 @@ export default function GeneratePasswordView() {
         onChange={handleOnChange}
         showStoreOption={false}
         value={generatePswState.retries}
-        inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+        htmlInputSlotProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
       />
     </>
   );

@@ -1,11 +1,15 @@
-import Swal from "sweetalert2";
-type iconType = "success" | "error" | "info" | "question" | "warning";
-export function showSweetAlertModal(title: string, text = "", type: iconType) {
+import Swal, { type SweetAlertIcon } from "sweetalert2";
+
+export function showSweetAlertModal(
+  title: string,
+  text = "",
+  type: SweetAlertIcon
+) {
   return Swal.fire({
-    icon: `${type}`,
-    title: `${title}`,
-    text: `${text}`,
+    icon: type,
+    title,
+    text,
     showConfirmButton: false,
-    customClass: "swal-wide",
+    customClass: { popup: "swal-wide" },
   });
 }

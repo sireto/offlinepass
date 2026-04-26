@@ -49,7 +49,7 @@ const deriveKey = async (
 ): Promise<CryptoKey> => {
   const baseKey = await crypto.subtle.importKey(
     "raw",
-    new TextEncoder().encode(pin),
+    new TextEncoder().encode(pin) as BufferSource,
     "PBKDF2",
     false,
     ["deriveKey"]
@@ -57,7 +57,7 @@ const deriveKey = async (
   return crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
-      salt,
+      salt: salt as BufferSource,
       iterations: PBKDF2_ITERATIONS,
       hash: "SHA-256",
     },
@@ -77,9 +77,9 @@ export const encryptMsk = async (
   const key = await deriveKey(pin, salt);
   const ciphertext = new Uint8Array(
     await crypto.subtle.encrypt(
-      { name: "AES-GCM", iv },
+      { name: "AES-GCM", iv: iv as BufferSource },
       key,
-      new TextEncoder().encode(plaintext)
+      new TextEncoder().encode(plaintext) as BufferSource
     )
   );
   const blob = new Uint8Array(salt.length + iv.length + ciphertext.length);
@@ -102,9 +102,9 @@ export const decryptMsk = async (
     const ciphertext = bytes.slice(SALT_LENGTH + IV_LENGTH);
     const key = await deriveKey(pin, salt);
     const plaintext = await crypto.subtle.decrypt(
-      { name: "AES-GCM", iv },
+      { name: "AES-GCM", iv: iv as BufferSource },
       key,
-      ciphertext
+      ciphertext as BufferSource
     );
     return new TextDecoder().decode(plaintext);
   } catch {

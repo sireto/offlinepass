@@ -1,15 +1,8 @@
+import React from "react";
 import { PinInput } from "react-input-pin-code";
-import { PinInputProps } from "react-input-pin-code/dist/types/PinInput";
 import cn from "classnames";
 
-// type SizeNames = "large" | "medium" | "small" | "mini";
-// type size = "lg" | "md" | "sm" | "xs";
-// const sizes: Record<SizeNames, size> = {
-//   large: "lg",
-//   medium: "md",
-//   small: "sm",
-//   mini: "xs",
-// };
+type PinInputProps = React.ComponentProps<typeof PinInput>;
 
 interface IPinInputsProps extends PinInputProps {
   label: string;
@@ -29,6 +22,7 @@ const PinInputs: React.FC<IPinInputsProps> = ({
   placeholder = "",
   inputStyle = { marginLeft: 12 },
   showState = false,
+  ...rest
 }) => {
   return (
     <div>
@@ -44,6 +38,7 @@ const PinInputs: React.FC<IPinInputsProps> = ({
         onChange={onChange}
         values={values}
         inputStyle={inputStyle}
+        {...rest}
       />
 
       <p

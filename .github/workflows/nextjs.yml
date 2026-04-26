@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: yarn
           cache-dependency-path: "./web/yarn.lock"
 
@@ -65,9 +65,6 @@ jobs:
 
       - name: Build with Next.js
         run: cd web && yarn build
-
-      - name: Static HTML export with Next.js
-        run: cd web && yarn export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
