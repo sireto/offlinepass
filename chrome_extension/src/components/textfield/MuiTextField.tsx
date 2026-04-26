@@ -38,19 +38,23 @@ export const inputPropsStyle = {
 };
 
 const customRenderOption = (
-  props: React.HTMLAttributes<HTMLLIElement>,
+  props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
   option: string
-) => (
-  <span
-    {...props}
-    style={{
-      fontSize: inputPropsStyle.fontSize,
-      height: inputPropsStyle.height,
-    }}
-  >
-    {option}
-  </span>
-);
+) => {
+  const { key, ...rest } = props;
+  return (
+    <li
+      key={key}
+      {...rest}
+      style={{
+        fontSize: inputPropsStyle.fontSize,
+        height: inputPropsStyle.height,
+      }}
+    >
+      {option}
+    </li>
+  );
+};
 
 type InputSlotProps = NonNullable<
   NonNullable<OutlinedTextFieldProps["slotProps"]>["input"]
@@ -132,18 +136,40 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
     </div>
   );
 
+  const stringValue = typeof value === "string" ? value : "";
+
+  const dispatchSyntheticChange = (newValue: string) => {
+    if (!onChange) return;
+    const synthetic = {
+      target: { id, value: newValue },
+      currentTarget: { id, value: newValue },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+    onChange(synthetic);
+  };
+
   const getTextfield = () => {
     if (textfieldTypes === "autocomplete") {
       return (
         <Autocomplete
           id={id}
           options={options}
-          value={typeof value === "string" ? value : undefined}
-          getOptionLabel={(option: string) => option}
+          value={stringValue}
+          inputValue={stringValue}
+          onInputChange={(_event, newValue) =>
+            dispatchSyntheticChange(newValue)
+          }
+          onChange={(_event, newValue) =>
+            dispatchSyntheticChange(typeof newValue === "string" ? newValue : "")
+          }
+          getOptionLabel={(option) =>
+            typeof option === "string" ? option : ""
+          }
           autoComplete
           fullWidth
           freeSolo
           includeInputInList
+          selectOnFocus
+          handleHomeEndKeys
           renderOption={renderOption}
           renderInput={(params) => (
             <TextField
@@ -155,7 +181,6 @@ const MuiTextField: React.FC<MuiTextFieldProps> = ({
               fullWidth={fullWidth}
               error={error}
               onSelect={onSelect}
-              onChange={onChange}
               slotProps={{
                 ...params.slotProps,
                 input: {
