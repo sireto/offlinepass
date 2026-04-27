@@ -147,19 +147,11 @@ function Hero() {
                   the entire algorithm
                 </span>
               </div>
-              <pre className="leading-relaxed">
-                <span className="text-slate-500">
-                  // message = host | identity | year | n
-                </span>
+              <pre className="leading-relaxed whitespace-pre">
+                <span className="text-buttonColor">msg</span>      ={" "}
+                <span className="text-success">&quot;github.com|you@x.com|2026|0&quot;</span>
                 {"\n"}
-                <span className="text-buttonColor">msg</span> ={" "}
-                <span className="text-success">&quot;github.com&quot;</span> +{" "}
-                <span className="text-success">&quot;|&quot;</span> +{" "}
-                <span className="text-success">&quot;you@x.com&quot;</span>
-                {"\n      + "}
-                <span className="text-success">&quot;|2026|0&quot;</span>
-                {"\n\n"}
-                <span className="text-buttonColor">mac</span> ={" "}
+                <span className="text-buttonColor">mac</span>      ={" "}
                 <span className="text-brand font-semibold">hmac-sha256</span>
                 (masterKey, msg){"\n"}
                 <span className="text-buttonColor">password</span> ={" "}
