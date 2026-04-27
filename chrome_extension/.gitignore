@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+# packaged store upload
+/offlinepass-extension.zip
+
 # production
 /build
 

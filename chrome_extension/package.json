@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "export": "next build && mv ./out/_next ./out/next && cd ./out && grep -rl '/_next' * | xargs sed -i 's|/_next|/next|g'",
+    "package": "rm -rf out offlinepass-extension.zip && yarn export && cd out && rm -f next.svg vercel.svg thirteen.svg && zip -r ../offlinepass-extension.zip . -x '*.DS_Store' '__MACOSX/*' && cd ..",
     "lint": "next lint"
   },
   "dependencies": {
