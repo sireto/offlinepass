@@ -22,6 +22,4 @@ export type AppDispatch = typeof store.dispatch;
 export const persistor = persistStore(store);
 
 export default store;
-function createLogger() {
-  throw new Error("Function not implemented.");
-}
+

@@ -211,7 +211,11 @@ export default function GeneratePasswordView() {
         </a>
       </header>
 
-      <div className="px-5 pt-4 pb-3 space-y-4">
+      <form
+        autoComplete="off"
+        onSubmit={(e) => e.preventDefault()}
+        className="px-5 pt-4 pb-3 space-y-4"
+      >
         <PasswordToast
           host={generatePswState.host}
           generatedPasswordHash={generatePasswordHash}
@@ -357,7 +361,7 @@ export default function GeneratePasswordView() {
         <p className="text-center text-[10px] text-lightGray pt-1">
           Nothing leaves your browser.
         </p>
-      </div>
+      </form>
     </div>
   );
 }

@@ -176,7 +176,11 @@ export default function GeneratePasswordView() {
         host={generatePswState.host}
         generatedPasswordHash={generatePasswordHash}
       />
-      <div className="rounded-2xl bg-white border border-textfield_stroke shadow-[0_8px_32px_-8px_rgba(0,62,107,0.12)] p-6 lg:p-8">
+      <form
+        autoComplete="off"
+        onSubmit={(e) => e.preventDefault()}
+        className="rounded-2xl bg-white border border-textfield_stroke shadow-[0_8px_32px_-8px_rgba(0,62,107,0.12)] p-6 lg:p-8"
+      >
         {showUnlockBanner && (
           <button
             type="button"
@@ -327,7 +331,7 @@ export default function GeneratePasswordView() {
             Save Master Key with a PIN
           </button>
         )}
-      </div>
+      </form>
       <p className="mt-4 text-center text-xs text-lightGray">
         Nothing leaves your browser. Open the network tab to verify.
       </p>
