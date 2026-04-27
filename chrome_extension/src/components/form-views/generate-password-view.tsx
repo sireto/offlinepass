@@ -207,7 +207,7 @@ export default function GeneratePasswordView() {
           rel="noopener noreferrer"
           className="text-[10px] uppercase tracking-wider text-lightGray hover:text-brand transition-colors"
         >
-          v1.0
+          v1.1
         </a>
       </header>
 
