@@ -1,59 +1,193 @@
+<div align="center">
+
+<img src="chrome_extension/public/icon-128.png" alt="OfflinePass" width="96" height="96" />
+
 # OfflinePass
-Self Service Password Manager
 
-## Generate all your passwords deterministically using your Master Key. 
-Your Master Key is your one and only backup of all passwords.
+**One Master Key. Every password, derived.**
 
-## Philosophy
-  - No central server. No server at all. Fully client side. Works Offline.
-  - No data to store or share. 
-  - No data or passwords to backup. Backup your Master Key only.
-  - No hidden agenda or false promise of security. We’re open source. Check the code for yourself.
+A deterministic, client-side password manager. No server, no vault, no sync.
+Your Master Key plus the site you're visiting always produce the same
+password — on any device, on any version, forever.
 
-## Source Code
-  https://github.com/sireto/offlinepass
-  
-# Master Security Key (MSK)
-All you need to store is Master Security Key (MSK). This key is used to generate all the passwords deterministically. So as long as you have your MSK, all of your passwords (past, present and future) can be recovered. It is your responsibility to keep it safe. If you loose it, you'll loose all your passwords.
+[**Web app**](https://offlinepass.com) ·
+[**Chrome extension**](https://chrome.google.com/webstore/detail/offline-pass/dohnghdcmkckopegdlbjagkpdcadapmd) ·
+[**Mobile (Flutter)**](./app)
 
-# How Offline Pass works?
-Passwords are generated using secure hash functions using the following algorithm
-``` 
-PasswordHash = hmac(MSK,Message,sha256_algorithm)
-Password     = No_of_password_changed$PasswordHash
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-success.svg)](./CONTRIBUTING.md)
+[![Security policy](https://img.shields.io/badge/security-policy-orange.svg)](./SECURITY.md)
+[![Made with Next.js](https://img.shields.io/badge/built%20with-Next.js-000.svg)](https://nextjs.org)
+
+</div>
+
+---
+
+## Why OfflinePass
+
+Most password managers are vaults: they sit between you and your accounts,
+sync your secrets through a cloud, and ask you to trust a vendor with the
+keys to your digital life. OfflinePass is the other model — there is no
+vault. The "manager" is a pure function:
+
 ```
-- The generated passwords are based on MSK ,Message.
-- Message = Host | Identity | Year | No of password changed
-- MSK: Master Security Key
-- Host: Host indicates the URL of the app or website. For eg. facebook.com, twitter.com, gmail.com, github.com, ...
-- Identity: Identity can be your username, email address or phone number you use to login to the app or website.
-- No of password changed : It indicates number of password changes on selected year. By default it is set to 0.    
-- Year : Year you changed your password. By default it is set to current year.
-
-**Example**
-To generated Twitter password for mail@example.com on 2023:
-First, convert all details into lowercase and concatinate it to Message.
-```
-Message = `twitter.com | mail@example.com | 2023 | 0`
-```
-Then, the generated password is:
-```
-PasswordHash = hmac(MSK,Message,sha256_algorithm)
-             = hmac("H@rdPassw0rd",`twitter.com | mail@example.com | 2023 | 0`,"SHA-256")
-             = 87booSaeaKYnhgEq
-
-Password     = No_of_password_changed$PasswordHash 
-             = 0$87booSaeaKYnhgEq
+password = base58(hmac-sha256(masterKey, "host|identity|year|n")).slice(0, 16)
 ```
 
-base58 encoding is used after using hmac to get shorter length eg. 16 characters.
+Type your Master Key, the site, and your identity. Get a 16-character
+password. Same inputs always yield the same output, so there is nothing
+to back up except your Master Key — which lives only in your head.
 
+| | OfflinePass | Traditional vault |
+|---|---|---|
+| Server | None | Required for sync |
+| Vault to back up | None | Yes (often encrypted at rest) |
+| Recover after device loss | Type your Master Key | Restore vault from backup |
+| What an attacker steals if they breach you | Nothing — there's nothing on the wire | The whole vault |
+| Offline-able | Always | Depends |
+| Auditable in one sitting | Yes (~150 LOC of crypto) | No |
 
-# License
-Apache v2 License. See [LICENSE](./LICENSE).
+## How it works
 
-# Contributing
-If you're interested in contributing, please read [CONTRIBUTING.md](./CONTRIBUTING.md) and open an issue or pull request.
+```ts
+const msg      = "github.com|you@example.com|2026|0";   // host | identity | year | rotation
+const mac      = hmacSha256(masterKey, msg);            // RFC 2104
+const password = base58(mac).slice(0, 16);              // ~94 bits of entropy
+// → 0$87booSaeaKYnhgEq
+```
 
-# Security
-For the threat model, known limitations, and how to report a vulnerability, see [SECURITY.md](./SECURITY.md).
+That's the entire algorithm. The leading `0$` is the rotation counter —
+bump it when a site forces a password change, and the same Master Key
+gives you a fresh password without any "vault update" anywhere.
+
+The reference implementation lives in
+[`web/src/utils/hmacUtils.ts`](web/src/utils/hmacUtils.ts) and is
+mirrored verbatim in the
+[Chrome extension](chrome_extension/src/utils/hmacUtils.ts) and the
+[Flutter app](app/lib/models/password_manager.dart). All three produce
+the same output for the same inputs — see
+[SECURITY.md](./SECURITY.md#cross-platform-compatibility).
+
+## Try it in 30 seconds
+
+- **Web**: open <https://offlinepass.com> and use it. Open the network tab —
+  there are no requests after the page loads.
+- **Chrome extension**: install from the
+  [Chrome Web Store](https://chrome.google.com/webstore/detail/offline-pass/dohnghdcmkckopegdlbjagkpdcadapmd),
+  open the popup with `Ctrl+Shift+F` (`MacCtrl+Shift+F` on macOS), type
+  your Master Key.
+- **Mobile**: build the Flutter app from [`app/`](./app).
+- **Run locally**: see [Develop locally](#develop-locally).
+
+## Repository layout
+
+```
+offlinepass/
+├── web/                    Next.js 16 + React 19 web app, deployed to GitHub Pages
+├── chrome_extension/       Chrome MV3 popup, same Next.js stack
+│   └── store-assets/       Chrome Web Store listing copy & art
+├── app/                    Flutter mobile/desktop app
+├── CONTRIBUTING.md         How to develop, test, and propose changes
+├── SECURITY.md             Threat model, crypto details, vulnerability reporting
+└── LICENSE                 Apache 2.0
+```
+
+The three implementations are independent codebases that share an
+algorithm. Each one passes the same fixture-based parity tests, so a
+password generated on the web for `github.com` is byte-identical to the
+one generated by the Chrome extension or the Flutter app for the same
+inputs.
+
+## Optional: save your Master Key with a PIN
+
+If you don't want to retype your Master Key every visit, OfflinePass can
+encrypt it locally with a PIN of your choice:
+
+- **KDF**: PBKDF2-HMAC-SHA256, 250 000 iterations, 16-byte random salt.
+- **Cipher**: AES-GCM with a 12-byte random IV. The auth tag *is* the
+  PIN-correctness check — there is no separate `pinHash` to crib against.
+- **Storage**: `localStorage` on this device only. Nothing is synced or
+  sent over the network.
+
+A wrong PIN means the GCM auth tag fails and the ciphertext is useless.
+A 4-digit PIN is still short, so a longer PIN (or no PIN at all) is
+stronger; we explain the trade-off in [SECURITY.md](./SECURITY.md).
+
+## Develop locally
+
+The repo is a multi-package monorepo without a workspace tool — each
+sub-project is independently installable.
+
+```bash
+# Web app
+cd web
+yarn install
+yarn dev          # http://localhost:3000
+yarn test
+yarn build
+
+# Chrome extension
+cd chrome_extension
+yarn install
+yarn dev          # iterate at http://localhost:3000
+yarn export       # produces ./out/ for sideloading
+yarn package      # produces offlinepass-extension.zip for the Chrome Web Store
+
+# Flutter app
+cd app
+flutter pub get
+flutter run
+```
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide, including
+the cross-platform parity rule (any change to password generation must
+keep the three implementations byte-identical) and the
+[SECURITY.md](./SECURITY.md) policy for handling vulnerability reports.
+
+## Security
+
+OfflinePass takes a few stances most password managers can't:
+
+- **Zero network traffic** after the page loads. No analytics, no
+  fingerprinting, no telemetry, no fonts from a CDN, no cookies you
+  didn't ask for. Open the network tab and verify.
+- **Reproducible derivation**. The algorithm is fixed, public, and
+  trivial to re-implement. If we vanish tomorrow, your passwords are
+  recoverable from any HMAC-SHA256 + base58 implementation.
+- **Single permission**. The Chrome extension requests only
+  `activeTab` — used solely to read the current tab's URL so the host
+  field can be pre-filled. The URL never leaves your browser.
+
+For the full threat model, what we do *not* protect against, and how
+to report a vulnerability privately, see [SECURITY.md](./SECURITY.md).
+
+## Tech stack
+
+- **Web & extension**: TypeScript 5, Next.js 16, React 19, MUI 9,
+  Headless UI 2, Tailwind CSS 3, Web Crypto API.
+- **Mobile**: Flutter, `package:crypto`, `fast_base58`,
+  `encrypted_shared_preferences`.
+- **Crypto primitives**: HMAC-SHA256, Base58, AES-GCM, PBKDF2 — all via
+  Web Crypto on web/extension, all via Dart `package:crypto` on Flutter.
+  No third-party crypto libraries doing key derivation.
+
+## Contributing
+
+Issues, pull requests, and security reports are all welcome. Read
+[CONTRIBUTING.md](./CONTRIBUTING.md) before starting on a change to
+the password algorithm — cross-platform parity is non-negotiable, and
+new tests need to cover all three implementations.
+
+## License
+
+Apache 2.0. See [LICENSE](./LICENSE).
+
+---
+
+<div align="center">
+
+<sub>Built in the open at
+<a href="https://github.com/sireto/offlinepass">github.com/sireto/offlinepass</a>.
+Audit the math, not us.</sub>
+
+</div>
