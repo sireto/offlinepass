@@ -1,14 +1,24 @@
+const SITE_URL = "https://offlinepass.com";
+
 const globalConstants = {
-  appName: "Offline Pass",
-  appDesc: "Self service password manager",
-  title: "OfflinePass - Offline Password Manager",
+  appName: "OfflinePass",
+  appDesc:
+    "Deterministic, client-side password manager. One Master Key — every password derived. No server, no vault, no sync.",
+  title: "OfflinePass — Deterministic Password Manager",
+  shortTitle: "OfflinePass",
+  url: `${SITE_URL}/`,
   twitterHandle: "",
-  url: "https://offlinepass.com/",
+  themeColor: "#003E6B",
   socialPreview: {
-    url: "https://offlinepass.com/",
-    title: "OfflinePass - Offline Password Manager",
-    desc: "Forget all you know about passwords, now you have the master key.",
-    image: "/ogimage.png",
+    url: `${SITE_URL}/`,
+    title: "OfflinePass — One Master Key. Every password, derived.",
+    desc: "Deterministic, client-side password manager. No server, no vault, no sync — your Master Key derives every password.",
+    image: `${SITE_URL}/ogimage.png`,
+    imageAlt:
+      "OfflinePass — One Master Key. Every password, derived. Deterministic, client-side, open source.",
+    imageWidth: 1200,
+    imageHeight: 630,
+    imageType: "image/png",
   },
 };
 
